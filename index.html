@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DEV PARADE | デブパレード 公式サイト - 15年ぶりの復活</title>
+  <meta name="description" content="総体重570kg超のヘヴィメタボバンド DEV PARADE（デブパレード）15年ぶりの復活！元DefSTAR Records、NARUTOエンディングテーマ「バッチコイ!!!」でお馴染み。">
+  <meta property="og:title" content="DEV PARADE | デブパレード 公式サイト">
+  <meta property="og:description" content="伝説のヘヴィメタボバンド、15年ぶりの奇跡の復活！">
+  <meta property="og:image" content="assets/member-group.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #E31E24;
+      --dark-red: #B01018;
+      --black: #0a0a0a;
+      --yellow: #FFD700;
+      --white: #f5f5f5;
+      --gray: #888;
+      --card-bg: #151515;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--red);
+      transition: transform 0.3s;
+    }
+    nav .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1.5rem;
+    }
+    nav .nav-logo { height: 40px; }
+    nav ul {
+      list-style: none; display: flex; gap: 1.8rem;
+    }
+    nav ul li a {
+      color: var(--white); text-decoration: none;
+      font-family: 'Oswald', sans-serif; font-size: 0.95rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover { color: var(--red); }
+    .hamburger {
+      display: none; background: none; border: none; cursor: pointer;
+      flex-direction: column; gap: 5px;
+    }
+    .hamburger span {
+      display: block; width: 28px; height: 3px; background: var(--white);
+      transition: 0.3s;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('assets/live-wide.jpg') center center / cover no-repeat;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10,10,10,0.5) 0%,
+        rgba(10,10,10,0.3) 40%,
+        rgba(10,10,10,0.7) 80%,
+        rgba(10,10,10,1) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2; text-align: center;
+      padding: 0 1rem;
+    }
+    .hero-logo-img {
+      max-width: min(500px, 80vw); height: auto;
+      filter: drop-shadow(0 0 30px rgba(227,30,36,0.4));
+      animation: logoFloat 4s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero-tagline {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--yellow);
+      margin-top: 1.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+    .hero-sub {
+      font-size: clamp(0.85rem, 2vw, 1.1rem);
+      color: rgba(255,255,255,0.7);
+      margin-top: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+    .hero-reunion {
+      display: inline-block; margin-top: 2rem;
+      padding: 0.8rem 2.5rem;
+      background: var(--red);
+      color: #fff; font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem; letter-spacing: 0.15em;
+      text-decoration: none; text-transform: uppercase;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .hero-reunion:hover {
+      background: transparent; border-color: var(--red); color: var(--red);
+    }
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 2; animation: bounce 2s infinite;
+    }
+    .scroll-indicator span {
+      display: block; width: 24px; height: 24px;
+      border-right: 2px solid var(--red); border-bottom: 2px solid var(--red);
+      transform: rotate(45deg);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(12px); }
+    }
+
+    /* ===== SECTION BASE ===== */
+    section { padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+    .section-title span { color: var(--red); }
+    .section-sub {
+      text-align: center; color: var(--gray);
+      font-size: 0.85rem; letter-spacing: 0.15em;
+      margin-bottom: 3rem;
+    }
+
+    /* ===== REUNION BANNER ===== */
+    .reunion-banner {
+      background: linear-gradient(135deg, var(--dark-red), var(--red));
+      padding: 3rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .reunion-banner::before {
+      content: '復活'; position: absolute;
+      font-size: 15rem; font-weight: 900;
+      color: rgba(255,255,255,0.04);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      white-space: nowrap;
+    }
+    .reunion-banner h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+    .reunion-banner p {
+      font-size: 1.1rem; margin-top: 1rem;
+      position: relative; max-width: 700px; margin-left: auto; margin-right: auto;
+      line-height: 1.8;
+    }
+    .reunion-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      color: var(--yellow);
+      line-height: 1; position: relative;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    /* ===== ABOUT ===== */
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      align-items: center;
+    }
+    .about-img {
+      width: 100%; border-radius: 4px;
+      border: 2px solid #222;
+    }
+    .about-text p {
+      line-height: 1.9; font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 1rem;
+    }
+    .about-stats {
+      display: flex; gap: 2rem; margin-top: 2rem;
+    }
+    .about-stat {
+      text-align: center;
+    }
+    .about-stat .num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem; color: var(--red);
+    }
+    .about-stat .label {
+      font-size: 0.75rem; color: var(--gray);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* ===== MEMBERS ===== */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+    }
+    .member-card {
+      background: var(--card-bg);
+      border: 1px solid #222;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      position: relative;
+    }
+    .member-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--red);
+    }
+    .member-card.new-member::after {
+      content: 'NEW';
+      position: absolute; top: 10px; right: 10px;
+      background: var(--red); color: #fff;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem; padding: 2px 8px;
+      letter-spacing: 0.1em;
+    }
+    .member-img {
+      width: 100%; aspect-ratio: 3/4; object-fit: cover;
+      filter: grayscale(20%);
+      transition: filter 0.3s;
+    }
+    .member-card:hover .member-img { filter: grayscale(0%); }
+    .member-info { padding: 1rem; }
+    .member-part {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem; color: var(--red);
+      letter-spacing: 0.15em; text-transform: uppercase;
+    }
+    .member-name {
+      font-size: 1.1rem; font-weight: 900;
+      margin: 0.3rem 0;
+    }
+    .member-name-en {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem; color: var(--gray);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .member-weight {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; color: var(--yellow);
+      margin-top: 0.5rem;
+    }
+    .member-acts {
+      font-size: 0.7rem; color: var(--gray);
+      margin-top: 0.4rem; line-height: 1.5;
+    }
+    .member-sns {
+      display: flex; gap: 0.5rem; margin-top: 0.6rem;
+    }
+    .member-sns a {
+      color: var(--gray); font-size: 0.75rem;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .member-sns a:hover { color: var(--red); }
+
+    /* ===== DISCOGRAPHY ===== */
+    .disco-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    }
+    .disco-card {
+      background: var(--card-bg);
+      border: 1px solid #222;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .disco-card:hover { border-color: var(--red); }
+    .disco-card .year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem; color: var(--red);
+      letter-spacing: 0.15em;
+    }
+    .disco-card h3 {
+      font-size: 1.3rem; font-weight: 900;
+      margin: 0.5rem 0;
+    }
+    .disco-card .label {
+      font-size: 0.75rem; color: var(--gray);
+      letter-spacing: 0.08em;
+    }
+    .disco-card .tieup {
+      display: inline-block; margin-top: 0.8rem;
+      background: rgba(227,30,36,0.15);
+      border: 1px solid rgba(227,30,36,0.3);
+      color: var(--red); font-size: 0.75rem;
+      padding: 0.3rem 0.8rem; letter-spacing: 0.05em;
+    }
+    .disco-card .tracks {
+      margin-top: 1rem; font-size: 0.85rem;
+      color: rgba(255,255,255,0.7); line-height: 1.8;
+    }
+    .disco-new {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
+      border: 2px solid var(--red);
+      text-align: center; padding: 3rem;
+    }
+    .disco-new h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 0.1em;
+    }
+    .disco-new .coming {
+      color: var(--yellow); font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem; letter-spacing: 0.2em; margin-top: 0.5rem;
+    }
+
+    /* ===== LIVE ===== */
+    .live-list { display: flex; flex-direction: column; gap: 2rem; }
+    .live-card {
+      display: grid; grid-template-columns: 140px 1fr;
+      background: var(--card-bg);
+      border: 1px solid #222;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .live-card:hover { border-color: var(--red); }
+    .live-date {
+      background: var(--red);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .live-date .year {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.15em; opacity: 0.8;
+    }
+    .live-date .day {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem; line-height: 1;
+    }
+    .live-date .month {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem; letter-spacing: 0.1em;
+    }
+    .live-date .dow {
+      font-size: 0.75rem; opacity: 0.7; margin-top: 0.2rem;
+    }
+    .live-info { padding: 1.5rem; }
+    .live-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .live-info .venue {
+      color: var(--gray); font-size: 0.85rem;
+    }
+    .live-info .badge {
+      display: inline-block; margin-top: 0.6rem;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+    }
+    .badge-soldout { background: #333; color: var(--gray); }
+    .badge-upcoming { background: var(--yellow); color: #000; }
+
+    /* ===== HISTORY ===== */
+    .timeline {
+      position: relative;
+      padding-left: 3rem;
+    }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 12px; top: 0; bottom: 0;
+      width: 2px; background: #333;
+    }
+    .timeline-item {
+      position: relative; margin-bottom: 2.5rem;
+    }
+    .timeline-item::before {
+      content: ''; position: absolute;
+      left: -3rem; top: 6px;
+      width: 12px; height: 12px;
+      background: var(--red); border-radius: 50%;
+      border: 2px solid var(--black);
+    }
+    .timeline-item.highlight::before {
+      background: var(--yellow);
+      box-shadow: 0 0 10px var(--yellow);
+    }
+    .timeline-year {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; color: var(--red);
+      letter-spacing: 0.08em;
+    }
+    .timeline-item.highlight .timeline-year { color: var(--yellow); }
+    .timeline-text {
+      font-size: 0.9rem; color: rgba(255,255,255,0.8);
+      line-height: 1.7; margin-top: 0.3rem;
+    }
+
+    /* ===== LINKS ===== */
+    .links-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .link-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--card-bg);
+      border: 1px solid #222;
+      padding: 1.2rem 1.5rem;
+      text-decoration: none; color: var(--white);
+      transition: all 0.3s;
+    }
+    .link-card:hover {
+      border-color: var(--red);
+      transform: translateX(5px);
+    }
+    .link-icon {
+      font-size: 1.5rem; min-width: 40px; text-align: center;
+    }
+    .link-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.9rem; letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .link-desc {
+      font-size: 0.75rem; color: var(--gray); margin-top: 0.2rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 2px solid var(--red);
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+    footer .footer-logo { height: 60px; margin-bottom: 1rem; }
+    footer p {
+      font-size: 0.75rem; color: var(--gray);
+      letter-spacing: 0.05em; line-height: 1.8;
+    }
+    footer a { color: var(--gray); text-decoration: none; }
+    footer a:hover { color: var(--red); }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .members-grid { grid-template-columns: repeat(3, 1fr); }
+      .about-grid { grid-template-columns: 1fr; }
+      .disco-grid { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+      .hamburger { display: flex; }
+      nav ul.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(10,10,10,0.98);
+        padding: 1.5rem;
+        border-bottom: 2px solid var(--red);
+      }
+    }
+    /* ===== GOODS ===== */
+    .goods-showcase {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+      align-items: center;
+    }
+    .goods-img {
+      width: 100%; border-radius: 4px; border: 1px solid #222;
+    }
+    .goods-info h3 { font-size: 1.3rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .goods-colors {
+      display: flex; gap: 0.5rem; margin: 1rem 0;
+    }
+    .goods-colors span {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid #333;
+    }
+    .goods-badge {
+      display: inline-block;
+      background: var(--yellow); color: #000;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem; padding: 0.3rem 0.8rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    /* ===== VIDEO RESPONSIVE ===== */
+    .video-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    }
+    .video-wrap {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #111;
+    }
+    .video-wrap iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
+    }
+
+    @media (max-width: 600px) {
+      .members-grid { grid-template-columns: repeat(2, 1fr); }
+      .live-card { grid-template-columns: 100px 1fr; }
+      .about-stats { flex-wrap: wrap; }
+      .video-grid { grid-template-columns: 1fr; }
+      .goods-showcase { grid-template-columns: 1fr; }
+      section { padding: 3rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-inner">
+    <img src="assets/logo.png" alt="DEV PARADE" class="nav-logo">
+    <ul id="navMenu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#members">Members</a></li>
+      <li><a href="#live">Live</a></li>
+      <li><a href="#video">Video</a></li>
+      <li><a href="#discography">Discography</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#goods">Goods</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#links">Links</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <img src="assets/logo.png" alt="DEV PARADE" class="hero-logo-img">
+    <p class="hero-tagline">Heavy Metabo Band is Back.</p>
+    <p class="hero-sub">総体重570kg超 &mdash; 伝説のヘヴィメタボバンド、15年ぶりの復活</p>
+    <a href="#live" class="hero-reunion">LIVE INFO &rarr;</a>
+  </div>
+  <div class="scroll-indicator"><span></span></div>
+</section>
+
+<!-- ===== REUNION BANNER ===== -->
+<div class="reunion-banner">
+  <div class="reunion-year">2026</div>
+  <h2>15年ぶりの奇跡の復活</h2>
+  <p>2011年「メンバーが痩せてしまった」という理由で解散したDEV PARADEが、<br>
+  2026年2月6日、ついに再結成。初のフルアルバムも制作中。</p>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <h2 class="section-title reveal">ABOUT <span>DEV PARADE</span></h2>
+  <p class="section-sub reveal">デブパレードとは</p>
+  <div class="about-grid">
+    <img src="assets/member-group.jpg" alt="DEV PARADE" class="about-img reveal">
+    <div class="about-text reveal">
+      <p>DEV PARADE（デブパレード）は、2006年にギタリストugazinが「体重100kg以上のミュージシャン」を緊急招集して結成された日本のロックバンド。バンド名はDef Leppard（デフ・レパード）のパロディ。自称「ヘヴィメタボバンド」。復活後のメンバー条件は<strong>90kg以上</strong>に改定。</p>
+      <p>2008年、ソニー・ミュージック傘下のDefSTAR Recordsから「メジャー・デブー」。NARUTOエンディングテーマ「バッチコイ!!!」、SUMMER SONIC出演、「HEY!HEY!HEY!」出演など精力的に活動。</p>
+      <p>2011年、「メンバーが痩せてメタボを名乗れなくなった」という前代未聞の理由で解散。「普通（サイズ）の男の子に戻ります」と宣言。</p>
+      <p>そして2026年2月6日 &mdash; 15年の沈黙を破り、奇跡の再結成。新メンバーに"ぺー"を迎え、新たなDEV PARADEが動き出す。</p>
+      <div class="about-stats">
+        <div class="about-stat">
+          <div class="num">570<span style="font-size:1.2rem">kg+</span></div>
+          <div class="label">Total Weight</div>
+        </div>
+        <div class="about-stat">
+          <div class="num">15</div>
+          <div class="label">Years Apart</div>
+        </div>
+        <div class="about-stat">
+          <div class="num">2026</div>
+          <div class="label">Reunion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MEMBERS ===== -->
+<section id="members">
+  <h2 class="section-title reveal">THE <span>MEMBERS</span></h2>
+  <p class="section-sub reveal">メンバー紹介</p>
+  <div class="members-grid">
+
+    <div class="member-card reveal">
+      <img src="assets/member-hanzi.jpg" alt="ハンサム判治" class="member-img">
+      <div class="member-info">
+        <div class="member-part">Vocal / Leader</div>
+        <div class="member-name">ハンサム判治</div>
+        <div class="member-name-en">Handsome Hanzi</div>
+        <div class="member-weight">120kg</div>
+        <div class="member-acts">ハンサム兄弟 / HANZI BAND</div>
+        <div class="member-sns">
+          <a href="https://x.com/han363" target="_blank">X</a>
+          <a href="https://www.instagram.com/hanzi/" target="_blank">Instagram</a>
+          <a href="https://www.threads.net/@hanzi" target="_blank">Threads</a>
+          <a href="https://www.han363.com/hanzi/" target="_blank">Web</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="member-card reveal">
+      <img src="assets/member-coyass.jpg" alt="COYASS" class="member-img">
+      <div class="member-info">
+        <div class="member-part">MC</div>
+        <div class="member-name">COYASS</div>
+        <div class="member-name-en">Dr.COYASS - D.D.S. Ph.D.</div>
+        <div class="member-weight">105kg</div>
+        <div class="member-acts">MIC BANDITZ / E.P.O<br>歯科医師・歯学博士</div>
+        <div class="member-sns">
+          <a href="https://x.com/coyass" target="_blank">X</a>
+          <a href="https://www.instagram.com/dr.coyass/" target="_blank">Instagram</a>
+          <a href="https://drcoyass.github.io" target="_blank">Web</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="member-card reveal">
+      <img src="assets/member-ugazin.jpg" alt="ugazin" class="member-img">
+      <div class="member-info">
+        <div class="member-part">Guitar / Songwriter</div>
+        <div class="member-name">ugazin</div>
+        <div class="member-name-en">Ugazin</div>
+        <div class="member-weight">105kg</div>
+        <div class="member-acts">MONG HANG / 14"fourteen"<br>バンド発起人</div>
+        <div class="member-sns">
+          <a href="https://x.com/ugazin" target="_blank">X</a>
+          <a href="https://ugazin.com" target="_blank">Web</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="member-card new-member reveal">
+      <img src="assets/member-bass.jpg" alt="ぺー" class="member-img">
+      <div class="member-info">
+        <div class="member-part">Bass</div>
+        <div class="member-name">ぺー</div>
+        <div class="member-name-en">Pe</div>
+        <div class="member-acts">TAPE ME WONDER / Vanityyyy<br>2026年〜新メンバー</div>
+        <div class="member-sns">
+          <a href="https://tapemewonder.com/" target="_blank">TAPE ME WONDER</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="member-card reveal">
+      <img src="assets/member-tah.jpg" alt="TAH" class="member-img">
+      <div class="member-info">
+        <div class="member-part">Drums</div>
+        <div class="member-name">TAH</div>
+        <div class="member-name-en">Tah</div>
+        <div class="member-weight">146kg</div>
+        <div class="member-acts">元GQ06 / lolMusika<br>元初代リーダー（最重量）</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== LIVE ===== -->
+<section id="live">
+  <h2 class="section-title reveal">LIVE <span>SCHEDULE</span></h2>
+  <p class="section-sub reveal">ライブ情報</p>
+  <div class="live-list">
+
+    <div class="live-card reveal">
+      <div class="live-date">
+        <div class="year">2026</div>
+        <div class="day">02.06</div>
+        <div class="month">FEB</div>
+        <div class="dow">FRI</div>
+      </div>
+      <div class="live-info">
+        <h3>ハッピー乱デブー 2026 〜再結成記念ワンマン〜</h3>
+        <div class="venue">下北沢 Club Que</div>
+        <span class="badge badge-soldout">SOLD OUT</span>
+      </div>
+    </div>
+
+    <div class="live-card reveal">
+      <div class="live-date" style="background: var(--yellow); color: #000;">
+        <div class="year" style="color:#000;">2026</div>
+        <div class="day">05.09</div>
+        <div class="month">MAY</div>
+        <div class="dow">SAT</div>
+      </div>
+      <div class="live-info">
+        <h3>DEV PARADE GRAND FESTIVAL</h3>
+        <div class="venue">国立代々木体育館</div>
+        <span class="badge badge-upcoming">UPCOMING</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== VIDEO ===== -->
+<section id="video">
+  <h2 class="section-title reveal">MUSIC <span>VIDEO</span></h2>
+  <p class="section-sub reveal">公式ミュージックビデオ</p>
+  <div class="video-grid reveal">
+    <div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/Y5ZNUwub_OQ" title="デブパレード - バッチコイ!!! MV"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:var(--red); letter-spacing:0.1em;">NARUTO -ナルト- 疾風伝 ED THEME</div>
+        <div style="font-weight:900; margin-top:0.2rem;">バッチコイ!!!</div>
+        <div style="font-size:0.8rem; color:var(--gray);">2nd Single (2009) &mdash; Official Music Video</div>
+      </div>
+    </div>
+    <div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/SVTMKC2_iOg" title="デブパレード - Body&Soul MV"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div style="margin-top:0.8rem;">
+        <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:var(--red); letter-spacing:0.1em;">MAJOR DEBUT</div>
+        <div style="font-weight:900; margin-top:0.2rem;">Body&Soul</div>
+        <div style="font-size:0.8rem; color:var(--gray);">1st Single (2008) &mdash; SPEED Cover</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DISCOGRAPHY ===== -->
+<section id="discography">
+  <h2 class="section-title reveal">DISCO<span>GRAPHY</span></h2>
+  <p class="section-sub reveal">作品 &mdash; 全オリジナル音源サブスク解禁中</p>
+
+  <!-- Streaming Links -->
+  <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem;" class="reveal">
+    <a href="https://open.spotify.com/artist/1qeIXf0zcZXwfjd5oGmFC3" target="_blank"
+       style="display:inline-block; padding:0.5rem 1.5rem; background:#1DB954; color:#fff;
+              font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:0.1em;
+              text-decoration:none; transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Spotify
+    </a>
+    <a href="https://music.apple.com/jp/artist/%E3%83%87%E3%83%96%E3%83%91%E3%83%AC%E3%83%BC%E3%83%89/304692523" target="_blank"
+       style="display:inline-block; padding:0.5rem 1.5rem; background:linear-gradient(135deg,#FA243C,#A534BE); color:#fff;
+              font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:0.1em;
+              text-decoration:none; transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Apple Music
+    </a>
+  </div>
+
+  <div class="disco-grid">
+
+    <!-- NEW ALBUM -->
+    <div class="disco-new reveal">
+      <div class="year" style="color: var(--yellow);">2026 &mdash; 1st Full Album</div>
+      <h3>NEW ALBUM</h3>
+      <div class="coming">COMING SOON</div>
+      <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.9rem;">
+        15年越しの初フルアルバム &mdash; 現在制作中
+      </p>
+    </div>
+
+    <!-- 2nd Single -->
+    <div class="disco-card reveal">
+      <div class="year">2009.03.11 &mdash; 2nd Single</div>
+      <h3>バッチコイ!!!</h3>
+      <div class="label">DefSTAR Records (DFCL-1539)</div>
+      <div class="tieup">テレビ東京系アニメ「NARUTO -ナルト- 疾風伝」第8期EDテーマ</div>
+      <div class="tracks">
+        1. バッチコイ!!! &mdash; <a href="https://smer.lnk.to/Bacchikoi" target="_blank" style="color:var(--red);">▶ 聴く</a><br>
+        2. GODS N' DEATH &mdash; <a href="https://smer.lnk.to/GODS_N_DEATH" target="_blank" style="color:var(--red);">▶ 聴く</a><br>
+        作詞: ハンサム判治・COYASS・ugazin / 編曲: ugazin
+      </div>
+    </div>
+
+    <!-- 1st Single -->
+    <div class="disco-card reveal">
+      <div class="year">2008.06.25 &mdash; 1st Single</div>
+      <h3>Body&Soul / cosmic mind</h3>
+      <div class="label">DefSTAR Records (DFCL-1478)</div>
+      <div class="tieup">「cosmic mind」映画「ギララの逆襲/洞爺湖サミット危機一発」主題歌<br>（第65回ヴェネツィア国際映画祭出品作）</div>
+      <div class="tracks">
+        1. Body&Soul（SPEEDカバー / パラダイス山元参加）<br>
+        2. cosmic mind &mdash; <a href="https://smer.lnk.to/cosmic_mind" target="_blank" style="color:var(--red);">▶ 聴く</a><br>
+        3. ME☆TA☆BO〜俺たちミートボール〜 &mdash; <a href="https://smer.lnk.to/MeTaBo-Oretachi_Meatball-" target="_blank" style="color:var(--red);">▶ 聴く</a>
+      </div>
+    </div>
+
+    <!-- Indies -->
+    <div class="disco-card reveal">
+      <div class="year">PRE-DEBUT &mdash; Indies CD</div>
+      <h3>脂肪遊戯</h3>
+      <div class="label">Self Release（メジャーデビュー前レア音源）</div>
+      <div class="tracks">
+        ※現在入手困難
+      </div>
+    </div>
+
+    <!-- DVD -->
+    <div class="disco-card reveal">
+      <div class="year">2007.11.21 &mdash; DVD</div>
+      <h3>ちゃんこdeちゃんこ 〜in両国〜</h3>
+      <div class="label">DVD</div>
+      <div class="tracks">
+        2007年7月 両国FOURVALLEYにて開催された<br>
+        女性限定ワンマンライブの映像作品
+      </div>
+    </div>
+
+    <!-- Compilation: 赤塚不二夫トリビュート -->
+    <div class="disco-card reveal">
+      <div class="year">2008.09.24 &mdash; Compilation</div>
+      <h3>赤塚不二夫トリビュート<br>〜四十一才の春だから〜</h3>
+      <div class="label">DefSTAR Records (DFCL-1490)</div>
+      <div class="tieup">「天才バカボン（レコード・サイズ）」で参加<br>CR天才バカボン メインテーマ</div>
+      <div class="tracks">
+        赤塚不二夫を愛するアーティストが集結した<br>
+        豪華トリビュートアルバム
+      </div>
+    </div>
+
+    <!-- Compilation: BEST HIT NARUTO -->
+    <div class="disco-card reveal">
+      <div class="year">2010.07.14 &mdash; Compilation</div>
+      <h3>BEST HIT NARUTO</h3>
+      <div class="label">Sony Music (通常盤 / DVD付限定盤)</div>
+      <div class="tieup">「バッチコイ!!!」(#10) 収録</div>
+      <div class="tracks">
+        NARUTO -ナルト- 疾風伝<br>
+        2008年春〜2010年春のテーマソング集
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== HISTORY ===== -->
+<section id="history">
+  <h2 class="section-title reveal">HISTO<span>RY</span></h2>
+  <p class="section-sub reveal">バンドの歴史</p>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2006</div>
+      <div class="timeline-text">ugazinがインターネットで「体重100kg以上のミュージシャン」を緊急招集。バンド結成。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2007</div>
+      <div class="timeline-text">ライブ活動開始。総体重570kg超の圧倒的存在感で話題に。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2008.06</div>
+      <div class="timeline-text">DefSTAR Records（ソニー）から「メジャー・デブー」。1stシングル「Body&Soul / cosmic mind」発売。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2008.07</div>
+      <div class="timeline-text">フジテレビ「HEY!HEY!HEY! MUSIC CHAMP」出演。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2008.08</div>
+      <div class="timeline-text">SUMMER SONIC 2008 大阪エンタメステージ出演。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2009.03</div>
+      <div class="timeline-text">2ndシングル「バッチコイ!!!」発売。NARUTO -ナルト- 疾風伝 EDテーマに採用。</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2011.02</div>
+      <div class="timeline-text">解散。「メンバーが痩せてメタボを名乗れなくなった」「普通（サイズ）の男の子に戻ります」</div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-year">2025.11</div>
+      <div class="timeline-text">ugazin主催ライブ（下北沢Club Que）にシークレットアクトとして15年ぶりにステージへ。</div>
+    </div>
+    <div class="timeline-item highlight reveal">
+      <div class="timeline-year">2026.02.06</div>
+      <div class="timeline-text">15年ぶりの再結成を正式発表！新メンバー"ぺー"を迎え、下北沢Club Queでワンマンライブ開催。初のフルアルバム制作中であることも発表。</div>
+    </div>
+    <div class="timeline-item highlight reveal">
+      <div class="timeline-year">2026.05.09</div>
+      <div class="timeline-text">国立代々木体育館でのグランドフェスティバル開催予定。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PHOTO GALLERY ===== -->
+<section id="gallery">
+  <h2 class="section-title reveal">LIVE <span>GALLERY</span></h2>
+  <p class="section-sub reveal">2026.02.06 復活ワンマン @ 下北沢 Club Que</p>
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem;" class="reveal">
+    <img src="assets/live-action1.jpg" alt="DEV PARADE Live" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-hanzi2.jpg" alt="ハンサム判治 Live" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-duo.jpg" alt="ハンサム判治 & COYASS" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-ugazin2.jpg" alt="ugazin Live" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-coyass2.jpg" alt="COYASS Live" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-front.jpg" alt="DEV PARADE Live Front" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-stage2.jpg" alt="DEV PARADE Stage" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+    <img src="assets/live-wide.jpg" alt="DEV PARADE Wide" style="width:100%; aspect-ratio:3/2; object-fit:cover; cursor:pointer; filter:grayscale(10%); transition:filter 0.3s;" onmouseover="this.style.filter='grayscale(0)'" onmouseout="this.style.filter='grayscale(10%)'">
+  </div>
+</section>
+
+<!-- ===== GOODS ===== -->
+<section id="goods">
+  <h2 class="section-title reveal">OFFICIAL <span>GOODS</span></h2>
+  <p class="section-sub reveal">デ物販 &mdash; ライブ会場限定販売</p>
+  <div class="goods-showcase reveal">
+    <div>
+      <img src="assets/goods-banner.jpg" alt="DEV PARADE Goods" class="goods-img">
+    </div>
+    <div class="goods-info">
+      <span class="goods-badge">LIVE VENUE ONLY</span>
+      <h3 style="margin-top:1rem;">「全ての武器をお箸に」Tシャツ</h3>
+      <p style="color:var(--gray); font-size:0.9rem; margin:0.5rem 0; line-height:1.7;">
+        フロント: DEV PARADEロゴ<br>
+        バック: 「全ての武器をお箸に」DEV PARADE
+      </p>
+      <div style="display:flex; gap:1.5rem; margin:1rem 0; align-items:baseline;">
+        <div>
+          <div style="font-family:'Oswald',sans-serif; font-size:0.7rem; color:var(--gray); letter-spacing:0.1em;">SIZE</div>
+          <div style="font-weight:900; font-size:1.1rem;">M / XL / XXXL</div>
+        </div>
+        <div>
+          <div style="font-family:'Oswald',sans-serif; font-size:0.7rem; color:var(--gray); letter-spacing:0.1em;">PRICE</div>
+          <div style="font-weight:900; font-size:1.1rem; color:var(--yellow);">¥4,000<span style="font-size:0.75rem; color:var(--gray);">（税込）</span></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+        <img src="assets/tshirt-design.png" alt="Tシャツデザイン" style="width:48%; border:1px solid #222; border-radius:4px;">
+        <img src="assets/tshirt-real.jpg" alt="Tシャツ実物" style="width:48%; border:1px solid #222; border-radius:4px;">
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:2rem;" class="reveal">
+    <img src="assets/flyer-meat.jpg" alt="DEV PARADE 極厚リブステージ用" style="max-width:350px; width:100%; border:1px solid #222; border-radius:4px;">
+    <p style="color:var(--gray); font-size:0.8rem; margin-top:0.5rem;">※ライブ会場のみでの販売です</p>
+  </div>
+</section>
+
+<!-- ===== NEWS (Facebook Feed) ===== -->
+<section id="news">
+  <h2 class="section-title reveal"><span>NEWS</span></h2>
+  <p class="section-sub reveal">最新情報 &mdash; Facebook公式ページより</p>
+  <div style="display:flex; justify-content:center;" class="reveal">
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous"
+      src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v21.0"></script>
+    <div class="fb-page"
+      data-href="https://www.facebook.com/DevParadeOfficial/"
+      data-tabs="timeline"
+      data-width="500"
+      data-height="700"
+      data-small-header="false"
+      data-adapt-container-width="true"
+      data-hide-cover="false"
+      data-show-facepile="true">
+      <blockquote cite="https://www.facebook.com/DevParadeOfficial/" class="fb-xfbml-parse-ignore">
+        <a href="https://www.facebook.com/DevParadeOfficial/">DEV PARADE Official</a>
+      </blockquote>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:2rem;" class="reveal">
+    <a href="https://www.facebook.com/DevParadeOfficial/"
+       target="_blank"
+       style="display:inline-block; padding:0.7rem 2rem; background:#1877F2; color:#fff;
+              font-family:'Oswald',sans-serif; font-size:0.95rem; letter-spacing:0.1em;
+              text-decoration:none; text-transform:uppercase; transition:opacity 0.3s;"
+       onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      Follow on Facebook &rarr;
+    </a>
+  </div>
+</section>
+
+<!-- ===== LINKS ===== -->
+<section id="links">
+  <h2 class="section-title reveal"><span>LINKS</span></h2>
+  <p class="section-sub reveal">関連リンク</p>
+  <div class="links-grid">
+    <a href="https://www.sonymusic.co.jp/artist/devparade/" target="_blank" class="link-card reveal">
+      <div class="link-icon">🎵</div>
+      <div>
+        <div class="link-label">Sony Music Official</div>
+        <div class="link-desc">旧公式サイト（DefSTAR Records時代）</div>
+      </div>
+    </a>
+    <a href="https://music.apple.com/jp/artist/%E3%83%87%E3%83%96%E3%83%91%E3%83%AC%E3%83%BC%E3%83%89/304692523" target="_blank" class="link-card reveal">
+      <div class="link-icon">🍎</div>
+      <div>
+        <div class="link-label">Apple Music</div>
+        <div class="link-desc">DEV PARADEの楽曲をストリーミング</div>
+      </div>
+    </a>
+    <a href="https://www.last.fm/music/DEV+PARADE" target="_blank" class="link-card reveal">
+      <div class="link-icon">📻</div>
+      <div>
+        <div class="link-label">Last.fm</div>
+        <div class="link-desc">アーティストページ</div>
+      </div>
+    </a>
+    <a href="https://natalie.mu/music/artist/1474" target="_blank" class="link-card reveal">
+      <div class="link-icon">📰</div>
+      <div>
+        <div class="link-label">音楽ナタリー</div>
+        <div class="link-desc">ニュース・記事</div>
+      </div>
+    </a>
+    <a href="https://www.facebook.com/DevParadeOfficial/" target="_blank" class="link-card reveal" style="border-color: #1877F2;">
+      <div class="link-icon">📘</div>
+      <div>
+        <div class="link-label">Facebook Official</div>
+        <div class="link-desc">DEV PARADE 公式Facebookページ</div>
+      </div>
+    </a>
+    <a href="https://www.han363.com/band/%E3%83%87%E3%83%96%E3%83%91%E3%83%AC%E3%83%BC%E3%83%89/" target="_blank" class="link-card reveal">
+      <div class="link-icon">🎤</div>
+      <div>
+        <div class="link-label">ハンサムレコーズ</div>
+        <div class="link-desc">DEV PARADEページ</div>
+      </div>
+    </a>
+    <a href="https://tower.jp/artist/496015" target="_blank" class="link-card reveal">
+      <div class="link-icon">🏬</div>
+      <div>
+        <div class="link-label">TOWER RECORDS</div>
+        <div class="link-desc">ディスコグラフィー</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <img src="assets/logo.png" alt="DEV PARADE" class="footer-logo">
+  <p>
+    DEV PARADE (デブパレード) &copy; 2026<br>
+    Formerly on DefSTAR Records / Sony Music Labels Inc.<br><br>
+    <a href="https://www.sonymusic.co.jp/artist/devparade/" target="_blank">旧公式サイト (Sony Music)</a>
+  </p>
+</footer>
+
+<script>
+// Hamburger menu
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navMenu').classList.toggle('open');
+});
+
+// Close menu on link click
+document.querySelectorAll('#navMenu a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navMenu').classList.remove('open');
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Nav hide on scroll down, show on scroll up
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  const current = window.scrollY;
+  if (current > lastScroll && current > 100) {
+    nav.style.transform = 'translateY(-100%)';
+  } else {
+    nav.style.transform = 'translateY(0)';
+  }
+  lastScroll = current;
+});
+</script>
+
+</body>
+</html>
