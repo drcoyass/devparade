@@ -5,9 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DEV PARADE | デブパレード 公式サイト - 15年ぶりの復活</title>
   <meta name="description" content="総体重570kg超のヘヴィメタボバンド DEV PARADE（デブパレード）15年ぶりの復活！元DefSTAR Records、NARUTOエンディングテーマ「バッチコイ!!!」でお馴染み。">
-  <meta property="og:title" content="DEV PARADE | デブパレード 公式サイト">
-  <meta property="og:description" content="伝説のヘヴィメタボバンド、15年ぶりの奇跡の復活！">
-  <meta property="og:image" content="assets/member-group.jpg">
+  <!-- OGP: Facebook / LINE -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DEV PARADE | 総体重570kg超ヘヴィメタボバンド 15年ぶり復活">
+  <meta property="og:description" content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆痛風ホルダー。2026.02.06 再結成ワンマン開催。">
+  <meta property="og:image" content="https://drcoyass.github.io/devparade/assets/member-group.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://drcoyass.github.io/devparade/">
+  <meta property="og:site_name" content="DEV PARADE Official">
+  <meta property="og:locale" content="ja_JP">
+  <!-- OGP: X (Twitter) Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DEV PARADE | 総体重570kg超ヘヴィメタボバンド 15年ぶり復活">
+  <meta name="twitter:description" content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆痛風ホルダー。">
+  <meta name="twitter:image" content="https://drcoyass.github.io/devparade/assets/member-group.jpg">
+  <!-- SEO -->
+  <meta name="keywords" content="DEV PARADE,デブパレード,バッチコイ,NARUTO,ヘヴィメタボ,復活,再結成,ハンサム判治,COYASS,ugazin,DefSTAR Records">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://drcoyass.github.io/devparade/">
+  <!-- Structured Data: JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MusicGroup",
+    "name": "DEV PARADE",
+    "alternateName": "デブパレード",
+    "url": "https://drcoyass.github.io/devparade/",
+    "image": "https://drcoyass.github.io/devparade/assets/member-group.jpg",
+    "genre": ["Rock", "Heavy Metabo"],
+    "foundingDate": "2006",
+    "dissolutionDate": "2011",
+    "description": "総体重570kg超のヘヴィメタボバンド。2008年DefSTAR Records（ソニー）からメジャーデビュー。NARUTOエンディングテーマ「バッチコイ!!!」。2026年2月6日、15年ぶりの再結成。",
+    "member": [
+      {"@type": "Person", "name": "ハンサム判治", "roleName": "Vocal / Leader"},
+      {"@type": "Person", "name": "COYASS", "roleName": "MC"},
+      {"@type": "Person", "name": "ugazin", "roleName": "Guitar / Songwriter"},
+      {"@type": "Person", "name": "ぺー", "roleName": "Bass"},
+      {"@type": "Person", "name": "TAH", "roleName": "Drums"}
+    ],
+    "sameAs": [
+      "https://www.facebook.com/DevParadeOfficial/",
+      "https://open.spotify.com/artist/1qeIXf0zcZXwfjd5oGmFC3",
+      "https://www.sonymusic.co.jp/artist/devparade/"
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -514,6 +557,53 @@
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
     }
 
+    /* ===== SHARE BUTTONS ===== */
+    .share-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+      display: flex; justify-content: center; gap: 0;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
+      border-top: 2px solid var(--red);
+      padding: 0.5rem 0;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+    .share-bar.visible { transform: translateY(0); }
+    .share-btn {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.08em;
+      text-decoration: none; color: #fff;
+      transition: opacity 0.2s;
+      border: none; cursor: pointer;
+      background: none;
+    }
+    .share-btn:hover { opacity: 0.7; }
+    .share-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .share-btn.x-btn { color: #fff; }
+    .share-btn.line-btn { color: #06C755; }
+    .share-btn.fb-btn { color: #1877F2; }
+    .share-btn.copy-btn { color: var(--yellow); }
+
+    /* ===== VIRAL CATCHCOPY BANNER ===== */
+    .viral-banner {
+      text-align: center; padding: 2rem 1rem;
+      background: linear-gradient(135deg, #111, #0a0a0a);
+      border-top: 1px solid #222; border-bottom: 1px solid #222;
+    }
+    .viral-banner .catch {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 900; font-size: clamp(1.2rem, 4vw, 2rem);
+      line-height: 1.8;
+    }
+    .viral-banner .catch .em { color: var(--red); }
+    .viral-banner .catch .yellow { color: var(--yellow); }
+    .viral-banner .share-prompt {
+      margin-top: 1rem; font-size: 0.8rem; color: var(--gray);
+      letter-spacing: 0.1em;
+    }
+
     @media (max-width: 600px) {
       .members-grid { grid-template-columns: repeat(2, 1fr); }
       .live-card { grid-template-columns: 100px 1fr; }
@@ -566,6 +656,16 @@
   <h2>15年ぶりの奇跡の復活</h2>
   <p>2011年「メンバーが痩せてしまった」という理由で解散したDEV PARADEが、<br>
   2026年2月6日、ついに再結成。初のフルアルバムも制作中。</p>
+</div>
+
+<!-- ===== VIRAL CATCHCOPY ===== -->
+<div class="viral-banner">
+  <div class="catch">
+    <span class="em">総体重570kg超</span>、全員<span class="yellow">痛風ホルダー</span>。<br>
+    <span class="em">NARUTO</span>エンディングバンドが<span class="yellow">15年ぶり</span>に帰ってきた。<br>
+    デブじゃなきゃ入れない。<span class="em">90kg以上</span>限定バンド。
+  </div>
+  <div class="share-prompt">#デブパレード #DEVPARADE #バッチコイ で拡散お願いします</div>
 </div>
 
 <!-- ===== ABOUT ===== -->
@@ -1064,6 +1164,26 @@
   </div>
 </section>
 
+<!-- ===== FIXED SHARE BAR ===== -->
+<div class="share-bar" id="shareBar">
+  <a class="share-btn x-btn" id="shareX" href="#" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    SHARE
+  </a>
+  <a class="share-btn line-btn" id="shareLINE" href="#" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+    LINE
+  </a>
+  <a class="share-btn fb-btn" id="shareFB" href="#" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    FB
+  </a>
+  <button class="share-btn copy-btn" id="copyURL">
+    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+    URL
+  </button>
+</div>
+
 <!-- ===== FOOTER ===== -->
 <footer>
   <img src="assets/logo.png" alt="DEV PARADE" class="footer-logo">
@@ -1108,8 +1228,9 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Nav hide on scroll down, show on scroll up
+// Nav hide on scroll down, show on scroll up + Share bar
 let lastScroll = 0;
+const shareBar = document.getElementById('shareBar');
 window.addEventListener('scroll', () => {
   const nav = document.querySelector('nav');
   const current = window.scrollY;
@@ -1118,7 +1239,35 @@ window.addEventListener('scroll', () => {
   } else {
     nav.style.transform = 'translateY(0)';
   }
+  // Show share bar after scrolling past hero
+  if (current > 400) {
+    shareBar.classList.add('visible');
+  } else {
+    shareBar.classList.remove('visible');
+  }
   lastScroll = current;
+});
+
+// Share buttons
+const siteURL = 'https://drcoyass.github.io/devparade/';
+const shareText = '総体重570kg超、全員痛風ホルダー。NARUTOエンディングバンド「デブパレード」が15年ぶりに復活！デブじゃなきゃ入れない90kg以上限定バンド。\n#デブパレード #DEVPARADE #バッチコイ';
+
+document.getElementById('shareX').href =
+  'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(siteURL);
+
+document.getElementById('shareLINE').href =
+  'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(siteURL);
+
+document.getElementById('shareFB').href =
+  'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(siteURL);
+
+document.getElementById('copyURL').addEventListener('click', () => {
+  navigator.clipboard.writeText(siteURL + '\n' + shareText).then(() => {
+    const btn = document.getElementById('copyURL');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> COPIED!';
+    setTimeout(() => { btn.innerHTML = orig; }, 2000);
+  });
 });
 </script>
 
