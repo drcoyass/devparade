@@ -1,0 +1,43 @@
+name: DebuPosi Monitor - Negative Tweet Detector
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # 3時間ごとに実行
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install tweepy
+
+      - name: Search and generate responses
+        env:
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+        run: python scripts/debu-posi-monitor.py
+
+      - name: Create Issue with responses
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f monitor_issue.md ]; then
+            DATE=$(date +%Y-%m-%d_%H:%M)
+            gh issue create \
+              --title "🍖 [デブポジ返信] ネガティブ発言検知 (${DATE})" \
+              --body "$(cat monitor_issue.md)" \
+              --label "debu-posi-reply" || \
+            gh issue create \
+              --title "🍖 [デブポジ返信] ネガティブ発言検知 (${DATE})" \
+              --body "$(cat monitor_issue.md)"
+          fi

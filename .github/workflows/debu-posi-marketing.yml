@@ -1,27 +1,20 @@
-name: DebuPosi Marketing - Multi-Platform Promotion
+name: DebuPosi Marketing - Auto Tweet Generator
 
 on:
   workflow_dispatch:
     inputs:
       campaign:
-        description: 'キャンペーン名'
+        description: 'キャンペーン名 (launch / scheduled / collab)'
         required: false
-        default: 'launch'
+        default: 'scheduled'
   schedule:
-    - cron: '0 3 * * 1,4'  # 月・木 12:00 JST (03:00 UTC) - 週2回投稿
+    - cron: '0 3 * * 1,4'  # 月・木 12:00 JST - 週2回自動生成
 
 permissions:
   issues: write
 
-env:
-  X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-  X_API_KEY: ${{ secrets.X_API_KEY }}
-  X_API_SECRET: ${{ secrets.X_API_SECRET }}
-  X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
-  X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-
 jobs:
-  marketing:
+  generate-tweet:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,23 +24,22 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install deps
-        run: pip install tweepy
-
-      - name: Post promotional tweets
-        run: python scripts/debu-posi-marketing.py
+      - name: Generate tweet content
         env:
           CAMPAIGN: ${{ github.event.inputs.campaign || 'scheduled' }}
+        run: python scripts/debu-posi-tweet-generator.py
 
-      - name: Log marketing activity
-        if: always()
+      - name: Create Issue with tweet
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -f marketing_log.md ]; then
-            DATE=$(date +%Y-%m-%d_%H:%M)
+          if [ -f tweet_issue.md ]; then
+            DATE=$(date +%Y-%m-%d)
             gh issue create \
-              --title "📢 [Marketing] デブポジBot告知 (${DATE})" \
-              --body "$(cat marketing_log.md)" \
-              --label "marketing" || true
+              --title "🍖 [デブポジツイート] ${DATE}" \
+              --body "$(cat tweet_issue.md)" \
+              --label "tweet-ready" || \
+            gh issue create \
+              --title "🍖 [デブポジツイート] ${DATE}" \
+              --body "$(cat tweet_issue.md)"
           fi
