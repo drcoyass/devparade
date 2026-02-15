@@ -11,7 +11,16 @@ import random
 import urllib.parse
 from datetime import datetime, timezone, timedelta
 
+try:
+    import tweepy
+except ImportError:
+    tweepy = None
+
 CAMPAIGN = os.environ.get("CAMPAIGN", "scheduled")
+API_KEY = os.environ.get("X_API_KEY")
+API_SECRET = os.environ.get("X_API_SECRET")
+ACCESS_TOKEN = os.environ.get("X_ACCESS_TOKEN")
+ACCESS_SECRET = os.environ.get("X_ACCESS_SECRET")
 BOT_URL = "https://dev-parade.github.io/debu-bot.html"
 SITE_URL = "https://dev-parade.github.io/"
 
@@ -206,9 +215,33 @@ DM or リプライで！🍖
 }
 
 
+def auto_post(tweet_text):
+    """X APIで自動投稿を試みる"""
+    if not tweepy or not all([API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
+        return None
+    try:
+        client = tweepy.Client(
+            consumer_key=API_KEY,
+            consumer_secret=API_SECRET,
+            access_token=ACCESS_TOKEN,
+            access_token_secret=ACCESS_SECRET,
+        )
+        result = client.create_tweet(text=tweet_text)
+        tweet_id = result.data["id"]
+        print(f"✅ Auto-posted! Tweet ID: {tweet_id}")
+        return tweet_id
+    except Exception as e:
+        print(f"❌ Auto-post failed: {e}")
+        return None
+
+
 def main():
     tweets = TWEETS.get(CAMPAIGN, TWEETS["scheduled"])
     tweet_text = random.choice(tweets)
+
+    # 自動投稿を試みる
+    tweet_id = auto_post(tweet_text)
+    auto_posted = tweet_id is not None
 
     # X intent URL（ワンクリック投稿リンク）
     intent_url = "https://twitter.com/intent/tweet?text=" + urllib.parse.quote(tweet_text)
@@ -216,10 +249,15 @@ def main():
     # Issue用Markdown生成
     now = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
 
+    status = "✅ 自動投稿済み" if auto_posted else "📋 手動投稿待ち"
+    tweet_link = f"https://twitter.com/dev_parade/status/{tweet_id}" if tweet_id else ""
+
     issue_md = f"""## 🍖 デブポジツイート（自動生成）
 
 **生成日時:** {now}
 **キャンペーン:** {CAMPAIGN}
+**ステータス:** {status}
+{"**投稿リンク:** " + tweet_link if tweet_link else ""}
 
 ---
 
