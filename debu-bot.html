@@ -903,7 +903,7 @@ function showResult(text, member) {
   resultBox.classList.add('show');
 
   // Update share links
-  const shareText = `${text}\n\n— ${member.name}（DEV PARADE）\n#デブポジBot #DEVPARADE\nhttps://dev-parade.github.io/debu-bot.html`;
+  const shareText = `${text}\n\n— ${member.name}（DEV PARADE）\n@dev_parade\n#デブポジBot #DEVPARADE\nhttps://dev-parade.github.io/debu-bot.html`;
   document.getElementById('shareX').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
   document.getElementById('shareLine').href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent('https://dev-parade.github.io/debu-bot.html')}&text=${encodeURIComponent(shareText)}`;
 
@@ -920,7 +920,7 @@ function randomConvert() {
 function copyResult() {
   const text = document.getElementById('resultText').textContent;
   const member = document.getElementById('resultMember').textContent;
-  navigator.clipboard.writeText(`${text}\n\n— ${member}\n#デブポジBot #DEVPARADE`).then(() => {
+  navigator.clipboard.writeText(`${text}\n\n— ${member}\n@dev_parade\n#デブポジBot #DEVPARADE`).then(() => {
     const btn = event.target;
     const original = btn.textContent;
     btn.textContent = '✅ コピー完了！';
