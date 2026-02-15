@@ -1,4 +1,4 @@
-# デブポジBot 有料化セットアップガイド
+# ポジデブBot 有料化セットアップガイド
 
 ## 方法1: noteメンバーシップ（推奨・簡単）
 
@@ -10,12 +10,12 @@ noteのメンバーシップ機能を使って有料プランを提供。
 3. プランを作成:
 
 #### プラン1: PREMIUM（¥500/月）
-- **プラン名:** デブポジBot PREMIUM
+- **プラン名:** ポジデブBot PREMIUM
 - **説明:** AI搭載デブポジ変換、API利用（月1,000回）、自動リプライBot設定、カスタム応答、メンバー指名変換
 - **特典記事:** PREMIUMメンバー限定のAPIキー発行手順
 
 #### プラン2: PRO（¥2,000/月）
-- **プラン名:** デブポジBot PRO
+- **プラン名:** ポジデブBot PRO
 - **説明:** 全機能無制限、複数SNS自動Bot、企業利用OK、DEV PARADE公認バッジ、メンバーからDM
 - **特典記事:** PRO限定のフル機能APIキー + メンバーとの直接やりとり
 
@@ -39,10 +39,10 @@ Stripeを使って直接課金。APIキーの自動発行も可能。
 #### 2. Stripe商品/価格作成
 ```bash
 # Stripe CLIでプラン作成
-stripe products create --name="DebuPosiBot PREMIUM" --description="AI搭載デブポジ変換 月1,000回API"
+stripe products create --name="PosiDevBot PREMIUM" --description="AI搭載デブポジ変換 月1,000回API"
 stripe prices create --product=prod_xxx --unit-amount=500 --currency=jpy --recurring[interval]=month
 
-stripe products create --name="DebuPosiBot PRO" --description="全機能無制限 複数SNS自動Bot"
+stripe products create --name="PosiDevBot PRO" --description="全機能無制限 複数SNS自動Bot"
 stripe prices create --product=prod_yyy --unit-amount=2000 --currency=jpy --recurring[interval]=month
 ```
 
@@ -67,7 +67,7 @@ debu-bot.htmlのSUBSCRIBEボタンをStripe Checkoutにリンク。
 2. Stripe Webhookがサーバーに通知
 3. APIキーを自動生成
 4. ユーザーにメールで通知
-5. APIキーでデブポジBot APIを利用可能
+5. APIキーでポジデブBot APIを利用可能
 
 ※ この方式はVercel/Cloudflare Workers等のサーバーレス環境が必要
 

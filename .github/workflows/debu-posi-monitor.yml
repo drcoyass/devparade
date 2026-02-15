@@ -1,4 +1,4 @@
-name: DebuPosi Monitor - Negative Tweet Detector
+name: PosiDev Monitor - Negative Tweet Detector
 
 on:
   schedule:

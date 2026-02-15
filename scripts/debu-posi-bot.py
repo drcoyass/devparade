@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DebuPosi Bot - DEV PARADE 公式デブポジティブ変換Bot
+PosiDev Bot - DEV PARADE 公式デブポジティブ変換Bot
 
 SNS上の「デブ」「太った」「痩せろ」等のネガティブ発言を検知し、
 DEV PARADEメンバーとしてポジティブなリプライを自動送信する。
@@ -49,43 +49,43 @@ MEMBERS = [
 # ===== ポジティブレスポンスDB =====
 RESPONSES = {
     "デブ": [
-        "デブ？ ありがとう！🍖 総体重570kg超のバンドDEV PARADEから言わせてもらうと、それは最高の褒め言葉。#デブポジ #DEVPARADE",
-        "「デブ」= Delightful Excellent Beautiful の略。知らなかった？ 🍖 by DEV PARADE #デブポジ",
-        "デブは才能。俺たち5人で570kg、全員メジャーデビュー済み。才能に体重は関係ない。🍖 #デブポジ #DEVPARADE",
-        "デブって呼ばれた？ おめでとう、DEV PARADEの入団資格を満たしてます（条件:90kg以上）🍖 #デブポジ",
-        "デブは誇り。バンド名にDEV（デブ）入れてるくらい。リスペクト。🍖 by DEV PARADE #デブポジ",
+        "デブ？ ありがとう！🍖 総体重570kg超のバンドDEV PARADEから言わせてもらうと、それは最高の褒め言葉。#ポジデブ #DEVPARADE",
+        "「デブ」= Delightful Excellent Beautiful の略。知らなかった？ 🍖 by DEV PARADE #ポジデブ",
+        "デブは才能。俺たち5人で570kg、全員メジャーデビュー済み。才能に体重は関係ない。🍖 #ポジデブ #DEVPARADE",
+        "デブって呼ばれた？ おめでとう、DEV PARADEの入団資格を満たしてます（条件:90kg以上）🍖 #ポジデブ",
+        "デブは誇り。バンド名にDEV（デブ）入れてるくらい。リスペクト。🍖 by DEV PARADE #ポジデブ",
     ],
     "太った": [
-        "太った？ それは「成長した」って言うんだよ。細胞レベルで進化してる。おめでとう！🎉🍖 by DEV PARADE #デブポジ",
-        "体重が増えた = 存在感が増した。ステージ映えするってこと。DEV PARADEが保証する。🍖 #デブポジ",
-        "太った分だけ、地球がお前を離したくないってこと。モテてるぜ、地球に。🌍🍖 #デブポジ #DEVPARADE",
-        "体重計の数字が増えた？ それは「影響力」のメーター。デカい奴はデカいことができる。🍖 #デブポジ",
+        "太った？ それは「成長した」って言うんだよ。細胞レベルで進化してる。おめでとう！🎉🍖 by DEV PARADE #ポジデブ",
+        "体重が増えた = 存在感が増した。ステージ映えするってこと。DEV PARADEが保証する。🍖 #ポジデブ",
+        "太った分だけ、地球がお前を離したくないってこと。モテてるぜ、地球に。🌍🍖 #ポジデブ #DEVPARADE",
+        "体重計の数字が増えた？ それは「影響力」のメーター。デカい奴はデカいことができる。🍖 #ポジデブ",
     ],
     "痩せ": [
-        "痩せる必要？ ないね。俺たち570kgで武道館目指してる。痩せたら夢が軽くなる。💪🍖 #デブポジ #DEVPARADE",
-        "「痩せたい」を「もっと愛されたい」に変換。大丈夫、デブは愛される才能。🍖 by DEV PARADE #デブポジ",
-        "痩せなくていい。むしろDEV PARADE入らない？条件は90kg以上。🍖 #デブポジ #DEVPARADE",
-        "ダイエットの語源は\"生き方\"。今の生き方、最高じゃん。変えなくていい。🍖 #デブポジ",
+        "痩せる必要？ ないね。俺たち570kgで武道館目指してる。痩せたら夢が軽くなる。💪🍖 #ポジデブ #DEVPARADE",
+        "「痩せたい」を「もっと愛されたい」に変換。大丈夫、デブは愛される才能。🍖 by DEV PARADE #ポジデブ",
+        "痩せなくていい。むしろDEV PARADE入らない？条件は90kg以上。🍖 #ポジデブ #DEVPARADE",
+        "ダイエットの語源は\"生き方\"。今の生き方、最高じゃん。変えなくていい。🍖 #ポジデブ",
     ],
     "メタボ": [
-        "メタボ？ メタル＋ボディの略でしょ？ ロックな体型認定おめでとう！🤘🍖 by DEV PARADE #デブポジ",
-        "俺たち自称「ヘヴィメタボバンド」。メタボは音楽ジャンル。🍖 #デブポジ #DEVPARADE",
-        "メタボ判定 = ロック認定。DEV PARADEはメタボバンドとして15年やってます。🍖 #デブポジ",
+        "メタボ？ メタル＋ボディの略でしょ？ ロックな体型認定おめでとう！🤘🍖 by DEV PARADE #ポジデブ",
+        "俺たち自称「ヘヴィメタボバンド」。メタボは音楽ジャンル。🍖 #ポジデブ #DEVPARADE",
+        "メタボ判定 = ロック認定。DEV PARADEはメタボバンドとして15年やってます。🍖 #ポジデブ",
     ],
     "ぽっちゃり": [
-        "ぽっちゃり？ それは「やわらかい魅力がある」の同義語。🍖 by DEV PARADE #デブポジ",
-        "ぽっちゃりは最高のボディタイプ。包容力がハンパない。DEV PARADEメンバー全員が証人。🍖 #デブポジ",
+        "ぽっちゃり？ それは「やわらかい魅力がある」の同義語。🍖 by DEV PARADE #ポジデブ",
+        "ぽっちゃりは最高のボディタイプ。包容力がハンパない。DEV PARADEメンバー全員が証人。🍖 #ポジデブ",
     ],
     "体重": [
-        "体重の話？ 俺たち5人で570kg超。重さは力。重さは存在感。🍖 by DEV PARADE #デブポジ",
-        "体重と幸福度は比例する（DEV PARADE調べ）。お前、幸せだろ？🍖 #デブポジ #DEVPARADE",
+        "体重の話？ 俺たち5人で570kg超。重さは力。重さは存在感。🍖 by DEV PARADE #ポジデブ",
+        "体重と幸福度は比例する（DEV PARADE調べ）。お前、幸せだろ？🍖 #ポジデブ #DEVPARADE",
     ],
     "generic": [
-        "どんな悩みも、焼肉食ったら解決する。解決しなくても、美味い。それでいい。🍖 by DEV PARADE #デブポジ",
-        "大丈夫、お前は最高だ。570kg超のバンドが言ってるんだから間違いない。🍖 #デブポジ #DEVPARADE",
-        "ネガティブな言葉は俺たちの腹の肉で全部吸収してやる。🍖 by DEV PARADE #デブポジ",
-        "この世に無駄な脂肪なんてない。全部お前という作品の一部。🍖 #デブポジ #DEVPARADE",
-        "デブは個性。個性は武器。武器は磨け。🍖 by DEV PARADE #デブポジ",
+        "どんな悩みも、焼肉食ったら解決する。解決しなくても、美味い。それでいい。🍖 by DEV PARADE #ポジデブ",
+        "大丈夫、お前は最高だ。570kg超のバンドが言ってるんだから間違いない。🍖 #ポジデブ #DEVPARADE",
+        "ネガティブな言葉は俺たちの腹の肉で全部吸収してやる。🍖 by DEV PARADE #ポジデブ",
+        "この世に無駄な脂肪なんてない。全部お前という作品の一部。🍖 #ポジデブ #DEVPARADE",
+        "デブは個性。個性は武器。武器は磨け。🍖 by DEV PARADE #ポジデブ",
     ],
 }
 
@@ -137,7 +137,7 @@ def get_ai_response(tweet_text):
 - 280文字以内（日本語）
 - ユーモアと温かさを込める
 - 「デブは才能」「脂肪は努力の結晶」的なポジティブ変換
-- 最後に 🍖 と #デブポジ #DEVPARADE を付ける
+- 最後に 🍖 と #ポジデブ #DEVPARADE を付ける
 - 相手を傷つけない、上から目線にならない
 - 押し付けがましくない
 
@@ -190,7 +190,7 @@ def save_last_id(tweet_id):
 
 def main():
     print("=" * 50)
-    print("🍖 DebuPosi Bot - DEV PARADE")
+    print("🍖 PosiDev Bot - DEV PARADE")
     print(f"   Mode: {'DRY RUN' if DRY_RUN else 'LIVE'}")
     print(f"   Time: {datetime.now(timezone.utc).isoformat()}")
     print("=" * 50)
@@ -287,7 +287,7 @@ def main():
 
 def generate_sample_log():
     """API未設定時のサンプルログ"""
-    log = """## 🍖 DebuPosi Bot 実行ログ
+    log = """## 🍖 PosiDev Bot 実行ログ
 
 **ステータス:** ⚠️ X API未設定（デモモード）
 
@@ -320,7 +320,7 @@ def generate_log(entries, count):
     now = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
 
     lines = [
-        f"## 🍖 DebuPosi Bot 実行ログ",
+        f"## 🍖 PosiDev Bot 実行ログ",
         f"",
         f"**実行日時:** {now}",
         f"**モード:** {mode}",
@@ -343,7 +343,7 @@ def generate_log(entries, count):
 
     lines.append("")
     lines.append("---")
-    lines.append(f"Powered by DEV PARADE デブポジBot 🍖")
+    lines.append(f"Powered by DEV PARADE ポジデブBot 🍖")
 
     with open("bot_log.md", "w") as f:
         f.write("\n".join(lines))

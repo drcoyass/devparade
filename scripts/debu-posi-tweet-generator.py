@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-DebuPosi Tweet Generator
+PosiDev Tweet Generator
 
 ツイート文を自動生成し、ワンクリック投稿リンク付きのIssueを作成。
 X APIクレジット不要。GitHub Issueのリンクをクリックするだけで投稿可能。
@@ -27,7 +27,7 @@ SITE_URL = "https://dev-parade.github.io/"
 # ===== ツイートテンプレート =====
 TWEETS = {
     "launch": [
-        f"""🍖【世界初】デブポジBot、爆誕。
+        f"""🍖【世界初】ポジデブBot、爆誕。
 
 SNS上の全ての「デブ」をポジティブに変換するBot、作りました。
 
@@ -36,7 +36,7 @@ SNS上の全ての「デブ」をポジティブに変換するBot、作りま�
 試してみて👇
 {BOT_URL}
 
-#デブポジBot #DEVPARADE #デブパレード""",
+#ポジデブBot #DEVPARADE #デブパレード""",
 
         f"""「デブ」って言われて傷ついた全ての人へ。
 
@@ -46,10 +46,10 @@ SNS上の全ての「デブ」をポジティブに変換するBot、作りま�
 
 デブは才能。脂肪は努力の結晶。
 
-そんな俺たちが作った「デブポジBot」🍖
+そんな俺たちが作った「ポジデブBot」🍖
 
 {BOT_URL}
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
     ],
 
     "scheduled": [
@@ -66,7 +66,7 @@ A.
 反論は受け付けません。🍖
 
 {BOT_URL}
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""【定期】DEV PARADEのメンバー体重
 
@@ -92,9 +92,9 @@ A.
 全部ポジティブに変換するBot作った🍖
 {BOT_URL}
 
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
-        f"""今日のデブポジ名言:
+        f"""今日のポジデブ名言:
 
 「この世に無駄な脂肪はない。
 全部、お前という作品の一部だ。」
@@ -102,14 +102,14 @@ A.
 — DEV PARADE（総体重570kg超）🍖
 
 {BOT_URL}
-#デブポジBot #デブポジ""",
+#ポジデブBot #ポジデブ""",
 
         f"""体重と幸福度は比例する。
 （DEV PARADE調べ）
 
 source: 俺たち570kg超で幸せ🍖
 
-#デブポジBot #DEVPARADE
+#ポジデブBot #DEVPARADE
 {BOT_URL}""",
 
         f"""NARUTOのエンディングテーマ歌ってた
@@ -131,11 +131,11 @@ source: 俺たち570kg超で幸せ🍖
 でも今の生き方、最高じゃん？
 変えなくていいよ。🍖
 
-#デブポジBot #DEVPARADE
+#ポジデブBot #DEVPARADE
 {BOT_URL}""",
 
         f"""あなたの「デブ」エピソード、
-デブポジBotが全力ポジティブに変換します。
+ポジデブBotが全力ポジティブに変換します。
 
 入力: ネガティブな体型の悩み
 出力: DEV PARADEメンバーからの全力肯定
@@ -143,7 +143,7 @@ source: 俺たち570kg超で幸せ🍖
 やってみて👇🍖
 {BOT_URL}
 
-#デブポジBot""",
+#ポジデブBot""",
 
         f"""太ってる人にしかわからないこと
 
@@ -155,7 +155,7 @@ source: 俺たち570kg超で幸せ🍖
 でも全部ネタになる。
 それがDEV PARADEのスピリット🍖
 
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""【急募】体重90kg以上の仲間
 
@@ -166,10 +166,10 @@ source: 俺たち570kg超で幸せ🍖
 
 待遇:
 ・DEV PARADEが全力で肯定
-・デブポジBotが24時間あなたの味方
+・ポジデブBotが24時間あなたの味方
 
 {BOT_URL}
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""太ったことを後悔してるあなたへ。
 
@@ -183,10 +183,10 @@ NARUTOのエンディング歌って
 
 全部、太ってたから。🍖
 
-#デブポジBot #DEVPARADE #バッチコイ
+#ポジデブBot #DEVPARADE #バッチコイ
 {SITE_URL}""",
 
-        f"""デブポジBot 変換例:
+        f"""ポジデブBot 変換例:
 
 😢「また太った...」
 🍖「太った？ それは成長した！細胞レベルで進化してる。おめでとう！」
@@ -196,13 +196,13 @@ NARUTOのエンディング歌って
 
 あなたも変換してみて👇
 {BOT_URL}
-#デブポジBot""",
+#ポジデブBot""",
     ],
 
     "collab": [
         f"""【コラボ募集】
 
-デブポジBotと一緒にデブをポジティブにしたい
+ポジデブBotと一緒にデブをポジティブにしたい
 企業・ブランド・インフルエンサーを募集中！
 
 ・フードブランド🍔
@@ -210,7 +210,7 @@ NARUTOのエンディング歌って
 ・お笑い芸人（デブ芸人さん大歓迎）🎤
 
 DM or リプライで！🍖
-#デブポジBot #コラボ募集""",
+#ポジデブBot #コラボ募集""",
     ],
 }
 
@@ -252,7 +252,7 @@ def main():
     status = "✅ 自動投稿済み" if auto_posted else "📋 手動投稿待ち"
     tweet_link = f"https://twitter.com/dev_parade/status/{tweet_id}" if tweet_id else ""
 
-    issue_md = f"""## 🍖 デブポジツイート（自動生成）
+    issue_md = f"""## 🍖 ポジデブツイート（自動生成）
 
 **生成日時:** {now}
 **キャンペーン:** {CAMPAIGN}

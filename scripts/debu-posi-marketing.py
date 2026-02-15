@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-DebuPosi Marketing - 自動マーケティング・告知投稿スクリプト
+PosiDev Marketing - 自動マーケティング・告知投稿スクリプト
 
-各SNSにデブポジBotの告知を自動投稿し、集客する。
+各SNSにポジデブBotの告知を自動投稿し、集客する。
 バイラルを狙ったコンテンツを定期投稿。
 """
 
@@ -25,7 +25,7 @@ YOUTUBE_URL = "https://youtube.com/playlist?list=PL0THYLU4QbDkldXStxeHXCfsTnas90
 # ===== 告知ツイートのバリエーション =====
 PROMO_TWEETS = {
     "launch": [
-        f"""🍖【世界初】デブポジBot、爆誕。
+        f"""🍖【世界初】ポジデブBot、爆誕。
 
 SNS上の全ての「デブ」をポジティブに変換するBot、作りました。
 
@@ -36,7 +36,7 @@ SNS上の全ての「デブ」をポジティブに変換するBot、作りま�
 試してみて👇
 {BOT_URL}
 
-#デブポジBot #DEVPARADE #デブパレード""",
+#ポジデブBot #DEVPARADE #デブパレード""",
 
         f"""「デブ」って言われて傷ついた全ての人へ。
 
@@ -46,11 +46,11 @@ SNS上の全ての「デブ」をポジティブに変換するBot、作りま�
 
 デブは才能。脂肪は努力の結晶。
 
-そんな俺たちが作った「デブポジBot」
+そんな俺たちが作った「ポジデブBot」
 ネガティブ → ポジティブに全変換🍖
 
 {BOT_URL}
-#デブポジBot""",
+#ポジデブBot""",
     ],
 
     "scheduled": [
@@ -70,7 +70,7 @@ A.
 反論は受け付けません。🍖
 
 {BOT_URL}
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""【定期】
 
@@ -99,7 +99,7 @@ DEV PARADEのメンバー体重
 全部ポジティブに変換するBot作った🍖
 {BOT_URL}
 
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""今日のデブポジ名言:
 
@@ -109,7 +109,7 @@ DEV PARADEのメンバー体重
 — DEV PARADE（総体重570kg超）🍖
 
 {BOT_URL}
-#デブポジBot #デブポジ""",
+#ポジデブBot #ポジデブ""",
 
         f"""体重と幸福度は比例する。
 
@@ -117,7 +117,7 @@ DEV PARADEのメンバー体重
 
 source: 俺たち570kg超で幸せ🍖
 
-#デブポジBot #DEVPARADE
+#ポジデブBot #DEVPARADE
 {BOT_URL}""",
 
         f"""NARUTOのエンディングテーマ歌ってた
@@ -140,11 +140,11 @@ source: 俺たち570kg超で幸せ🍖
 
 変えなくていいよ。🍖
 
-#デブポジBot #DEVPARADE
+#ポジデブBot #DEVPARADE
 {BOT_URL}""",
 
         f"""あなたの「デブ」エピソード、
-デブポジBotが全力ポジティブに変換します。
+ポジデブBotが全力ポジティブに変換します。
 
 入力: ネガティブな体型の悩み
 出力: DEV PARADEメンバーからの全力肯定
@@ -152,7 +152,7 @@ source: 俺たち570kg超で幸せ🍖
 やってみて👇🍖
 {BOT_URL}
 
-#デブポジBot""",
+#ポジデブBot""",
 
         f"""太ってる人にしかわからないこと
 
@@ -165,7 +165,7 @@ source: 俺たち570kg超で幸せ🍖
 でも全部ネタになる。
 それがDEV PARADEのスピリット🍖
 
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""【急募】体重90kg以上の仲間
 
@@ -177,10 +177,10 @@ source: 俺たち570kg超で幸せ🍖
 
 待遇:
 ・DEV PARADEが全力で肯定
-・デブポジBotが24時間あなたの味方
+・ポジデブBotが24時間あなたの味方
 
 {BOT_URL}
-#デブポジBot #DEVPARADE""",
+#ポジデブBot #DEVPARADE""",
 
         f"""太ったことを後悔してるあなたへ。
 
@@ -194,14 +194,14 @@ NARUTOのエンディング歌って
 
 全部、太ってたから。🍖
 
-#デブポジBot #DEVPARADE #バッチコイ
+#ポジデブBot #DEVPARADE #バッチコイ
 {SITE_URL}""",
     ],
 
     "collab": [
         f"""【コラボ募集】
 
-デブポジBotと一緒にデブをポジティブにしたい
+ポジデブBotと一緒にデブをポジティブにしたい
 企業・ブランド・インフルエンサーを募集中！
 
 ・フードブランド🍔
@@ -210,14 +210,14 @@ NARUTOのエンディング歌って
 ・お笑い芸人（デブ芸人さん大歓迎）🎤
 
 DM or リプライで！🍖
-#デブポジBot #コラボ募集""",
+#ポジデブBot #コラボ募集""",
     ],
 }
 
 # ===== リプライ用テンプレート（バズりそうなツイートに反応） =====
 VIRAL_REPLIES = [
-    "デブの話題が出たので来ました。総体重570kg超バンドのDEV PARADEです。デブは才能。🍖 #デブポジBot",
-    "デブをネガティブに語るスレッドに割り込む総体重570kg超バンドです。デブは最高。🍖 #デブポジBot",
+    "デブの話題が出たので来ました。総体重570kg超バンドのDEV PARADEです。デブは才能。🍖 #ポジデブBot",
+    "デブをネガティブに語るスレッドに割り込む総体重570kg超バンドです。デブは最高。🍖 #ポジデブBot",
 ]
 
 
@@ -274,7 +274,7 @@ def generate_marketing_log(result):
     """マーケティングログ生成"""
     now = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M JST")
 
-    log = f"""## 📢 デブポジBot マーケティングログ
+    log = f"""## 📢 ポジデブBot マーケティングログ
 
 **実行日時:** {now}
 **キャンペーン:** {CAMPAIGN}
@@ -305,20 +305,20 @@ def generate_marketing_log(result):
 ### Instagramストーリー用テキスト（コピペ用）
 
 ```
-🍖 デブポジBot 始動！
+🍖 ポジデブBot 始動！
 
 SNSの「デブ」を全部ポジティブに変換する
 世界初のBot作った！
 
 プロフのリンクから試してみて！
 
-#デブポジBot #DEVPARADE #デブパレード
+#ポジデブBot #DEVPARADE #デブパレード
 ```
 
 ### Facebook投稿用テキスト（コピペ用）
 
 ```
-【デブポジBot 始動🍖】
+【ポジデブBot 始動🍖】
 
 DEV PARADEが、SNS上の全ての「デブ」「太った」「痩せろ」を
 ポジティブに変換するBotを作りました！
@@ -329,7 +329,7 @@ DEV PARADEが、SNS上の全ての「デブ」「太った」「痩せろ」を
 試してみてください👇
 {BOT_URL}
 
-#デブポジBot #DEVPARADE #デブパレード
+#ポジデブBot #DEVPARADE #デブパレード
 ```
 
 ---
@@ -342,7 +342,7 @@ DEV PARADEが、SNS上の全ての「デブ」「太った」「痩せろ」を
 
 def main():
     print("=" * 50)
-    print("📢 DebuPosi Marketing")
+    print("📢 PosiDev Marketing")
     print(f"   Campaign: {CAMPAIGN}")
     print("=" * 50)
 

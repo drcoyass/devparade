@@ -1,4 +1,4 @@
-name: DebuPosi Marketing - Auto Tweet Generator
+name: PosiDev Marketing - Auto Tweet Generator
 
 on:
   workflow_dispatch:
