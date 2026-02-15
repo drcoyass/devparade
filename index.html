@@ -88,7 +88,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.6rem 1.5rem;
     }
-    nav .nav-logo { height: 40px; }
+    nav .nav-logo { height: 40px; mix-blend-mode: screen; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
     nav ul {
       list-style: none; display: flex; gap: 1.8rem;
     }
@@ -134,7 +134,8 @@
     }
     .hero-logo-img {
       max-width: min(500px, 80vw); height: auto;
-      filter: drop-shadow(0 0 30px rgba(227,30,36,0.4));
+      mix-blend-mode: screen;
+      filter: drop-shadow(0 0 30px rgba(227,30,36,0.6)) drop-shadow(0 8px 20px rgba(0,0,0,0.7)) drop-shadow(0 0 60px rgba(227,30,36,0.3));
       animation: logoFloat 4s ease-in-out infinite;
     }
     @keyframes logoFloat {
@@ -493,7 +494,7 @@
       padding: 3rem 1.5rem;
       text-align: center;
     }
-    footer .footer-logo { height: 60px; margin-bottom: 1rem; }
+    footer .footer-logo { height: 60px; margin-bottom: 1rem; mix-blend-mode: screen; filter: drop-shadow(0 2px 8px rgba(227,30,36,0.4)); }
     footer p {
       font-size: 0.75rem; color: var(--gray);
       letter-spacing: 0.05em; line-height: 1.8;
