@@ -93,7 +93,7 @@ def select_response(tweet_text):
 
 
 def get_client():
-    """OAuth 1.0a クライアント（読み書き両方）"""
+    """OAuth 1.0a クライアント（投稿用）"""
     if not all([API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
         return None
     return tweepy.Client(
@@ -103,6 +103,14 @@ def get_client():
         access_token_secret=ACCESS_SECRET,
         wait_on_rate_limit=True,
     )
+
+
+def get_read_client():
+    """Bearer Tokenクライアント（読み取り用）"""
+    if BEARER_TOKEN:
+        return tweepy.Client(bearer_token=BEARER_TOKEN, wait_on_rate_limit=True)
+    # Bearer Token無い場合はOAuth 1.0aで試す
+    return get_client()
 
 
 def get_last_id():
@@ -118,12 +126,17 @@ def save_last_id(tweet_id):
         f.write(str(tweet_id))
 
 
-def monitor_mentions(client):
+def monitor_mentions(write_client):
     """メンションタイムラインを監視して自動返信"""
     print("\n📡 メンション監視モード")
 
+    read_client = get_read_client()
+    if not read_client:
+        print("❌ 読み取りクライアント作成失敗")
+        return []
+
     try:
-        me = client.get_me()
+        me = write_client.get_me()
         if not me.data:
             print("❌ ユーザー情報取得失敗")
             return []
@@ -150,7 +163,7 @@ def monitor_mentions(client):
         if last_id:
             kwargs["since_id"] = last_id
 
-        result = client.get_users_mentions(**kwargs)
+        result = read_client.get_users_mentions(**kwargs)
 
         if not result.data:
             print("   新しいメンションなし")
@@ -182,10 +195,10 @@ def monitor_mentions(client):
                 "status": "pending",
             }
 
-            # 自動返信
+            # 自動返信（write_clientで投稿）
             if len(auto_replies) < 10:
                 try:
-                    client.create_tweet(
+                    write_client.create_tweet(
                         text=reply_text,
                         in_reply_to_tweet_id=tweet.id,
                     )
