@@ -44,11 +44,11 @@ FOUND_IDS_FILE = "replied_tweet_ids.json"
 LAST_MENTION_ID_FILE = "last_monitor_id.txt"
 
 MEMBERS = [
-    {"name": "ハンサム判治", "role": "Vo.", "weight": "100kg"},
-    {"name": "COYASS", "role": "MC", "weight": "93kg"},
-    {"name": "ugazin", "role": "Gt.", "weight": "135kg"},
-    {"name": "ぺー", "role": "Ba.", "weight": "120kg"},
-    {"name": "TAH", "role": "Dr.", "weight": "120kg"},
+    {"name": "ハンサム判治", "role": "Vo./Leader", "weight": "90kg超"},
+    {"name": "COYASS", "role": "MC", "weight": "90kg超"},
+    {"name": "ugazin", "role": "Gt./作曲", "weight": "90kg超"},
+    {"name": "ぺー", "role": "Ba.", "weight": "90kg超"},
+    {"name": "TAH", "role": "Dr.", "weight": "90kg超"},
 ]
 
 # キーワードDBをインポート

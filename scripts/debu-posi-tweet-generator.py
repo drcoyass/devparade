@@ -34,7 +34,7 @@ DAILY_TWEETS = [
 「この世に無駄な脂肪はない。
 全部、お前という作品の一部だ。」
 
-— DEV PARADE（総体重570kg超）🍖
+— DEV PARADE（全員90kg超）🍖
 
 {BOT_URL}
 #ポジデブBot #ポジデブ""",
@@ -79,21 +79,20 @@ DAILY_TWEETS = [
 「腹が出てるんじゃない。
 夢が詰まってるんだ。」
 
-DEV PARADEの腹には570kg分の夢が詰まってます🍖
+DEV PARADEの腹にはメンバー全員90kg超分の夢が詰まってます🍖
 
 #ポジデブBot #DEVPARADE""",
 
-    # ----- メンバー体重ネタ系 -----
-    f"""【定期】DEV PARADEのメンバー体重
+    # ----- メンバー紹介系 -----
+    f"""【定期】DEV PARADEのメンバー
 
-🎤 ハンサム判治 100kg
-🎙️ COYASS 93kg
-🎸 ugazin 135kg
-🎸 ぺー 120kg
-🥁 TAH 120kg
+🎤 ハンサム判治（Vo./Leader）
+🎙️ COYASS（MC）
+🎸 ugazin（Gt./作曲）
+🎸 ぺー（Ba.）NEW!
+🥁 TAH（Dr.）
 
-合計: 570kg超
-全員痛風ホルダー。
+全員90kg以上。合計体重は推して知るべし。
 全員メジャーデビュー経験あり。
 
 体重と才能は比例する。🍖
@@ -104,17 +103,17 @@ DEV PARADEの腹には570kg分の夢が詰まってます🍖
 ✅ 体重90kg以上
 ✅ 音楽が好き
 ✅ デブに誇りを持てる
-✅ 痛風でも前を向ける
+✅ 肉を愛せる
 
-現在メンバー5名、合計570kg超。
+現在メンバー5名。全員90kg超。
 次の仲間、募集中。🍖
 
 #DEVPARADE #ポジデブBot""",
 
     f"""DEV PARADEメンバー豆知識:
 
-ugazin（Gt.）は135kg。
-ギターの弦より太い指で繊細なメロディを紡ぐ男。
+ugazin（Gt.）はバンドの発起人。
+太い指で繊細なメロディを紡ぐ男。
 
 体重と繊細さは共存する。🍖
 
@@ -122,7 +121,7 @@ ugazin（Gt.）は135kg。
 
     f"""DEV PARADEメンバー豆知識:
 
-TAH（Dr.）は120kg。
+TAH（Dr.）は最重量メンバー。
 バスドラが二度と元に戻らないパワー。
 
 それがヘヴィメタボの「ヘヴィ」の意味。🍖
@@ -297,7 +296,7 @@ NARUTOのEDも歌った。
     f"""体重と幸福度は比例する。
 （DEV PARADE調べ）
 
-source: 俺たち570kg超で幸せ🍖
+source: 俺たち全員90kg超で幸せ🍖
 
 #ポジデブBot #DEVPARADE
 {BOT_URL}""",
@@ -385,7 +384,7 @@ DEV PARADEが許可する。🍖
     f"""🍖【世界初】ポジデブBot
 
 SNS上の全ての「デブ」をポジティブに変換！
-総体重570kg超のバンド DEV PARADEが全力で肯定。
+全員90kg超のバンド DEV PARADEが全力で肯定。
 
 試してみて👇
 {BOT_URL}
@@ -429,13 +428,10 @@ DEV PARADEが全力で肯定する。🍖
     # ----- 参加型 / 質問系 -----
     f"""【質問】あなたの好きな食べ物は？
 
-DEV PARADEメンバーの回答:
-🎤 判治: 焼肉
-🎙️ COYASS: ラーメン
-🎸 ugazin: カレー
-🎸 ぺー: 寿司
-🥁 TAH: 全部
+DEV PARADEメンバーは全員「肉」と即答。
+5人で焼肉行ったら店が震える。
 
+あなたは何が好き？
 リプで教えて🍖
 
 #ポジデブBot #DEVPARADE""",
@@ -456,7 +452,7 @@ DEV PARADEの仲間。🍖
 「デブ」って悩んでる人に届けたい。
 
 太ってるのは恥ずかしいことじゃない。
-俺たち5人で570kg。
+俺たち5人でメンバー全員90kg超。
 全員メジャーデビュー。
 NARUTOのED歌った。
 
@@ -506,7 +502,7 @@ NARUTOのED歌った。
 世界で唯一のBot作りました。
 
 入力: ネガティブな体型の悩み
-出力: 570kg超バンドからの全力肯定
+出力: 全員90kg超バンドからの全力肯定
 
 既に変換された人、感想をリプで🍖
 
@@ -515,7 +511,7 @@ NARUTOのED歌った。
 
     # ----- 海外向け / English -----
     f"""A band where EVERY member weighs over 90kg.
-Total: 570kg+.
+Total: メンバー全員90kg超+.
 All had major label deals.
 Sang NARUTO's ending theme.
 
@@ -528,7 +524,7 @@ This is DEV PARADE. 🍖
 #DEVPARADE #BodyPositive""",
 
     f"""Body positivity isn't just words for us.
-It's 570kg of proof.
+It's メンバー全員90kg超 of proof.
 
 DEV PARADE - 5 members, all 90kg+
 Every one of us proud.
@@ -539,8 +535,8 @@ It's a story to celebrate. 🍖
 {SITE_URL}
 #BodyPositive #DEVPARADE""",
 
-    f"""POV: You're a 570kg band and
-your guitarist weighs 135kg.
+    f"""POV: You're a メンバー全員90kg超 band and
+your guitarist is a heavyweight champion.
 
 His fingers are thicker than guitar strings.
 His melodies? Delicate as a butterfly.
@@ -558,7 +554,7 @@ They're partners. 🍖
 4. Gravity? Loves you more.
 5. Presence? Undeniable.
 
-570kg band DEV PARADE approves. 🍖
+メンバー全員90kg超 band DEV PARADE approves. 🍖
 
 #BodyPositive #DEVPARADE""",
 
@@ -573,7 +569,7 @@ They're partners. 🍖
 体型＝健康じゃない。
 
 俺たちDEV PARADE、
-5人で570kg。
+5人でメンバー全員90kg超。
 全員現役ミュージシャン。🍖
 
 #ポジデブBot #DEVPARADE""",
@@ -581,7 +577,7 @@ They're partners. 🍖
     f"""日本で一番体重が重いバンドは
 たぶん俺たち。
 
-5人で570kg。
+5人でメンバー全員90kg超。
 
 でも日本で一番
 「デブでよかった」と思ってるバンドも
@@ -606,14 +602,12 @@ They're partners. 🍖
     # ----- 数字・データ系（信頼性UP） -----
     f"""【DEV PARADE データ】
 
-結成: 2000年代
-メンバー: 5人
-合計体重: 570kg超
-全員痛風: Yes
+結成: 2006年
+メンバー: 5人（全員90kg以上）
 メジャーデビュー: 全員経験あり
 代表曲: バッチコイ!!（NARUTO ED）
 解散理由: メンバーが痩せた
-復活理由: 全員太り直した
+復活理由: 全員太り直した（2026年）
 
 全部事実。🍖
 
@@ -631,7 +625,7 @@ They're partners. 🍖
 
 #ポジデブBot #DEVPARADE #月曜日""",
 
-    f"""今日も570kgのバンドが
+    f"""今日もメンバー全員90kg超のバンドが
 あなたを全力で肯定します。
 
 太ってていい。
