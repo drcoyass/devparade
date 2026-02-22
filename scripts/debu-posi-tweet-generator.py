@@ -79,7 +79,7 @@ DAILY_TWEETS = [
 「腹が出てるんじゃない。
 夢が詰まってるんだ。」
 
-DEV PARADEの腹にはメンバー全員90kg超分の夢が詰まってます🍖
+DEV PARADEの腹には夢がたっぷり詰まってます🍖
 
 #ポジデブBot #DEVPARADE""",
 
@@ -92,8 +92,8 @@ DEV PARADEの腹にはメンバー全員90kg超分の夢が詰まってます�
 🎸 ぺー（Ba.）NEW!
 🥁 TAH（Dr.）
 
-全員90kg以上。合計体重は推して知るべし。
-全員メジャーデビュー経験あり。
+全員90kg以上。
+DefSTAR Records（ソニー）からメジャーデビュー済み。
 
 体重と才能は比例する。🍖
 #DEVPARADE #デブパレード""",
@@ -121,7 +121,7 @@ ugazin（Gt.）はバンドの発起人。
 
     f"""DEV PARADEメンバー豆知識:
 
-TAH（Dr.）は最重量メンバー。
+TAH（Dr.）は元初代リーダー。
 バスドラが二度と元に戻らないパワー。
 
 それがヘヴィメタボの「ヘヴィ」の意味。🍖
@@ -264,7 +264,7 @@ A.
 {SITE_URL}""",
 
     f"""DEV PARADE = Def Leppardのパロディ。
-ただし体重は本家の3倍。
+ただし全員90kg超。
 
 「ヘヴィメタル」じゃなくて「ヘヴィメタボ」。
 メタルより重い、メタボの響き。🍖
@@ -381,7 +381,7 @@ DEV PARADEが許可する。🍖
 
 #ポジデブBot""",
 
-    f"""🍖【世界初】ポジデブBot
+    f"""🍖 ポジデブBot
 
 SNS上の全ての「デブ」をポジティブに変換！
 全員90kg超のバンド DEV PARADEが全力で肯定。
@@ -428,10 +428,10 @@ DEV PARADEが全力で肯定する。🍖
     # ----- 参加型 / 質問系 -----
     f"""【質問】あなたの好きな食べ物は？
 
-DEV PARADEメンバーは全員「肉」と即答。
+DEV PARADEは焼肉が大好きなバンド。
 5人で焼肉行ったら店が震える。
 
-あなたは何が好き？
+あなたの好きな食べ物は？
 リプで教えて🍖
 
 #ポジデブBot #DEVPARADE""",
@@ -452,9 +452,9 @@ DEV PARADEの仲間。🍖
 「デブ」って悩んでる人に届けたい。
 
 太ってるのは恥ずかしいことじゃない。
-俺たち5人でメンバー全員90kg超。
-全員メジャーデビュー。
+俺たち5人、全員90kg超。
 NARUTOのED歌った。
+メジャーデビューもした。
 
 体重は、才能。🍖
 
@@ -487,11 +487,11 @@ NARUTOのED歌った。
 
     f"""フォローすると起きること:
 
-🍖 1日3回ポジデブが届く
+🍖 1日4回ポジデブが届く
 🍖 体型の悩みが軽くなる
 🍖 焼肉が食べたくなる
 🍖 DEV PARADEのことが気になり始める
-🍖 痛風が怖くなくなる
+🍖 自分に自信が持てるようになる
 
 副作用: 体重は増えます。
 でも幸福度も増えます。
@@ -499,7 +499,7 @@ NARUTOのED歌った。
 #ポジデブBot #DEVPARADE""",
 
     f"""「デブ」をポジティブに変換できる
-世界で唯一のBot作りました。
+ポジデブBot作りました。
 
 入力: ネガティブな体型の悩み
 出力: 全員90kg超バンドからの全力肯定
@@ -511,11 +511,11 @@ NARUTOのED歌った。
 
     # ----- 海外向け / English -----
     f"""A band where EVERY member weighs over 90kg.
-Total: メンバー全員90kg超+.
-All had major label deals.
+All members over 90kg.
+Had a major label deal with Sony.
 Sang NARUTO's ending theme.
 
-We broke up because a member got thin.
+We broke up because members got thin.
 Reunited because everyone got fat again.
 
 This is DEV PARADE. 🍖
@@ -524,7 +524,7 @@ This is DEV PARADE. 🍖
 #DEVPARADE #BodyPositive""",
 
     f"""Body positivity isn't just words for us.
-It's メンバー全員90kg超 of proof.
+It's 5 members, all over 90kg, of proof.
 
 DEV PARADE - 5 members, all 90kg+
 Every one of us proud.
@@ -535,7 +535,7 @@ It's a story to celebrate. 🍖
 {SITE_URL}
 #BodyPositive #DEVPARADE""",
 
-    f"""POV: You're a メンバー全員90kg超 band and
+    f"""POV: You're in a band where everyone's over 90kg and
 your guitarist is a heavyweight champion.
 
 His fingers are thicker than guitar strings.
@@ -554,7 +554,7 @@ They're partners. 🍖
 4. Gravity? Loves you more.
 5. Presence? Undeniable.
 
-メンバー全員90kg超 band DEV PARADE approves. 🍖
+All-90kg+ band DEV PARADE approves. 🍖
 
 #BodyPositive #DEVPARADE""",
 
@@ -587,10 +587,10 @@ They're partners. 🍖
 
     f"""「太ってるのにバンドやってるの？」
 
-って10年前に言われた。
+って言われたことがある。
 
-今:
-・メジャーデビュー済み
+でも:
+・メジャーデビューした
 ・NARUTOのED歌った
 ・HEY!HEY!HEY!出た
 ・SUMMER SONIC出た
@@ -604,9 +604,9 @@ They're partners. 🍖
 
 結成: 2006年
 メンバー: 5人（全員90kg以上）
-メジャーデビュー: 全員経験あり
+メジャーデビュー: DefSTAR Records（ソニー）
 代表曲: バッチコイ!!（NARUTO ED）
-解散理由: メンバーが痩せた
+解散理由: メンバーが痩せてメタボを名乗れなくなった
 復活理由: 全員太り直した（2026年）
 
 全部事実。🍖
@@ -686,16 +686,19 @@ def select_daily_tweet():
     day_seed = int(hashlib.md5(today.encode()).hexdigest(), 16)
     base = day_seed % n
 
-    # 時間帯ごとにオフセットを加算（必ず3つとも別になる）
+    # 時間帯ごとにオフセットを加算（必ず4つとも別になる）
     if hour < 10:
         slot = "morning"
         offset = 0
     elif hour < 15:
         slot = "noon"
-        offset = n // 3        # 1/3ずらす
-    else:
+        offset = n // 4        # 1/4ずらす
+    elif hour < 19:
         slot = "evening"
-        offset = (n * 2) // 3  # 2/3ずらす
+        offset = (n * 2) // 4  # 2/4ずらす
+    else:
+        slot = "night"
+        offset = (n * 3) // 4  # 3/4ずらす
 
     index = (base + offset) % n
     print(f"Time slot: {slot} (index: {index}/{n})")

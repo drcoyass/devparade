@@ -1,4 +1,4 @@
-name: PosiDev Daily Tweet - 1日3回ポジデブ自動投稿
+name: PosiDev Daily Tweet - 1日4回ポジデブ自動投稿
 
 on:
   workflow_dispatch:
@@ -8,9 +8,10 @@ on:
         required: false
         default: 'scheduled'
   schedule:
-    # X閲覧ピーク時間に1日3回投稿（JST）
+    # X閲覧ピーク時間に1日4回投稿（JST）
     - cron: '30 22 * * *'  # 朝 7:30 JST（通勤ラッシュ）
     - cron: '0 3 * * *'    # 昼 12:00 JST（ランチタイム）
+    - cron: '0 8 * * *'    # 夕方 17:00 JST（帰宅ラッシュ）
     - cron: '30 11 * * *'  # 夜 20:30 JST（ゴールデンタイム）
 
 permissions:
