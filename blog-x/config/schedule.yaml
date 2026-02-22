@@ -1,0 +1,65 @@
+# ============================================
+# 投稿スケジュール定義
+# ============================================
+
+schedules:
+  # --- X (Twitter) 投稿スケジュール ---
+  x_morning:
+    platform: "x"
+    cron: "0 7 * * *"  # 毎日 07:00
+    category: "daily_doc"
+    description: "おはようツイート・今日の予定"
+    template: "morning_tweet"
+
+  x_lunch:
+    platform: "x"
+    cron: "0 12 * * *"  # 毎日 12:00
+    category: "food_health"
+    description: "ランチ投稿 / 歯の豆知識"
+    template: "lunch_tweet"
+
+  x_evening:
+    platform: "x"
+    cron: "0 18 * * *"  # 毎日 18:00
+    category: "music_review"
+    description: "診療後の気づき / 音楽レビュー"
+    template: "evening_tweet"
+
+  x_night:
+    platform: "x"
+    cron: "0 21 * * *"  # 毎日 21:00
+    category: "career"
+    description: "夜の振り返り"
+    template: "night_tweet"
+
+  # --- Note 投稿スケジュール ---
+  note_main:
+    platform: "note"
+    cron: "0 6 * * *"   # 毎日 06:00
+    description: "メイン記事（長文・深掘り系）"
+    category_rotation:
+      monday: "dental_tips"
+      tuesday: "music_review"
+      wednesday: "food_health"
+      thursday: "career"
+      friday: "dental_tips"
+      saturday: "daily_doc"
+      sunday: "parenting"
+    template: "note_main"
+
+  note_sub:
+    platform: "note"
+    cron: "0 20 * * *"  # 毎日 20:00
+    description: "サブ記事（日記系・軽い読み物）"
+    category: "daily_doc"
+    template: "note_daily"
+
+# カテゴリの優先順位（ネタ切れ時のフォールバック）
+category_priority:
+  - "dental_tips"
+  - "music_review"
+  - "food_health"
+  - "daily_doc"
+  - "career"
+  - "industry"
+  - "parenting"

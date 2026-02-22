@@ -1,0 +1,23 @@
+# Secrets
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+
+# blog-x generated files
+blog-x/data/*.db
+blog-x/playwright-screenshots/
+blog-x/logs/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+bot_log.md
+tweet_issue.md

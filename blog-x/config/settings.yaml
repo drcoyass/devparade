@@ -1,0 +1,70 @@
+# ============================================
+# COYASS Auto-Posting System - 全体設定
+# ============================================
+
+app:
+  name: "COYASS Auto-Posting System"
+  version: "1.0.0"
+  timezone: "Asia/Tokyo"
+  dry_run: true  # true = 投稿せずにログのみ
+
+ai:
+  primary_provider: "openai"  # "openai" or "gemini"
+  fallback_provider: "gemini"
+  openai:
+    model: "gpt-4o"
+    max_tokens: 4000
+    temperature: 0.8
+  gemini:
+    model: "gemini-2.0-flash"
+    max_tokens: 4000
+    temperature: 0.8
+
+persona:
+  name: "COYASS"
+  real_name: "小安正洋"
+  title: "歯科医師 / ラッパー / 2児の父"
+  clinic: "中目黒コヤス歯科"
+  tone:
+    - "専門性と親しみやすさの融合"
+    - "ラッパー的なリズム感と比喩表現"
+    - "実体験ベースのリアルさ"
+    - "読者への呼びかけと巻き込み力"
+    - "ポジティブだけど現実的"
+  hashtags:
+    always: ["#COYASS", "#中目黒コヤス歯科"]
+    dental: ["#予防歯科", "#美容歯科", "#歯科医師の日常", "#ホワイトニング"]
+    music: ["#HipHop", "#音楽レビュー", "#デブパレード", "#EPO"]
+    lifestyle: ["#中目黒", "#二刀流", "#パパの日常"]
+
+note:
+  base_url: "https://note.com"
+  posts_per_day: 2
+  article_length:
+    min: 2000
+    max: 5000
+  publish_mode: "draft"  # 最初は "draft" で安全に
+  retry_attempts: 3
+  retry_delay_seconds: 30
+
+x:
+  posts_per_day: 4
+  max_chars: 280
+  enable_threads: true
+  thread_max_tweets: 5
+  enable_images: true
+  retry_attempts: 3
+
+database:
+  path: "data/coyass.db"
+
+dashboard:
+  host: "127.0.0.1"
+  port: 5000
+  debug: false
+
+logging:
+  level: "INFO"
+  file: "logs/app.log"
+  max_size_mb: 10
+  backup_count: 5

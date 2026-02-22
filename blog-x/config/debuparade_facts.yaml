@@ -1,0 +1,74 @@
+# ============================================
+# デブパレード - 正確なファクトデータ（検証済み）
+# ============================================
+# ⚠️ AI生成時にこのデータのみを使用すること！
+# このファイルにない情報は「不明」として扱い、捏造しないこと。
+
+band:
+  name: "デブパレード"
+  name_origin: "デフ・レパード (Def Leppard) のパロディ"
+  genre: "ロック"
+  formed: 2006
+  live_start: 2007
+  disbanded: 2011
+  disband_reason: "メンバーが痩せてしまった"
+  reunion: 2026
+  reunion_rule: "90kg以上限定（元は100kg以上）"
+  label: "DefSTAR Records (ソニー・ミュージック)"
+  major_debut:
+    single: "BODY&SOUL/cosmic mind"
+    date: "2008年6月"
+  total_weight_at_formation: "約570kg"
+
+members:
+  - name: "ハンサム判治"
+    role: "Vocal"
+    weight_2008: "120kg"
+    current_weight: "不明（非公開）"
+    notes: ""
+
+  - name: "COYASS"
+    real_name: "小安正洋"
+    role: "MC"
+    weight_2008: "105kg"
+    current_weight: "不明（非公開）"
+    other_career: "歯科医師（中目黒コヤス歯科 院長）、歯学博士"
+    other_music: "MIC BANDITZ(avex), E.P.O(with Bro.Hi), 洪水, Malignant Co."
+
+  - name: "ugazin"
+    role: "Guitar"
+    weight_2008: "105kg"
+    current_weight: "不明（非公開）"
+    notes: ""
+
+  - name: "ぺー"
+    role: "Bass"
+    weight_2008: "不明"
+    current_weight: "不明（非公開）"
+    notes: "加入時期不明"
+
+  - name: "TAH"
+    role: "Drums"
+    weight_2008: "146kg"
+    current_weight: "不明（非公開）"
+    notes: "バンド内最重量"
+
+ex_members:
+  - name: "たかぴ～"
+    role: "Bass"
+    weight_2008: "103kg"
+    notes: ""
+
+upcoming_events:
+  - event: "ARABAKI ROCK FEST.26"
+    status: "出演予定"
+
+# --- ツイート生成ルール ---
+rules:
+  - "体重は2008年時点のデータのみ。現在の体重は推測・捏造しない"
+  - "身長は非公開。推測しない"
+  - "メンバーの私生活（家族、住所等）は捏造しない"
+  - "公開されていない楽曲名やアルバム名を捏造しない"
+  - "面白いデブネタはOK。ただし事実と混同しない表現にすること"
+  - "「〜かもしれない」「〜らしい」等の推測表現でも嘘はNG"
+  - "このファイルにないファクトは使用禁止"
