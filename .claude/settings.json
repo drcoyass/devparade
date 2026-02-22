@@ -3,6 +3,25 @@
     "additionalDirectories": [
       "/Users/coyass/.gemini/antigravity",
       "/Users/coyass/Desktop/TEST"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(blog-x/.env)",
+      "Read(**/.env)"
+    ]
+  },
+
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '=== コンパクション後の復元 ===' && cat /Users/coyass/kaihatsu/dev-parade-site/CLAUDE.md && echo '' && cat /Users/coyass/.claude/projects/-Users-coyass-kaihatsu-dev-parade-site/memory/MEMORY.md"
+          }
+        ]
+      }
     ]
   }
 }
