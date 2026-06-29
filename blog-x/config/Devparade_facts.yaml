@@ -59,7 +59,12 @@ ex_members:
     weight_2008: "103kg"
     notes: ""
 
-upcoming_events: []
+upcoming_events:
+  - name: "ハッピー乱デブー配信リリース"
+    date: "2026年6月29日"
+    type: "Digital Single"
+    detail: "復活第三弾シングル「ハッピー乱デブー」配信開始。配信リンク：https://link-map.jp/links/9ox_1HYZ"
+
 
 # --- ツイート生成ルール ---
 rules:

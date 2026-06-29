@@ -559,14 +559,30 @@
       grid-column: 1 / -1;
       background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
       border: 2px solid var(--red);
-      text-align: center;
       padding: 3rem;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 3rem;
+      align-items: center;
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .disco-new {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        gap: 2rem;
+        text-align: center;
+      }
     }
 
     .disco-new h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 0.1em;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      color: #fff;
     }
 
     .disco-new .coming {
@@ -987,10 +1003,9 @@
       font-family: 'Oswald', sans-serif;
     }
 
-    /* ===== VIDEO RESPONSIVE ===== */
     .video-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
     }
 
@@ -1371,8 +1386,8 @@
     <div class="scroll-indicator"><span></span></div>
   </section>
 
-  <!-- ===== HAPPY RAN-DEBU BANNER (Auto-reveals on 6/29) ===== -->
-  <div id="new-hero-629" style="display: none;">
+  <!-- ===== HAPPY RAN-DEBU BANNER (Released on 6/29) ===== -->
+  <div id="new-hero-629" style="display: block;">
     <div class="ucchari-banner" style="background: linear-gradient(135deg, #001a0d, #004d26); border-top: 4px solid #00ff88; border-bottom: 4px solid #00ff88; padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden;">
       <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.05; font-family: 'Bebas Neue', sans-serif; color: #00ff88;">HAPPY</div>
       <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto;">
@@ -1387,7 +1402,7 @@
   </div>
 
   <!-- ===== PARFAIT BANNER ===== -->
-  <div id="old-hero-parfait" class="ucchari-banner" style="background: linear-gradient(135deg, #111, #330000); border-top: 4px solid var(--red); border-bottom: 4px solid var(--red); padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden;">
+  <div id="old-hero-parfait" class="ucchari-banner" style="background: linear-gradient(135deg, #111, #330000); border-top: 4px solid var(--red); border-bottom: 4px solid var(--red); padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden; display: none;">
     <div style="position: absolute; top: -50px; right: -50px; font-size: 15rem; opacity: 0.03; font-family: 'Bebas Neue', sans-serif;">PARFAIT</div>
     <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto;">
       <div style="display: inline-block; background: #ffb6c1; color: #000; font-family: 'Oswald', sans-serif; font-weight: 700; padding: 0.5rem 1.5rem; font-size: 1.2rem; letter-spacing: 0.1em; transform: rotate(-2deg); margin-bottom: 1.5rem; box-shadow: 2px 2px 0px var(--red);">復活第二弾シングル！</div>
@@ -1657,22 +1672,61 @@
         </div>
       </div>
 
-      <div class="live-card reveal">
-        <div class="live-date">
-          <div class="year">2026</div>
+      <div class="live-card reveal" style="border: 2px solid var(--red); background: linear-gradient(135deg, #1a0000, #151515);">
+        <div class="live-date" style="background: var(--red);">
+          <div class="year" style="color:#fff;">2026</div>
           <div class="day">07.12</div>
           <div class="month">JUL</div>
           <div class="dow">SUN</div>
         </div>
         <div class="live-info">
-          <h3><a href="https://clubque.net/schedule/15101/" target="_blank" rel="noopener" style="color:inherit; text-decoration:none; border-bottom: 1px solid var(--red);">CLUB Que夏ノ陣 VS SERIES ♯002 RETURN TO INDEPENDENT</a></h3>
+          <div style="margin-bottom: 10px;">
+            <div id="countdown-712" style="font-family:'Oswald',sans-serif; font-size: 1.1rem; color: var(--yellow); letter-spacing: 0.1em; margin-bottom: 8px;"></div>
+          </div>
+          <div class="live-flyer" style="margin-bottom: 15px;">
+            <img src="assets/flyer-20260712.jpg" alt="7/12 下北沢CLUB Que公演フライヤー" style="width: 100%; max-width: 300px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer;" onclick="window.open(this.src)">
+          </div>
+          <h3><a href="https://clubque.net/schedule/15101/" target="_blank" rel="noopener" style="color:inherit; text-decoration:none; border-bottom: 2px solid var(--red);">CLUB Que夏ノ陣 VS SERIES ♯002<br>RETURN TO INDEPENDENT</a></h3>
           <div class="venue">下北沢 CLUB Que</div>
-          <div style="font-size: 0.8rem; color: #888; margin-top: 4px;">Electric Eel Shock vs Devparade</div>
-          <span class="badge badge-upcoming" data-i18n="upcoming">TICKET OPEN</span>
+          <div style="font-size: 0.95rem; color: var(--yellow); font-weight: bold; margin-top: 8px; font-family:'Oswald',sans-serif; letter-spacing: 0.05em;">
+            Electric Eel Shock vs デブパレード
+            <span style="font-size: 0.8rem; color: #aaa; font-weight: normal; margin-left: 5px;">(Guest: 刑鉄)</span>
+          </div>
+          <div style="font-size: 0.85rem; color: #eee; margin-top: 8px;">
+            <div style="display: flex; gap: 15px; font-size: 0.8rem; color: #bbb;">
+              <span>18:30 OPEN / 19:00 START</span>
+              <span>前売 ¥4,000 / 当日 ¥4,300 (+1D)</span>
+            </div>
+          </div>
+          <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <a href="https://clubque.net/schedule/15101/" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 25px; background: var(--red); color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; border-radius: 4px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(227,30,36,0.4);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(227,30,36,0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(227,30,36,0.4)'">🎫 TICKET INFO</a>
+            <span style="font-size: 0.75rem; color: var(--red); font-weight: bold; animation: pulse 2s infinite;">🔥 NEXT LIVE</span>
+          </div>
+          <span class="badge badge-upcoming" style="background: var(--red); color: #fff; font-weight: bold;">NEXT LIVE</span>
         </div>
       </div>
 
     </div>
+
+    <!-- Countdown Timer Script -->
+    <script>
+    (function updateCountdown() {
+      const target = new Date('2026-07-12T12:00:00+09:00');
+      const now = new Date();
+      const diff = target - now;
+      const el = document.getElementById('countdown-712');
+      if (!el) return;
+      if (diff <= 0) {
+        el.textContent = '🔥 TODAY IS THE DAY! 🔥';
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      el.textContent = `⏱ NEXT LIVE in ${days}d ${hours}h ${mins}m`;
+      setTimeout(updateCountdown, 60000);
+    })();
+    </script>
   </section>
 
 
@@ -1711,6 +1765,19 @@
             DEBUT</div>
           <div style="font-weight:900; margin-top:0.2rem;">Body&Soul</div>
           <div style="font-size:0.8rem; color:var(--gray);">1st Single (2008) &mdash; SPEED Cover</div>
+        </div>
+      </div>
+      <div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/tctORYzd628" title="デブパレード - うっちゃりファンク OFFICIAL LIVE MV"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div style="margin-top:0.8rem;">
+          <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:var(--red); letter-spacing:0.1em;">REUNION
+            SINGLE</div>
+          <div style="font-weight:900; margin-top:0.2rem;">うっちゃりファンク</div>
+          <div style="font-size:0.8rem; color:var(--gray);">Digital Single &mdash; Official Live MV</div>
         </div>
       </div>
     </div>
@@ -1775,8 +1842,8 @@
 
     <div class="disco-grid">
 
-      <!-- Digital Single: Happy Ran-Debu (Auto-reveals on 6/29) -->
-      <div id="new-single-629" class="disco-card reveal" style="border-color: #00ff88; border-width: 2px; display: none;">
+      <!-- Digital Single: Happy Ran-Debu -->
+      <div id="new-single-629" class="disco-card reveal" style="border-color: #00ff88; border-width: 2px; display: block;">
         <div class="year" style="color: #00ff88;">2026.06.29 &mdash; Digital Single</div>
         <h3 style="color: #fff;">ハッピー乱デブー</h3>
         <div class="label" style="color: var(--gray);">PosiDev Records</div>
@@ -1806,14 +1873,20 @@
 
       <!-- NEW ALBUM -->
       <div class="disco-new reveal">
-        <div class="year" style="color: var(--yellow);">2026.06.14 &mdash; 1st Full Album</div>
-        <h3>全ての武器をお箸に</h3>
-        <div class="coming">COMING SOON</div>
-        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.9rem; margin-bottom: 0.5rem;">
-          15年越しの初フルアルバム！2026.06.14 渋谷CYCLONEにてレコ発ライブ開催！
-        </p>
-        <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:#666; letter-spacing:0.1em; text-transform:uppercase;">
-          Lyrics Preview Currently Restricted
+        <div class="album-jacket">
+          <img src="assets/album-hashi.jpg" alt="1st Full Album 全ての武器をお箸に ジャケット" style="width: 100%; max-width: 300px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 2px solid var(--red);">
+        </div>
+        <div class="album-info">
+          <div class="year" style="color: var(--yellow);">2026.08.19 &mdash; 1st Full Album</div>
+          <h3>全ての武器をお箸に</h3>
+          <div class="coming">2026.08.19 RELEASE</div>
+          <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
+            15年越しの初フルアルバムがついにリリース決定！<br>
+            先行配信シングル「うっちゃりファンク」「パルフェ」「ハッピー乱デブー」を含む、デブパレードの魂が詰まった全曲入りの超大作。
+          </p>
+          <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:#666; letter-spacing:0.1em; text-transform:uppercase;">
+            Tracklist & Details Coming Soon
+          </div>
         </div>
       </div>
 
@@ -1964,6 +2037,10 @@
       <div class="timeline-item highlight reveal">
         <div class="timeline-year">2026.05.09</div>
         <div class="timeline-text" data-i18n="history-2026-05">国立代々木体育館でのグランドフェスティバル開催予定。</div>
+      </div>
+      <div class="timeline-item highlight reveal">
+        <div class="timeline-year">2026.06.14</div>
+        <div class="timeline-text" data-i18n="history-2026-06">渋谷CYCLONEにてアルバム先行レコ発ライブ開催。1st Full Album「全ての武器をお箸に」のリリース日が2026年8月19日に決定したことを発表。</div>
       </div>
     </div>
   </section>
@@ -2382,7 +2459,7 @@
 
     </div>
     
-    <script>(function(d,s,id){var st=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return;}var nst=d.createElement(s);nst.id=id;nst.src="//btn.stores.jp/button.js";nst.charset="UTF-8";st.parentNode.insertBefore(nst,st);})(document, "script", "storesjp-button");</script>
+    <script>(function(d,s,id){var st=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return;}var nst=d.createElement(s);nst.id=id;nst.src="https://btn.stores.jp/button.js";nst.charset="UTF-8";st.parentNode.insertBefore(nst,st);})(document, "script", "storesjp-button");</script>
   </section>
 
   <!-- ===== POSI DEV BOT BANNER ===== -->
@@ -2756,6 +2833,7 @@
     </p>
   </footer>
 
+  <script src="data/debu_goroku.js"></script>
   <script>
     // Goroku Tabs
     function openGoroku(evt, rowName) {
@@ -2775,9 +2853,12 @@
     async function loadGoroku() {
       const container = document.getElementById('goroku-dynamic-container');
       try {
-        const response = await fetch('data/debu_goroku.json?v=' + new Date().getTime());
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
+        let data = window.DEBU_GOROKU_DATA;
+        if (!data) {
+          const response = await fetch('data/debu_goroku.json?v=' + new Date().getTime());
+          if (!response.ok) throw new Error('Network response was not ok');
+          data = await response.json();
+        }
         
         container.innerHTML = ''; // Clear loading
 
@@ -2953,7 +3034,8 @@ const translations = {
     "history-2011-02": "解散。「メンバーが痩せてメタボを名乗れなくなった」「普通（サイズ）の男の子に戻ります」",
     "history-2025-11": "ugazin主催ライブ（下北沢Club Que）にシークレットアクトとして15年ぶりにステージへ。",
     "history-2026-02": "15年ぶりの再結成を正式発表！新メンバー\"ぺー\"を迎え、下北沢Club Queでワンマンライブ開催。初のフルアルバム制作中であることも発表。",
-    "history-2026-05": "国立代々木体育館でのグランドフェスティバル開催予定。"
+    "history-2026-05": "国立代々木体育館でのグランドフェスティバル開催予定。",
+    "history-2026-06": "渋谷CYCLONEにてアルバム先行レコ発ライブ開催。1st Full Album「全ての武器をお箸に」のリリース日が2026年8月19日に決定したことを発表。"
   },
   "en": {
     "nav-about": "About",
@@ -3011,7 +3093,8 @@ const translations = {
     "history-2011-02": "Disbanded. \"Members lost weight and quit Metabo.\"",
     "history-2025-11": "Secret reunion stage at ugazin's live event after 15 years.",
     "history-2026-02": "Official reunion! One-man live with Pe. 1st Album in progress.",
-    "history-2026-05": "Grand Festival at Yoyogi National Gymnasium."
+    "history-2026-05": "Grand Festival at Yoyogi National Gymnasium.",
+    "history-2026-06": "Album pre-release live at Shibuya CYCLONE. Announced the release date of 1st Full Album 'All Weapons to Chopsticks' as August 19, 2026."
   },
   "es": {
     "nav-about": "Sobre",
@@ -3069,7 +3152,8 @@ const translations = {
     "history-2011-02": "Disuelto. \"Los miembros perdieron peso y dejaron Metabo.\"",
     "history-2025-11": "Reunión secreta en el concierto de ugazin después de 15 años.",
     "history-2026-02": "¡Reunión oficial! Concierto con Pe. 1er álbum en progreso.",
-    "history-2026-05": "Gran Festival en el Gimnasio Nacional Yoyogi."
+    "history-2026-05": "Gran Festival en el Gimnasio Nacional Yoyogi.",
+    "history-2026-06": "Concierto de pre-lanzamiento del álbum en Shibuya CYCLONE. Se anunció la fecha de lanzamiento del primer álbum completo 'Todos los utensilios a palillos' para el 19 de agosto de 2026."
   },
   "cn": {
     "nav-about": "关于",
@@ -3127,7 +3211,8 @@ const translations = {
     "history-2011-02": "解散。“成员变瘦了，不能再叫代谢了。”",
     "history-2025-11": "15年后在 ugazin 的演唱会上秘密复出。",
     "history-2026-02": "正式宣布复出！与新成员 Pe 举行个演。发行首张专辑。",
-    "history-2026-05": "代代木国立体育馆举行大祭。"
+    "history-2026-05": "代代木国立体育馆举行大祭。",
+    "history-2026-06": "在涩谷 CYCLONE 举行专辑先行发行现场演出。宣布首张完整专辑《将所有武器化为筷子》将于2026年8月19日正式发行。"
   }
 };
 
