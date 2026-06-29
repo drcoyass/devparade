@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COYASS - Input Data</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 30px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; }
+        .form-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        label { display: block; margin-bottom: 6px; color: #999; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            color: #e0e0e0;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        textarea { min-height: 150px; resize: vertical; }
+        button {
+            background: linear-gradient(135deg, #00f260, #0575e6);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { opacity: 0.9; }
+        .back-link { color: #0575e6; text-decoration: none; display: inline-block; margin-bottom: 20px; }
+        .input-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← ダッシュボードに戻る</a>
+        <h1>📥 入力データ（メモ・ネタ帳）</h1>
+
+        <div class="form-card">
+            <form method="POST">
+                <label>カテゴリ</label>
+                <select name="category">
+                    <option value="daily_doc">🔥 日々のドキュメンタリー</option>
+                    <option value="dental_tips">🦷 デンタルティップス</option>
+                    <option value="music_review">🎤 音楽レビュー</option>
+                    <option value="food_health">🍽️ 食と健康</option>
+                    <option value="career">💪 キャリア論</option>
+                    <option value="parenting">👨‍👧‍👦 子育て</option>
+                    <option value="industry">🏥 歯科業界</option>
+                </select>
+
+                <label>タイプ</label>
+                <select name="data_type">
+                    <option value="memo">📝 メモ</option>
+                    <option value="music">🎵 音楽</option>
+                    <option value="meal">🍽️ 食事</option>
+                    <option value="photo">📸 写真</option>
+                </select>
+
+                <label>タイトル（任意）</label>
+                <input type="text" name="title" placeholder="例：今日聴いた最高の1曲">
+
+                <label>内容</label>
+                <textarea name="body" placeholder="自由にメモを入力...&#10;例：Kendrick Lamarの新曲がマジでヤバい。ビートの構造が..."></textarea>
+
+                <button type="submit">💾 保存する</button>
+            </form>
+        </div>
+
+        <h2 style="margin-bottom: 15px;">📋 未使用の入力データ</h2>
+        {% if inputs %}
+            {% for inp in inputs %}
+            <div class="input-item">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <strong>{{ inp.title or '(無題)' }}</strong>
+                    <span style="color: #666; font-size: 0.8rem;">{{ inp.category }} / {{ inp.data_type }}</span>
+                </div>
+                <p style="color: #999; font-size: 0.9rem;">{{ inp.body[:200] }}{% if inp.body|length > 200 %}...{% endif %}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #666; text-align: center; padding: 30px;">まだ入力データがありません</p>
+        {% endif %}
+    </div>
+</body>
+</html>
