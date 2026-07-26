@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-ライブカウントダウン & アルバム告知 ツイート生成
-=================================================
+カウントダウン & リリース告知 ツイート生成
+==========================================
 
 毎日昼 12:00 に投稿するカウントダウンツイートを生成。
-7/12 下北沢 CLUB Que → 8/19 アルバムリリースまでの
-カウントダウンを行い、集客に直結する投稿を行う。
+3段階のフェーズ:
+  Phase 1: 7/12 ライブ前 → ライブカウントダウン
+  Phase 2: 7/12 以降〜7/29 → 先行シングル「夏の終わりに」カウントダウン
+  Phase 3: 7/29 以降〜8/19 → 1stアルバムカウントダウン
 
-旧ポジデブBOT（1日複数回の格言投稿）を置き換える。
 """
 
 import os
@@ -16,11 +17,13 @@ from datetime import datetime, timezone, timedelta
 
 # ===== ターゲット日付 =====
 LIVE_DATE = datetime(2026, 7, 12, 12, 0, 0, tzinfo=timezone(timedelta(hours=9)))
+SINGLE_DATE = datetime(2026, 7, 29, 0, 0, 0, tzinfo=timezone(timedelta(hours=9)))
 ALBUM_DATE = datetime(2026, 8, 19, 0, 0, 0, tzinfo=timezone(timedelta(hours=9)))
 
 SITE_URL = "https://devparade.jp/"
 TICKET_URL = "https://clubque.net/schedule/15101/"
-LINKMAP_URL = "https://link-map.jp/links/5N3CvpY-"
+LINKMAP_URL = "https://link-map.jp/links/t7J6lCsV"  # 夏の終わりに & アルバム共通配信リンク
+ALBUM_LINKMAP_URL = "https://link-map.jp/links/t7J6lCsV"
 
 def get_days_until(target_date):
     """目標日までの残り日数を計算"""
@@ -195,9 +198,119 @@ Electric Eel Shock vs Devparade
     ])
 
 
+def generate_single_countdown(days_left):
+    """7/29 先行シングル「夏の終わりに」カウントダウン用ツイート"""
+
+    if days_left == 0:
+        return random.choice([
+            f"""🎵 本日配信スタート！
+
+「夏の終わりに」/ Devparade
+
+15年の沈黙を破る、デブたちの切ないラブソング。
+
+Spotify / Apple Music / YouTube Music
+今すぐ聴いてくれ🍖
+
+{LINKMAP_URL}
+#デブパレード #夏の終わりに #配信開始""",
+
+            f"""今日、出す。
+
+「夏の終わりに」
+
+あの頃の夏の切なさ、全部詰め込んだ。
+NARUTOのあのバンドが送る、
+15年ぶりの新曲。
+
+聴いてくれ👇
+{LINKMAP_URL}
+
+#デブパレード #夏の終わりに""",
+        ])
+
+    if days_left <= 3:
+        return random.choice([
+            f"""あと{days_left}日。
+
+「夏の終わりに」/ Devparade
+7/29 配信スタート。
+
+デブの哀愁とメロディの組み合わせ、
+これが最強だと思ってる。
+
+{LINKMAP_URL}
+#デブパレード #夏の終わりに""",
+
+            f"""先行シングルまであと{days_left}日🍖
+
+「夏の終わりに」
+7/29 Spotify / Apple Music etc.で配信開始！
+
+15年ぶりに鳴らす、
+デブたちのラブソング。
+
+{LINKMAP_URL}
+#デブパレード #夏の終わりに #新曲""",
+        ])
+
+    if days_left <= 7:
+        return random.choice([
+            f"""【あと{days_left}日】
+
+先行シングル「夏の終わりに」
+7/29 配信スタート。
+
+夏の終わりの切なさを
+デブパレードのサウンドで届ける。
+
+{LINKMAP_URL}
+#デブパレード #夏の終わりに""",
+
+            f"""7/29まであと{days_left}日。
+
+NARUTOのED「バッチコイ!!!」バンドが
+15年ぶりに新曲を出す。
+
+「夏の終わりに」
+— デブの切なさが詰まった一曲。
+
+👇もうすぐ配信
+{LINKMAP_URL}
+#Devparade #NARUTO #夏の終わりに""",
+        ])
+
+    # 8日以上前
+    return random.choice([
+        f"""先行シングル配信まであと{days_left}日。
+
+「夏の終わりに」/ Devparade
+2026.07.29
+
+15年ぶりに鳴り響く、
+デブたちの切ないメロディ。
+
+COMING SOON🍖
+{LINKMAP_URL}
+#デブパレード #夏の終わりに""",
+
+        f"""📢 先行シングル告知
+
+7/29 配信リリース
+「夏の終わりに」/ Devparade
+
+NARUTOのED「バッチコイ!!!」を歌っていた
+全員90kg超のバンドが、
+15年ぶりに届ける新曲。
+
+{LINKMAP_URL}
+#デブパレード #NARUTO #バッチコイ""",
+    ])
+
+
 def generate_album_countdown(days_left):
     """8/19 アルバムカウントダウン用ツイート"""
-    
+
     if days_left <= 7:
         return random.choice([
             f"""1st Album「全ての武器をお箸に」
@@ -207,10 +320,10 @@ def generate_album_countdown(days_left):
 90kg超の5人が作った、
 どこにもない音楽。
 
-{LINKMAP_URL}
+{ALBUM_LINKMAP_URL}
 #デブパレード #全ての武器をお箸に""",
         ])
-    
+
     return random.choice([
         f"""2026.08.19
 1st Full Album
@@ -233,8 +346,8 @@ COMING SOON🍖
 ヘヴィメタボバンド Devparade。
 15年ぶり、初のフルアルバム。
 
-先行シングルはこちら👇
-{LINKMAP_URL}
+先行シングル「夏の終わりに」はこちら👇
+{ALBUM_LINKMAP_URL}
 
 #デブパレード #DEVPARADE""",
     ])
@@ -341,31 +454,39 @@ Botまで作った。
 def main():
     jst = timezone(timedelta(hours=9))
     now = datetime.now(jst)
-    
+
     live_days = get_days_until(LIVE_DATE)
+    single_days = get_days_until(SINGLE_DATE)
     album_days = get_days_until(ALBUM_DATE)
-    
+
     print("=" * 50)
     print(f"🍖 Devparade カウントダウン ツイート生成")
     print(f"   {now.strftime('%Y-%m-%d %H:%M JST')}")
     print(f"   7/12 LIVE まで: {live_days}日")
+    print(f"   7/29 SINGLE まで: {single_days}日")
     print(f"   8/19 ALBUM まで: {album_days}日")
     print("=" * 50)
-    
-    # 昼12時枠: ライブカウントダウン優先、ライブ後はアルバムカウントダウン
+
+    # ===== フェーズ判定 =====
+    # Phase 1: ライブ前 → ライブカウントダウン
+    # Phase 2: ライブ後〜シングル前 → シングルカウントダウン
+    # Phase 3: シングル後〜アルバム発売 → アルバムカウントダウン
     if live_days > 0:
         tweet = generate_live_countdown(live_days)
         category = "live_countdown"
+    elif single_days >= 0:
+        tweet = generate_single_countdown(single_days)
+        category = "single_countdown"
     else:
         tweet = generate_album_countdown(album_days)
         category = "album_countdown"
-    
+
     print(f"\n📢 [{category}] ツイート:")
     print("-" * 40)
     print(tweet)
     print("-" * 40)
     print(f"文字数: {len(tweet)}")
-    
+
     # 夜20:30枠: バンドストーリー
     story = generate_band_story()
     print(f"\n🌙 [band_story] ツイート:")
@@ -373,7 +494,7 @@ def main():
     print(story)
     print("-" * 40)
     print(f"文字数: {len(story)}")
-    
+
     return tweet, story
 
 

@@ -1,0 +1,131 @@
+name: Countdown Tweet - シングル&アルバム カウントダウン自動投稿
+
+# countdown_tweets.py を毎日昼12時と夜20:30に自動実行する
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (ツイートを実際には投稿しない)'
+        required: false
+        default: 'false'
+  schedule:
+    - cron: '0 3 * * *'    # 昼 12:00 JST（UTC 03:00）
+    - cron: '30 11 * * *'  # 夜 20:30 JST（UTC 11:30）
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  countdown-tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install tweepy python-dotenv requests twikit
+
+      - name: Run countdown tweet generator
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          # カウントダウンツイートを生成
+          python scripts/countdown_tweets.py 2>&1 | tee /tmp/countdown_output.txt
+          echo "✅ Countdown tweet generated"
+
+      - name: Post tweet via twikit
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+        run: |
+          python - <<'EOF'
+          import os, asyncio, subprocess, re
+          from twikit import Client
+
+          # countdown_tweets.pyの出力からツイートテキストを取得
+          result = subprocess.run(
+              ["python", "scripts/countdown_tweets.py"],
+              capture_output=True, text=True
+          )
+          output = result.stdout
+
+          # 最初のカウントダウンツイートを抽出
+          tweet_text = None
+          in_tweet = False
+          lines = []
+          for line in output.split('\n'):
+              if '----------------------------------------' in line and not in_tweet and not tweet_text:
+                  in_tweet = True
+                  continue
+              elif '----------------------------------------' in line and in_tweet:
+                  tweet_text = '\n'.join(lines).strip()
+                  break
+              elif in_tweet:
+                  lines.append(line)
+
+          if not tweet_text:
+              print("⚠️ Could not extract tweet text from output")
+              exit(0)
+
+          print(f"📝 Tweet to post ({len(tweet_text)} chars):")
+          print(tweet_text[:100] + "..." if len(tweet_text) > 100 else tweet_text)
+
+          username = os.environ.get('X_USERNAME')
+          email = os.environ.get('X_EMAIL')
+          password = os.environ.get('X_PASSWORD')
+
+          if not all([username, email, password]):
+              print("⚠️ Missing X credentials. Skipping auto-post.")
+              exit(0)
+
+          async def post():
+              client = Client('ja')
+              try:
+                  await client.login(auth_info_1=username, auth_info_2=email, password=password)
+                  tweet = await client.create_tweet(text=tweet_text)
+                  print(f"✅ Tweet posted! ID: {tweet.id}")
+                  return tweet.id
+              except Exception as e:
+                  print(f"❌ Post failed: {e}")
+                  return None
+
+          asyncio.run(post())
+          EOF
+
+      - name: Commit state changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add scripts/*.json data/*.json data/*.txt 2>/dev/null || true
+          git commit -m "🤖 [skip ci] Update countdown tweet state" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+
+      - name: Create Issue log
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date +%Y-%m-%d_%H%M)
+          PHASE="single_countdown"
+          # 7/29以降はアルバムフェーズ
+          if [ "$(date +%s)" -gt "$(date -d '2026-07-29' +%s 2>/dev/null || date -j -f '%Y-%m-%d' '2026-07-29' +%s)" ]; then
+            PHASE="album_countdown"
+          fi
+          gh issue create \
+            --title "🍖 [カウントダウン日報] ${DATE} [${PHASE}]" \
+            --body "$(cat /tmp/countdown_output.txt 2>/dev/null || echo 'No output captured')" \
+            --label "tweet-ready" || true
