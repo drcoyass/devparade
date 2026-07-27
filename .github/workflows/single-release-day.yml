@@ -1,0 +1,104 @@
+name: Single Release Day - 7/29「夏の終わりに」全投稿
+
+# 7/29 配信リリース日に手動または自動で実行する
+# 複数時間帯で投稿を分散させる
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: '投稿スロット (all / 00 / 07 / 12 / 18 / 20 / 21)'
+        required: false
+        default: 'all'
+  schedule:
+    # 7/29 JST の各投稿時間 (UTC)
+    - cron: '0 15 29 7 *'   # 7/29 00:00 JST
+    - cron: '0 22 28 7 *'   # 7/29 07:00 JST
+    - cron: '0 3 29 7 *'    # 7/29 12:00 JST
+    - cron: '0 9 29 7 *'    # 7/29 18:00 JST (動画投稿リマインダー)
+    - cron: '0 11 29 7 *'   # 7/29 20:00 JST
+    - cron: '0 12 29 7 *'   # 7/29 21:00 JST
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  release-tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install tweepy python-dotenv requests twikit
+
+      - name: Determine release slot
+        id: slot
+        run: |
+          SLOT="${{ github.event.inputs.slot || 'auto' }}"
+          if [ "$SLOT" = "auto" ]; then
+            # 現在のUTC時刻から投稿スロットを自動判定
+            HOUR_UTC=$(date -u +%H)
+            HOUR_MINUS=$(date -u +%M)
+            echo "Current UTC: ${HOUR_UTC}:${HOUR_MINUS}"
+            if [ "$HOUR_UTC" = "15" ]; then SLOT="00"
+            elif [ "$HOUR_UTC" = "22" ]; then SLOT="07"
+            elif [ "$HOUR_UTC" = "03" ]; then SLOT="12"
+            elif [ "$HOUR_UTC" = "09" ]; then SLOT="18"
+            elif [ "$HOUR_UTC" = "11" ]; then SLOT="20"
+            elif [ "$HOUR_UTC" = "12" ]; then SLOT="21"
+            else SLOT="07"
+            fi
+          fi
+          echo "slot=$SLOT" >> $GITHUB_OUTPUT
+          echo "📅 Selected slot: $SLOT"
+
+      - name: Post single_release tweet
+        if: ${{ steps.slot.outputs.slot != '18' && steps.slot.outputs.slot != '21' }}
+        env:
+          CAMPAIGN: single_release
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          python scripts/debu-posi-tweet-generator.py
+          echo "✅ Release tweet posted for slot ${{ steps.slot.outputs.slot }}"
+
+      - name: Video upload reminder (18:00 / 21:00)
+        if: ${{ steps.slot.outputs.slot == '18' || steps.slot.outputs.slot == '21' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SLOT="${{ steps.slot.outputs.slot }}"
+          if [ "$SLOT" = "18" ]; then
+            PLATFORM="YouTube Shorts / TikTok"
+            MSG="リリック動画を YouTube Shorts と TikTok にアップロードしてください。\n動画ファイル: video-automation/output/natsu_no_owari_ni_lyric.mp4\n\n【キャプション】\n「夏の終わりに」/ Devparade\n夏の終わりのリズムが、また僕を惑わせた。\n#デブパレード #夏の終わりに #NARUTO #バッチコイ"
+          else
+            PLATFORM="Instagram Reels"
+            MSG="リリック動画を Instagram Reels にアップロードしてください。\n動画ファイル: video-automation/output/natsu_no_owari_ni_lyric.mp4\n\n【キャプション】\n「夏の終わりに」/ Devparade 🍖\nあなたの夏の終わりを、俺たちのサウンドで彩ってほしい。\n配信リンクはプロフィールから↗️\n#デブパレード #夏の終わりに"
+          fi
+
+          gh issue create \
+            --title "📱 [動画投稿リマインダー] ${PLATFORM} - $(date '+%Y-%m-%d %H:%M JST')" \
+            --body "$(echo -e "$MSG")" \
+            --label "tweet-ready" || true
+
+      - name: Create issue log
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date '+%Y-%m-%d %H:%M')
+          SLOT="${{ steps.slot.outputs.slot }}"
+          gh issue create \
+            --title "🍖 [リリース日報] 夏の終わりに ${DATE} [slot:${SLOT}]" \
+            --body "$(cat tweet_issue.md 2>/dev/null || echo '投稿完了 slot:'$SLOT)" \
+            --label "tweet-ready" || true

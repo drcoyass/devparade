@@ -1876,10 +1876,65 @@ DM or リプライで！🍖
 # ===== DAILY_TWEETSを統合 =====
 DAILY_TWEETS = DAILY_TWEETS_BASE + EXTRA_TWEETS + EXTRA_TWEETS_2 + EXTRA_TWEETS_3
 
+# ===== 🎵 先行シングル「夏の終わりに」リリース専用ツイート =====
+SINGLE_RELEASE_TWEETS = [
+    f"""🎵 配信スタート！
+
+「夏の終わりに」/ Devparade
+
+15年の沈黙を破る、初のリリース。
+デブたちが本気で作った、夏の終わりのラブソング。
+
+Spotify / Apple Music / Amazon / YouTube Music
+今すぐ聴けます👇
+https://link-map.jp/links/t7J6lCsV
+
+#デブパレード #夏の終わりに #配信開始 #新曲""",
+
+    f"""「夏の終わりに」配信中！
+
+聴いた人、感想リプ下さい🍖
+
+「切ない」「懐かしい」「やっぱりデブパレードだ」
+なんでもいい。メンバー全員で読んでます。
+
+https://link-map.jp/links/t7J6lCsV
+
+#デブパレード #夏の終わりに""",
+
+    f"""NARUTOのED「バッチコイ!!!」のデブパレードが
+15年ぶりに新曲出した。
+
+「夏の終わりに」— 今日から配信中。
+
+バッチコイを知ってるならぜひ聴いてみて。
+あの頃より全員デカくなったけど、
+音楽への情熱はそのままです🍖
+
+https://link-map.jp/links/t7J6lCsV
+
+#NARUTO #バッチコイ #デブパレード""",
+
+    f"""0時。解禁。
+
+「夏の終わりに」/ Devparade
+
+15年間、ずっと作り続けた音楽。
+今夜、世界に解き放つ。
+
+Spotify / Apple Music / YouTube Music
+全サービスで今すぐ聴けます👇
+
+https://link-map.jp/links/t7J6lCsV
+
+#デブパレード #夏の終わりに #配信開始""",
+]
+
 TWEETS = {
     "launch": LAUNCH_TWEETS,
     "scheduled": DAILY_TWEETS,
     "collab": COLLAB_TWEETS,
+    "single_release": SINGLE_RELEASE_TWEETS,
 }
 
 
