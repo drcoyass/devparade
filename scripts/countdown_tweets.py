@@ -26,11 +26,18 @@ LINKMAP_URL = "https://link-map.jp/links/t7J6lCsV"  # 夏の終わりに & ア�
 ALBUM_LINKMAP_URL = "https://link-map.jp/links/t7J6lCsV"
 
 def get_days_until(target_date):
-    """目標日までの残り日数を計算"""
+    """目標日までの残り日数を計算（0以上）"""
     jst = timezone(timedelta(hours=9))
     now = datetime.now(jst)
     delta = target_date - now
     return max(0, delta.days)
+
+
+def is_past(target_date):
+    """目標日が過去かどうか判定"""
+    jst = timezone(timedelta(hours=9))
+    now = datetime.now(jst)
+    return now >= target_date
 
 
 def generate_live_countdown(days_left):
@@ -469,12 +476,12 @@ def main():
 
     # ===== フェーズ判定 =====
     # Phase 1: ライブ前 → ライブカウントダウン
-    # Phase 2: ライブ後〜シングル前 → シングルカウントダウン
-    # Phase 3: シングル後〜アルバム発売 → アルバムカウントダウン
-    if live_days > 0:
+    # Phase 2: ライブ後〜シングル配信前 → シングルカウントダウン
+    # Phase 3: シングル配信後〜アルバム発売 → アルバムカウントダウン
+    if not is_past(LIVE_DATE):
         tweet = generate_live_countdown(live_days)
         category = "live_countdown"
-    elif single_days >= 0:
+    elif not is_past(SINGLE_DATE):
         tweet = generate_single_countdown(single_days)
         category = "single_countdown"
     else:

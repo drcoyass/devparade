@@ -1,0 +1,197 @@
+name: Album Release Campaign - 8/5〜8/19「全ての武器をお箸に」
+
+# 8/5 トラックリスト公開 〜 8/19 アルバムリリース当日まで
+# 重要日程に自動投稿する
+
+on:
+  workflow_dispatch:
+    inputs:
+      day:
+        description: '実行日 (5/12/13/14/15/16/17/18/19)'
+        required: false
+        default: 'auto'
+      slot:
+        description: '投稿スロット (morning/noon/night/all)'
+        required: false
+        default: 'morning'
+  schedule:
+    # 8/5 アルバム全貌公開
+    - cron: '0 22 4 8 *'   # 8/5 07:00 JST
+    - cron: '0 3 5 8 *'    # 8/5 12:00 JST
+    # 8/12 1週間前カウントダウン開始
+    - cron: '0 22 11 8 *'  # 8/12 07:00 JST
+    - cron: '30 11 12 8 *' # 8/12 20:30 JST
+    # 8/16 あと3日
+    - cron: '0 22 15 8 *'  # 8/16 07:00 JST
+    # 8/17 あと2日
+    - cron: '0 22 16 8 *'  # 8/17 07:00 JST
+    # 8/18 前日
+    - cron: '0 22 17 8 *'  # 8/18 07:00 JST
+    - cron: '30 11 18 8 *' # 8/18 20:30 JST
+    # 8/19 リリース当日
+    - cron: '0 15 18 8 *'  # 8/19 00:00 JST
+    - cron: '0 22 18 8 *'  # 8/19 07:00 JST
+    - cron: '0 3 19 8 *'   # 8/19 12:00 JST
+    - cron: '30 11 19 8 *' # 8/19 20:30 JST
+
+permissions:
+  issues: write
+  contents: write
+
+jobs:
+  album-campaign-tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install tweepy python-dotenv requests twikit
+
+      - name: Determine campaign day and slot
+        id: params
+        run: |
+          DAY="${{ github.event.inputs.day || 'auto' }}"
+          SLOT="${{ github.event.inputs.slot || 'auto' }}"
+          MONTH=$(date -u +%m)
+          DOM=$(date -u +%d)
+          HOUR=$(date -u +%H)
+
+          if [ "$DAY" = "auto" ]; then
+            # UTC時刻から日本時間を逆算して日程を判断
+            if [ "$MONTH" = "08" ]; then
+              # 8/4 22:00 UTC → 8/5 JST
+              if [ "$DOM" = "04" ] && [ "$HOUR" = "22" ]; then DAY="5"; SLOT="morning"
+              elif [ "$DOM" = "05" ] && [ "$HOUR" = "03" ]; then DAY="5"; SLOT="noon"
+              elif [ "$DOM" = "11" ] && [ "$HOUR" = "22" ]; then DAY="12"; SLOT="morning"
+              elif [ "$DOM" = "12" ] && [ "$HOUR" = "11" ]; then DAY="12"; SLOT="night"
+              elif [ "$DOM" = "15" ] && [ "$HOUR" = "22" ]; then DAY="16"; SLOT="morning"
+              elif [ "$DOM" = "16" ] && [ "$HOUR" = "22" ]; then DAY="17"; SLOT="morning"
+              elif [ "$DOM" = "17" ] && [ "$HOUR" = "22" ]; then DAY="18"; SLOT="morning"
+              elif [ "$DOM" = "18" ] && [ "$HOUR" = "11" ]; then DAY="18"; SLOT="night"
+              elif [ "$DOM" = "18" ] && [ "$HOUR" = "15" ]; then DAY="19"; SLOT="midnight"
+              elif [ "$DOM" = "18" ] && [ "$HOUR" = "22" ]; then DAY="19"; SLOT="morning"
+              elif [ "$DOM" = "19" ] && [ "$HOUR" = "03" ]; then DAY="19"; SLOT="noon"
+              elif [ "$DOM" = "19" ] && [ "$HOUR" = "11" ]; then DAY="19"; SLOT="night"
+              else DAY="5"; SLOT="morning"
+              fi
+            fi
+          fi
+
+          echo "day=$DAY" >> $GITHUB_OUTPUT
+          echo "slot=$SLOT" >> $GITHUB_OUTPUT
+          echo "📅 Album campaign: day=$DAY slot=$SLOT"
+
+      - name: Post album campaign tweet
+        env:
+          CAMPAIGN: single_release
+          DAY: ${{ steps.params.outputs.day }}
+          SLOT: ${{ steps.params.outputs.slot }}
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          python - <<'PYEOF'
+          import os, asyncio, subprocess
+
+          day = os.environ.get('DAY', '5')
+          slot = os.environ.get('SLOT', 'morning')
+
+          # アルバムコンテンツ生成スクリプトから投稿テキストを取得
+          result = subprocess.run(
+              ['python3', 'scripts/album_content_generator.py', '--day', day],
+              capture_output=True, text=True
+          )
+          output = result.stdout
+
+          # 投稿テキストを抽出（最初のセクション）
+          tweet_text = None
+          in_section = False
+          lines = []
+          for line in output.split('\n'):
+              if '==========' in line and not in_section and tweet_text is None:
+                  in_section = True
+                  continue
+              elif '==========' in line and in_section:
+                  if lines:
+                      # ヘッダー行をスキップして本文を取得
+                      content = '\n'.join(lines).strip()
+                      # 📝 で始まる行をスキップ
+                      content_lines = [l for l in content.split('\n') if not l.startswith('📝')]
+                      tweet_text = '\n'.join(content_lines).strip()
+                      # [文字] の行を除去
+                      import re
+                      tweet_text = re.sub(r'\n\[\d+文字\]', '', tweet_text).strip()
+                      break
+                  in_section = False
+              elif in_section:
+                  lines.append(line)
+
+          if not tweet_text or len(tweet_text) < 10:
+              # フォールバック: countdown_tweets.py を使用
+              result2 = subprocess.run(
+                  ['python3', 'scripts/countdown_tweets.py'],
+                  capture_output=True, text=True
+              )
+              output2 = result2.stdout
+              # countdownツイートを抽出
+              in_tweet = False
+              t_lines = []
+              for line in output2.split('\n'):
+                  if '----------------------------------------' in line and not in_tweet:
+                      in_tweet = True
+                      continue
+                  elif '----------------------------------------' in line and in_tweet:
+                      tweet_text = '\n'.join(t_lines).strip()
+                      break
+                  elif in_tweet:
+                      t_lines.append(line)
+
+          if not tweet_text:
+              print("⚠️ No tweet text found. Skipping.")
+              exit(0)
+
+          print(f"📝 Posting ({len(tweet_text)} chars) for day={day} slot={slot}:")
+          print(tweet_text[:100] + '...' if len(tweet_text) > 100 else tweet_text)
+
+          username = os.environ.get('X_USERNAME')
+          email = os.environ.get('X_EMAIL')
+          password = os.environ.get('X_PASSWORD')
+
+          if not all([username, email, password]):
+              print("⚠️ Missing credentials. Skipping auto-post.")
+              exit(0)
+
+          try:
+              from twikit import Client
+
+              async def post():
+                  client = Client('ja')
+                  await client.login(auth_info_1=username, auth_info_2=email, password=password)
+                  tweet = await client.create_tweet(text=tweet_text)
+                  print(f"✅ Posted! ID: {tweet.id}")
+
+              asyncio.run(post())
+          except Exception as e:
+              print(f"❌ Post failed: {e}")
+          PYEOF
+
+      - name: Create issue log
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAY: ${{ steps.params.outputs.day }}
+          SLOT: ${{ steps.params.outputs.slot }}
+        run: |
+          DATE=$(date '+%Y-%m-%d %H:%M')
+          gh issue create \
+            --title "🍖 [アルバムキャンペーン] 8/${DAY} ${SLOT} ${DATE}" \
+            --body "アルバムキャンペーンツイートを実行しました (day=${DAY} slot=${SLOT})" \
+            --label "tweet-ready" || true
