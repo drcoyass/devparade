@@ -291,7 +291,7 @@ def show_august5():
     print("="*55)
     print_section("X メイン（トラックリスト）", AUGUST_5_POSTS["x_main"])
     print_section("X コンセプト告知", AUGUST_5_POSTS["x_concept"])
-    print_section("X NARUTO層向け", AUGUST_5_POSTS["x_naruto"])
+    print_section("X 先行配信曲紹介", AUGUST_5_POSTS["x_singles"])
     print_section("Instagram", AUGUST_5_POSTS["instagram"])
     print(f"\n{'='*55}")
     print("🎬 TikTok/Reels")
