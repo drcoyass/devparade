@@ -1,33 +1,34 @@
 name: Album Release Campaign - 8/5〜8/19「全ての武器をお箸に」
 
-# 8/5 トラックリスト公開 〜 8/19 アルバムリリース当日まで
-# 重要日程に自動投稿する
-
 on:
   workflow_dispatch:
     inputs:
       day:
-        description: '実行日 (5/12/13/14/15/16/17/18/19)'
+        description: '投稿日 (5/12/15/16/17/18/19)'
         required: false
         default: 'auto'
       slot:
-        description: '投稿スロット (morning/noon/night/all)'
+        description: '投稿スロット (morning/noon/night)'
         required: false
         default: 'morning'
+      dry_run:
+        description: 'Dry run (実際には投稿しない)'
+        required: false
+        default: 'false'
   schedule:
     # 8/5 アルバム全貌公開
     - cron: '0 22 4 8 *'   # 8/5 07:00 JST
     - cron: '0 3 5 8 *'    # 8/5 12:00 JST
-    # 8/12 1週間前カウントダウン開始
+    - cron: '30 11 5 8 *'  # 8/5 20:30 JST
+    # 8/12 1週間前
     - cron: '0 22 11 8 *'  # 8/12 07:00 JST
     - cron: '30 11 12 8 *' # 8/12 20:30 JST
-    # 8/16 あと3日
+    # 8/15〜8/18 カウントダウン
+    - cron: '0 22 14 8 *'  # 8/15 07:00 JST
     - cron: '0 22 15 8 *'  # 8/16 07:00 JST
-    # 8/17 あと2日
     - cron: '0 22 16 8 *'  # 8/17 07:00 JST
-    # 8/18 前日
     - cron: '0 22 17 8 *'  # 8/18 07:00 JST
-    - cron: '30 11 18 8 *' # 8/18 20:30 JST
+    - cron: '30 11 18 8 *' # 8/18 20:30 JST 前夜
     # 8/19 リリース当日
     - cron: '0 15 18 8 *'  # 8/19 00:00 JST
     - cron: '0 22 18 8 *'  # 8/19 07:00 JST
@@ -36,7 +37,7 @@ on:
 
 permissions:
   issues: write
-  contents: write
+  contents: read
 
 jobs:
   album-campaign-tweet:
@@ -50,91 +51,88 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy python-dotenv requests twikit
+        run: pip install tweepy
 
-      - name: Determine campaign day and slot
+      - name: Determine day and slot
         id: params
         run: |
           DAY="${{ github.event.inputs.day || 'auto' }}"
           SLOT="${{ github.event.inputs.slot || 'auto' }}"
-          MONTH=$(date -u +%m)
-          DOM=$(date -u +%d)
-          HOUR=$(date -u +%H)
 
           if [ "$DAY" = "auto" ]; then
-            # UTC時刻から日本時間を逆算して日程を判断
-            if [ "$MONTH" = "08" ]; then
-              # 8/4 22:00 UTC → 8/5 JST
-              if [ "$DOM" = "04" ] && [ "$HOUR" = "22" ]; then DAY="5"; SLOT="morning"
-              elif [ "$DOM" = "05" ] && [ "$HOUR" = "03" ]; then DAY="5"; SLOT="noon"
-              elif [ "$DOM" = "11" ] && [ "$HOUR" = "22" ]; then DAY="12"; SLOT="morning"
-              elif [ "$DOM" = "12" ] && [ "$HOUR" = "11" ]; then DAY="12"; SLOT="night"
-              elif [ "$DOM" = "15" ] && [ "$HOUR" = "22" ]; then DAY="16"; SLOT="morning"
-              elif [ "$DOM" = "16" ] && [ "$HOUR" = "22" ]; then DAY="17"; SLOT="morning"
-              elif [ "$DOM" = "17" ] && [ "$HOUR" = "22" ]; then DAY="18"; SLOT="morning"
-              elif [ "$DOM" = "18" ] && [ "$HOUR" = "11" ]; then DAY="18"; SLOT="night"
-              elif [ "$DOM" = "18" ] && [ "$HOUR" = "15" ]; then DAY="19"; SLOT="midnight"
-              elif [ "$DOM" = "18" ] && [ "$HOUR" = "22" ]; then DAY="19"; SLOT="morning"
-              elif [ "$DOM" = "19" ] && [ "$HOUR" = "03" ]; then DAY="19"; SLOT="noon"
-              elif [ "$DOM" = "19" ] && [ "$HOUR" = "11" ]; then DAY="19"; SLOT="night"
-              else DAY="5"; SLOT="morning"
-              fi
+            MONTH=$(date -u +%-m)
+            DOM=$(date -u +%-d)
+            HOUR=$(date -u +%-H)
+            MIN=$(date -u +%-M)
+            echo "UTC: ${MONTH}/${DOM} ${HOUR}:${MIN}"
+
+            # UTC→JST変換で日程判定
+            if   [ "$MONTH" = "8" ] && [ "$DOM" = "4"  ] && [ "$HOUR" = "22" ]; then DAY="5";  SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "5"  ] && [ "$HOUR" = "3"  ]; then DAY="5";  SLOT="noon"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "5"  ] && [ "$HOUR" = "11" ]; then DAY="5";  SLOT="night"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "11" ] && [ "$HOUR" = "22" ]; then DAY="12"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "12" ] && [ "$HOUR" = "11" ]; then DAY="12"; SLOT="night"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "14" ] && [ "$HOUR" = "22" ]; then DAY="15"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "15" ] && [ "$HOUR" = "22" ]; then DAY="16"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "16" ] && [ "$HOUR" = "22" ]; then DAY="17"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "17" ] && [ "$HOUR" = "22" ]; then DAY="18"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "18" ] && [ "$HOUR" = "11" ]; then DAY="18"; SLOT="night"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "18" ] && [ "$HOUR" = "15" ]; then DAY="19"; SLOT="midnight"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "18" ] && [ "$HOUR" = "22" ]; then DAY="19"; SLOT="morning"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "19" ] && [ "$HOUR" = "3"  ]; then DAY="19"; SLOT="noon"
+            elif [ "$MONTH" = "8" ] && [ "$DOM" = "19" ] && [ "$HOUR" = "11" ]; then DAY="19"; SLOT="night"
+            else DAY="5"; SLOT="morning"
             fi
           fi
 
           echo "day=$DAY" >> $GITHUB_OUTPUT
           echo "slot=$SLOT" >> $GITHUB_OUTPUT
-          echo "📅 Album campaign: day=$DAY slot=$SLOT"
+          echo "📅 Day=$DAY Slot=$SLOT"
 
-      - name: Post album campaign tweet
+      - name: Generate tweet text
+        id: tweet
         env:
-          CAMPAIGN: single_release
           DAY: ${{ steps.params.outputs.day }}
           SLOT: ${{ steps.params.outputs.slot }}
-          X_USERNAME: ${{ secrets.X_USERNAME }}
-          X_EMAIL: ${{ secrets.X_EMAIL }}
-          X_PASSWORD: ${{ secrets.X_PASSWORD }}
-          X_API_KEY: ${{ secrets.X_API_KEY }}
-          X_API_SECRET: ${{ secrets.X_API_SECRET }}
-          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
-          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: |
-          python - <<'PYEOF'
-          import os, asyncio, subprocess
+          python3 - <<'PYEOF'
+          import os, sys, subprocess, re
 
-          day = os.environ.get('DAY', '5')
+          day  = os.environ.get('DAY', '5')
           slot = os.environ.get('SLOT', 'morning')
+          print(f"Generating content for day={day} slot={slot}")
 
-          # アルバムコンテンツ生成スクリプトから投稿テキストを取得
+          # アルバムコンテンツ生成
           result = subprocess.run(
               ['python3', 'scripts/album_content_generator.py', '--day', day],
               capture_output=True, text=True
           )
           output = result.stdout
 
-          # 投稿テキストを抽出（最初のセクション）
-          tweet_text = None
-          in_section = False
-          lines = []
-          for line in output.split('\n'):
-              if '==========' in line and not in_section and tweet_text is None:
-                  in_section = True
-                  continue
-              elif '==========' in line and in_section:
-                  if lines:
-                      # ヘッダー行をスキップして本文を取得
-                      content = '\n'.join(lines).strip()
-                      # 📝 で始まる行をスキップ
-                      content_lines = [l for l in content.split('\n') if not l.startswith('📝')]
-                      tweet_text = '\n'.join(content_lines).strip()
-                      # [文字] の行を除去
-                      import re
-                      tweet_text = re.sub(r'\n\[\d+文字\]', '', tweet_text).strip()
-                      break
-                  in_section = False
-              elif in_section:
-                  lines.append(line)
+          # スロットに応じてセクションを選択
+          slot_to_key = {
+              'midnight': '0時解禁',
+              'morning':  '朝',
+              'noon':     '昼',
+              'night':    '夜',
+          }
+          target_key = slot_to_key.get(slot, '朝')
 
+          # テキストブロックを全て抽出
+          blocks = re.findall(r'={20,}\n📝 (.+?)\n={20,}\n(.*?)\n\[\d+文字\]', output, re.DOTALL)
+          tweet_text = None
+
+          if blocks:
+              # 最初のXメイン投稿を使う（スロットに応じて変える）
+              slot_idx = {'midnight': -1, 'morning': 0, 'noon': 1, 'night': 2}.get(slot, 0)
+              idx = min(slot_idx, len(blocks)-1)
+              if idx < 0:
+                  idx = len(blocks) + idx
+              _, raw = blocks[idx]
+              tweet_text = raw.strip()
+              # [文字] 行などの不要テキストを除去
+              tweet_text = re.sub(r'\n📝.*', '', tweet_text).strip()
+          
           if not tweet_text or len(tweet_text) < 10:
               # フォールバック: countdown_tweets.py を使用
               result2 = subprocess.run(
@@ -142,56 +140,103 @@ jobs:
                   capture_output=True, text=True
               )
               output2 = result2.stdout
-              # countdownツイートを抽出
               in_tweet = False
               t_lines = []
               for line in output2.split('\n'):
-                  if '----------------------------------------' in line and not in_tweet:
-                      in_tweet = True
-                      continue
-                  elif '----------------------------------------' in line and in_tweet:
-                      tweet_text = '\n'.join(t_lines).strip()
-                      break
+                  if '---' in line and not in_tweet:
+                      in_tweet = True; continue
+                  elif '---' in line and in_tweet:
+                      tweet_text = '\n'.join(t_lines).strip(); break
                   elif in_tweet:
                       t_lines.append(line)
 
-          if not tweet_text:
-              print("⚠️ No tweet text found. Skipping.")
-              exit(0)
-
-          print(f"📝 Posting ({len(tweet_text)} chars) for day={day} slot={slot}:")
-          print(tweet_text[:100] + '...' if len(tweet_text) > 100 else tweet_text)
-
-          username = os.environ.get('X_USERNAME')
-          email = os.environ.get('X_EMAIL')
-          password = os.environ.get('X_PASSWORD')
-
-          if not all([username, email, password]):
-              print("⚠️ Missing credentials. Skipping auto-post.")
-              exit(0)
-
-          try:
-              from twikit import Client
-
-              async def post():
-                  client = Client('ja')
-                  await client.login(auth_info_1=username, auth_info_2=email, password=password)
-                  tweet = await client.create_tweet(text=tweet_text)
-                  print(f"✅ Posted! ID: {tweet.id}")
-
-              asyncio.run(post())
-          except Exception as e:
-              print(f"❌ Post failed: {e}")
+          if tweet_text:
+              print(f"\n✅ Tweet ({len(tweet_text)} chars):")
+              print(tweet_text[:200])
+              with open('/tmp/tweet_text.txt', 'w') as f:
+                  f.write(tweet_text)
+          else:
+              print("❌ No tweet text found")
+              sys.exit(0)
           PYEOF
 
-      - name: Create issue log
+      - name: Post to X (tweepy v2)
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          DAY: ${{ steps.params.outputs.day }}
+          SLOT: ${{ steps.params.outputs.slot }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, sys, tweepy
+
+          tweet_text_file = '/tmp/tweet_text.txt'
+          try:
+              with open(tweet_text_file) as f:
+                  tweet_text = f.read().strip()
+          except FileNotFoundError:
+              print("⚠️ No tweet text file. Skipping.")
+              sys.exit(0)
+
+          api_key       = os.environ.get('X_API_KEY', '')
+          api_secret    = os.environ.get('X_API_SECRET', '')
+          access_token  = os.environ.get('X_ACCESS_TOKEN', '')
+          access_secret = os.environ.get('X_ACCESS_SECRET', '')
+
+          if not all([api_key, api_secret, access_token, access_secret]):
+              print("⚠️ Missing X credentials. Set X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET in Secrets.")
+              sys.exit(0)
+
+          day  = os.environ.get('DAY', '?')
+          slot = os.environ.get('SLOT', '?')
+
+          try:
+              client = tweepy.Client(
+                  consumer_key=api_key,
+                  consumer_secret=api_secret,
+                  access_token=access_token,
+                  access_token_secret=access_secret,
+                  wait_on_rate_limit=True
+              )
+              response = client.create_tweet(text=tweet_text)
+              tweet_id = response.data['id']
+              print(f"✅ Posted! day={day} slot={slot}")
+              print(f"   Tweet ID: {tweet_id}")
+              print(f"   URL: https://x.com/devparade/status/{tweet_id}")
+              with open('/tmp/post_result.txt', 'w') as f:
+                  f.write(f"✅ Posted: https://x.com/devparade/status/{tweet_id}\n\n{tweet_text}")
+
+          except tweepy.errors.Forbidden as e:
+              msg = f"❌ 403 Forbidden: {e}\nX API Free tier does not allow write. Upgrade to Basic tier."
+              print(msg)
+              with open('/tmp/post_result.txt', 'w') as f:
+                  f.write(msg)
+          except tweepy.errors.TooManyRequests as e:
+              msg = f"⚠️ Rate limited: {e}"
+              print(msg)
+              with open('/tmp/post_result.txt', 'w') as f:
+                  f.write(msg)
+          except Exception as e:
+              msg = f"❌ {type(e).__name__}: {e}"
+              print(msg)
+              with open('/tmp/post_result.txt', 'w') as f:
+                  f.write(msg)
+          PYEOF
+
+      - name: Create Issue log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DAY: ${{ steps.params.outputs.day }}
           SLOT: ${{ steps.params.outputs.slot }}
         run: |
-          DATE=$(date '+%Y-%m-%d %H:%M')
+          DATE=$(date '+%Y-%m-%d %H:%M UTC')
+          TWEET=$(cat /tmp/tweet_text.txt 2>/dev/null | head -5 || echo "N/A")
+          RESULT=$(cat /tmp/post_result.txt 2>/dev/null || echo "dry run / no result")
           gh issue create \
+            --repo drcoyass/devparade \
             --title "🍖 [アルバムキャンペーン] 8/${DAY} ${SLOT} ${DATE}" \
-            --body "アルバムキャンペーンツイートを実行しました (day=${DAY} slot=${SLOT})" \
+            --body "## 結果\n${RESULT}\n\n## 投稿テキスト (先頭)\n${TWEET}" \
             --label "tweet-ready" || true

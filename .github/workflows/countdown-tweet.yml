@@ -1,7 +1,5 @@
 name: Countdown Tweet - シングル&アルバム カウントダウン自動投稿
 
-# countdown_tweets.py を毎日昼12時と夜20:30に自動実行する
-
 on:
   workflow_dispatch:
     inputs:
@@ -29,47 +27,34 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy python-dotenv requests twikit
+        run: pip install tweepy
 
-      - name: Run countdown tweet generator
+      - name: Generate and post countdown tweet
         env:
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-          X_USERNAME: ${{ secrets.X_USERNAME }}
-          X_EMAIL: ${{ secrets.X_EMAIL }}
-          X_PASSWORD: ${{ secrets.X_PASSWORD }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: |
+          python - <<'PYEOF'
+          import os, sys, subprocess, re, tweepy
+
           # カウントダウンツイートを生成
-          python scripts/countdown_tweets.py 2>&1 | tee /tmp/countdown_output.txt
-          echo "✅ Countdown tweet generated"
-
-      - name: Post tweet via twikit
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        env:
-          X_USERNAME: ${{ secrets.X_USERNAME }}
-          X_EMAIL: ${{ secrets.X_EMAIL }}
-          X_PASSWORD: ${{ secrets.X_PASSWORD }}
-        run: |
-          python - <<'EOF'
-          import os, asyncio, subprocess, re
-          from twikit import Client
-
-          # countdown_tweets.pyの出力からツイートテキストを取得
           result = subprocess.run(
-              ["python", "scripts/countdown_tweets.py"],
+              ['python3', 'scripts/countdown_tweets.py'],
               capture_output=True, text=True
           )
           output = result.stdout
+          print("=== Countdown output ===")
+          print(output[:500])
 
-          # 最初のカウントダウンツイートを抽出
+          # 投稿テキストを抽出（最初の区切り線の間の本文）
           tweet_text = None
           in_tweet = False
           lines = []
           for line in output.split('\n'):
-              if '----------------------------------------' in line and not in_tweet and not tweet_text:
+              if '----------------------------------------' in line and not in_tweet:
                   in_tweet = True
                   continue
               elif '----------------------------------------' in line and in_tweet:
@@ -79,53 +64,69 @@ jobs:
                   lines.append(line)
 
           if not tweet_text:
-              print("⚠️ Could not extract tweet text from output")
-              exit(0)
+              print("⚠️ Could not extract tweet text")
+              sys.exit(0)
 
-          print(f"📝 Tweet to post ({len(tweet_text)} chars):")
-          print(tweet_text[:100] + "..." if len(tweet_text) > 100 else tweet_text)
+          print(f"\n📝 Tweet ({len(tweet_text)} chars):")
+          print(tweet_text)
 
-          username = os.environ.get('X_USERNAME')
-          email = os.environ.get('X_EMAIL')
-          password = os.environ.get('X_PASSWORD')
+          # DRY RUN チェック
+          if os.environ.get('DRY_RUN') == 'true':
+              print("\n🔍 DRY RUN - 投稿しません")
+              sys.exit(0)
 
-          if not all([username, email, password]):
-              print("⚠️ Missing X credentials. Skipping auto-post.")
-              exit(0)
+          # Tweepy v2 で投稿
+          api_key        = os.environ.get('X_API_KEY', '')
+          api_secret     = os.environ.get('X_API_SECRET', '')
+          access_token   = os.environ.get('X_ACCESS_TOKEN', '')
+          access_secret  = os.environ.get('X_ACCESS_SECRET', '')
 
-          async def post():
-              client = Client('ja')
-              try:
-                  await client.login(auth_info_1=username, auth_info_2=email, password=password)
-                  tweet = await client.create_tweet(text=tweet_text)
-                  print(f"✅ Tweet posted! ID: {tweet.id}")
-                  return tweet.id
-              except Exception as e:
-                  print(f"❌ Post failed: {e}")
-                  return None
+          if not all([api_key, api_secret, access_token, access_secret]):
+              print("⚠️ X API credentials missing. Skipping post.")
+              sys.exit(0)
 
-          asyncio.run(post())
-          EOF
+          try:
+              client = tweepy.Client(
+                  consumer_key=api_key,
+                  consumer_secret=api_secret,
+                  access_token=access_token,
+                  access_token_secret=access_secret
+              )
+              response = client.create_tweet(text=tweet_text)
+              tweet_id = response.data['id']
+              print(f"✅ Posted! Tweet ID: {tweet_id}")
+              print(f"   URL: https://x.com/devparade/status/{tweet_id}")
+
+              # 結果をファイルに保存
+              with open('/tmp/tweet_result.txt', 'w') as f:
+                  f.write(f"ID: {tweet_id}\nText:\n{tweet_text}")
+
+          except tweepy.errors.Forbidden as e:
+              print(f"❌ Forbidden (403): {e}")
+              print("   → X API Free tier does not allow write access.")
+              print("   → Please upgrade to Basic tier ($100/mo) or use a different method.")
+          except tweepy.errors.TooManyRequests as e:
+              print(f"⚠️ Rate limited (429): {e}")
+          except Exception as e:
+              print(f"❌ Error: {type(e).__name__}: {e}")
+          PYEOF
 
       - name: Commit state changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add scripts/*.json data/*.json data/*.txt 2>/dev/null || true
-          git commit -m "🤖 [skip ci] Update countdown tweet state" || echo "No changes to commit"
+          git add data/*.json data/*.txt 2>/dev/null || true
+          git diff --cached --quiet || git commit -m "🤖 [skip ci] Update countdown state"
           git push || echo "Nothing to push"
 
       - name: Create Issue log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          DATE=$(date +%Y-%m-%d_%H%M)
-          PHASE="single_countdown"
-          # 7/29以降はアルバムフェーズ
-          if [ "$(date +%s)" -gt "$(date -d '2026-07-29' +%s 2>/dev/null || date -j -f '%Y-%m-%d' '2026-07-29' +%s)" ]; then
-            PHASE="album_countdown"
-          fi
+          DATE=$(date '+%Y-%m-%d %H:%M UTC')
+          RESULT=$(cat /tmp/tweet_result.txt 2>/dev/null || echo "No result (dry run or error)")
           gh issue create \
-            --title "🍖 [カウントダウン日報] ${DATE} [${PHASE}]" \
-            --body "$(cat /tmp/countdown_output.txt 2>/dev/null || echo 'No output captured')" \
+            --repo drcoyass/devparade \
+            --title "🍖 [カウントダウン日報] ${DATE}" \
+            --body "${RESULT}" \
             --label "tweet-ready" || true
