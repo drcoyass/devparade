@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="WORLD FAMOUS Devparade | 15年ぶり復活">
   <meta property="og:description"
-    content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆<span data-i18n="member-gout">痛風ホルダー</span>。2026.02.06 再結成ワンマン開催。">
+    content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆痛風ホルダー。8/19アルバム『全ての武器をお箸に』リリース！">
   <meta property="og:image" content="https://devparade.jp/assets/member-group.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <!-- OGP: X (Twitter) Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Devparade | メンバー全員90kg超ヘヴィメタボバンド 15年ぶり復活">
-  <meta name="twitter:description" content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆<span data-i18n="member-gout">痛風ホルダー</span>。">
+  <meta name="twitter:description" content="NARUTOエンディング「バッチコイ!!!」のデブパレードが15年ぶりに復活！メンバー全員90kg以上＆痛風ホルダー。8/19アルバム『全ての武器をお箸に』リリース！">
   <meta name="twitter:image" content="https://devparade.jp/assets/member-group.jpg">
   <meta name="twitter:site" content="@dev_parade">
   <!-- SEO -->
@@ -1048,16 +1048,90 @@
       transform: translateY(0);
     }
 
-    .share-btn {
+    /* === Amazon 予約フローティングバー === */
+    #amazon-float-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1001;
+      background: linear-gradient(135deg, #FF9900 0%, #FFB300 100%);
+      padding: 0.5rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      padding: 0.6rem 1.2rem;
+      justify-content: center;
+      gap: 1rem;
+      transform: translateY(-100%);
+      transition: transform 0.4s ease;
+      box-shadow: 0 4px 20px rgba(255,153,0,0.5);
+    }
+    #amazon-float-bar.visible {
+      transform: translateY(0);
+    }
+    #amazon-float-bar .amz-label {
       font-family: 'Oswald', sans-serif;
       font-size: 0.8rem;
+      color: #000;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+    }
+    #amazon-float-bar .amz-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #000;
+      color: #FF9900;
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.35rem 1.2rem;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+      transition: all 0.2s;
+      animation: pulse-amazon 2s infinite;
+    }
+    #amazon-float-bar .amz-cta:hover {
+      background: #FF9900;
+      color: #000;
+    }
+    @keyframes pulse-amazon {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,153,0,0.5); }
+      50% { box-shadow: 0 0 0 6px rgba(255,153,0,0); }
+    }
+    #amazon-float-bar .amz-close {
+      position: absolute;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #000;
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+    #amazon-float-bar .amz-close:hover { opacity: 1; }
+    /* ストリーミングボタン */
+    .stream-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+    .stream-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
       letter-spacing: 0.08em;
       text-decoration: none;
-      color: #fff;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    .stream-btn:hover { opacity: 0.85; transform: translateY(-1px); }
       transition: opacity 0.2s;
       border: none;
       cursor: pointer;
@@ -1327,7 +1401,15 @@
 
 <body>
   <!-- DEBUG VERSION: 2026-05-13-1610 -->
-  <div id="debug-ver" style="position:fixed; bottom:10px; right:10px; background:rgba(0,0,0,0.8); color:#fff; font-size:10px; padding:5px; z-index:10000; pointer-events:none;">Ver: 2264</div>
+
+<!-- Amazon予約フローティングCTAバー -->
+<div id="amazon-float-bar">
+  <span class="amz-label">🎸 1st Full Album 『全ての武器をお箸に』2026.08.19 RELEASE</span>
+  <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" class="amz-cta" id="amz-float-btn">
+    🛒 Amazonで予約する
+  </a>
+  <button class="amz-close" onclick="document.getElementById('amazon-float-bar').style.display='none'" aria-label="閉じる">&times;</button>
+</div>
 
   <!-- ===== NAV ===== -->
   <div style="background: var(--red); color: white; text-align: center; padding: 10px 15px; font-weight: bold; font-family: 'Oswald', sans-serif; letter-spacing: 0.1em; position: fixed; top: 0; width: 100%; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-size: 0.9rem;">
@@ -1398,6 +1480,21 @@
           🎵 今すぐ各配信ストアで聴く
         </a>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== AMAZON PRE-ORDER BANNER ===== -->
+  <div class="amazon-preorder-banner" style="background: linear-gradient(135deg, #111, #232f3e); border-top: 4px solid #FF9900; border-bottom: 4px solid #FF9900; padding: 2rem 1.5rem; text-align: center; position: relative; overflow: hidden; margin-bottom: 2rem;">
+    <div style="position: absolute; top: -30px; right: -30px; font-size: 10rem; opacity: 0.05; font-family: 'Bebas Neue', sans-serif; color: #FF9900;">AMAZON</div>
+    <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto;">
+      <div style="display: inline-block; background: #FF9900; color: #000; font-family: 'Oswald', sans-serif; font-weight: 700; padding: 0.4rem 1.2rem; font-size: 1rem; letter-spacing: 0.1em; transform: rotate(-1deg); margin-bottom: 1rem; box-shadow: 2px 2px 0px #fff;">1st ALBUM 先行予約受付中！</div>
+      <h2 style="font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.8rem); color: #fff; text-shadow: 0 4px 15px rgba(255,153,0,0.5); margin-bottom: 1rem; letter-spacing: 0.05em;">全ての武器をお箸に</h2>
+      <p style="font-size: 1.1rem; color: #ccc; line-height: 1.8; margin-bottom: 1.5rem;">
+        15年ぶりの奇跡の復活フルアルバム（2026.08.19リリース）がついにAmazonにて予約開始！
+      </p>
+      <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" style="display: inline-block; background: #FF9900; color: #000; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 50px; transition: all 0.3s; box-shadow: 0 10px 25px rgba(255,153,0,0.4); letter-spacing: 0.1em;" onmouseover="this.style.transform='scale(1.05) translateY(-3px)'; this.style.boxShadow='0 15px 35px rgba(255,153,0,0.6)'" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 25px rgba(255,153,0,0.4)'">
+        🛒 Amazonで先行予約する &rarr;
+      </a>
     </div>
   </div>
 
@@ -1636,10 +1733,13 @@
           <div class="dow">SAT</div>
         </div>
         <div class="live-info">
+          <div class="live-flyer" style="margin-bottom: 15px;">
+            <img src="assets/flyer-20260509.jpg" alt="5/9 代々木FORTY DEGREES JAPANフライヤー" style="width: 100%; max-width: 300px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer;" onclick="window.open(this.src)">
+          </div>
           <h3><a href="https://40degreesjapan.com" target="_blank" rel="noopener" style="color:inherit; text-decoration:none; border-bottom: 1px solid var(--yellow);">FORTY DEGREES JAPAN</a></h3>
           <div class="venue">国立代々木競技場 第一体育館</div>
-          <div style="font-size: 0.8rem; color: #333; margin-top: 4px; font-weight: bold;">出演時間 12:15〜12:40 / 入場無料（事前登録制）</div>
-          <span class="badge badge-upcoming" data-i18n="upcoming">UPCOMING</span>
+          <div style="font-size: 0.8rem; color: #555; margin-top: 4px; font-weight: bold;">出演時間 12:15〜12:40 / 入場無料（事前登録制）</div>
+          <span class="badge badge-soldout">ENDED</span>
         </div>
       </div>
 
@@ -1668,7 +1768,7 @@
             <a href="https://livepocket.jp/e/5avag" target="_blank" rel="noopener" class="btn btn-red" style="font-size: 0.8rem; padding: 6px 15px;">TICKET BUY (LivePocket)</a>
             <span style="font-size: 0.7rem; color: #888; margin-left: 10px;">限定 250枚</span>
           </div>
-          <span class="badge badge-upcoming">TICKET OPEN</span>
+          <span class="badge badge-soldout">ENDED</span>
         </div>
       </div>
 
@@ -1681,7 +1781,7 @@
         </div>
         <div class="live-info">
           <div style="margin-bottom: 10px;">
-            <div id="countdown-712" style="font-family:'Oswald',sans-serif; font-size: 1.1rem; color: var(--yellow); letter-spacing: 0.1em; margin-bottom: 8px;"></div>
+            <div id="countdown-712" style="font-family:'Oswald',sans-serif; font-size: 1.1rem; color: #888; letter-spacing: 0.1em; margin-bottom: 8px;">✓ ENDED 2026.07.12</div>
           </div>
           <div class="live-flyer" style="margin-bottom: 15px;">
             <img src="assets/flyer-20260712.jpg" alt="7/12 下北沢CLUB Que公演フライヤー" style="width: 100%; max-width: 300px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer;" onclick="window.open(this.src)">
@@ -1699,34 +1799,15 @@
             </div>
           </div>
           <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-            <a href="https://clubque.net/schedule/15101/" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 25px; background: var(--red); color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; border-radius: 4px; transition: all 0.3s; box-shadow: 0 4px 12px rgba(227,30,36,0.4);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(227,30,36,0.6)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(227,30,36,0.4)'">🎫 TICKET INFO</a>
-            <span style="font-size: 0.75rem; color: var(--red); font-weight: bold; animation: pulse 2s infinite;">🔥 NEXT LIVE</span>
+            <a href="https://clubque.net/schedule/15101/" target="_blank" rel="noopener" style="display: inline-block; padding: 10px 25px; background: #444; color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.1em; border-radius: 4px;">📋 公演詳細</a>
           </div>
-          <span class="badge badge-upcoming" style="background: var(--red); color: #fff; font-weight: bold;">NEXT LIVE</span>
+          <span class="badge badge-soldout">ENDED</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Countdown Timer Script -->
-    <script>
-    (function updateCountdown() {
-      const target = new Date('2026-07-12T12:00:00+09:00');
-      const now = new Date();
-      const diff = target - now;
-      const el = document.getElementById('countdown-712');
-      if (!el) return;
-      if (diff <= 0) {
-        el.textContent = '🔥 TODAY IS THE DAY! 🔥';
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      el.textContent = `⏱ NEXT LIVE in ${days}d ${hours}h ${mins}m`;
-      setTimeout(updateCountdown, 60000);
-    })();
-    </script>
+    <!-- Countdown Timer Script removed (7/12 show has ended) -->
   </section>
 
 
@@ -1842,6 +1923,31 @@
 
     <div class="disco-grid">
 
+      <!-- Digital Single: Natsu no Owari ni (7/29 - pre-release shown now) -->
+      <div id="new-single-729" class="disco-card reveal" style="border-color: #e01e5a; border-width: 2px; grid-column: 1 / -1; background: linear-gradient(135deg, #1e0f25, #151515); padding: 2rem; display: block;">
+        <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+          <div class="album-jacket" style="flex: 0 0 200px; width: 200px; background: linear-gradient(135deg, #1e0f25, #4a154b); border-radius: 8px; border: 2px solid #e01e5a; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(224,30,90,0.3);">
+            <div style="text-align: center; color: #e01e5a; font-family: 'Noto Sans JP', sans-serif; font-weight: 900; padding: 1rem;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎵</div>
+              <div style="font-size: 0.9rem; line-height: 1.4;">夏の終わりに</div>
+            </div>
+          </div>
+          <div class="album-info" style="flex: 1; min-width: 280px;">
+            <div class="year" style="color: #e01e5a; font-family: 'Oswald', sans-serif;">2026.07.29 &mdash; Digital Single</div>
+            <h3 style="color: #fff; font-size: 1.8rem; margin-top: 0.2rem; margin-bottom: 0.5rem;">夏の終わりに</h3>
+            <div class="label" style="color: var(--gray); margin-bottom: 0.5rem; font-weight: bold;">ハンサムレコーズ</div>
+            <div class="tieup" style="display: inline-block; padding: 0.3rem 1rem; background: rgba(224, 30, 90, 0.1); border: 1px solid #e01e5a; color: #e01e5a; font-size: 0.85rem; border-radius: 4px; margin-bottom: 1rem; font-weight: bold;">
+              デブパレード復活第4弾シングル！
+            </div>
+            <div class="tracks" style="font-size: 1.1rem; line-height: 1.6;">
+              1. 夏の終わりに &mdash;
+              <a href="https://link-map.jp/links/t7J6lCsV" target="_blank" rel="noopener" style="color:#e01e5a; font-weight: bold; text-decoration: underline;">▶ 今すぐ聴く</a><br>
+              <span style="font-size: 0.9rem; color: var(--gray);">夏の終わりの夕暮れに響く、切なくも極太なメロウ・ファンクバラード</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Digital Single: Happy Ran-Debu -->
       <div id="new-single-629" class="disco-card reveal" style="border-color: #00ff88; border-width: 2px; display: block; grid-column: 1 / -1; background: linear-gradient(135deg, #001a0d, #151515); padding: 2rem;">
         <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
@@ -1855,7 +1961,6 @@
             <div class="tieup" style="display: inline-block; padding: 0.3rem 1rem; background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; color: #00ff88; font-size: 0.85rem; border-radius: 4px; margin-bottom: 1rem; font-weight: bold;">
               デブパレード復活第3弾シングル！
             </div>
-            <div class="tracks" style="font-size: 1.1rem; line-height: 1.6;">
               1. ハッピー乱デブー &mdash; 
               <a href="https://link-map.jp/links/9ox_1HYZ" target="_blank" rel="noopener" style="color:#00ff88; font-weight: bold; text-decoration: underline;">▶ 今すぐ聴く</a><br>
               <span style="font-size: 0.9rem; color: var(--gray);">作詞: ハンサム判治・COYASS / 作曲・編曲: ugazin</span>
@@ -1892,12 +1997,27 @@
           <h3>全ての武器をお箸に</h3>
           <div class="label" style="color: var(--gray); font-weight: bold; margin-bottom: 0.5rem;">ハンサムレコーズ</div>
           <div class="coming">2026.08.19 RELEASE</div>
-          <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
+          <div style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
             15年越しの初フルアルバムがついにリリース決定！<br>
-            先行配信シングル「うっちゃりファンク」「パルフェ」「ハッピー乱デブー」を含む、デブパレードの魂が詰まった全曲入りの超大作。
-          </p>
-          <div style="font-family:'Oswald',sans-serif; font-size:0.75rem; color:#666; letter-spacing:0.1em; text-transform:uppercase;">
-            Tracklist & Details Coming Soon
+            先行配信シングル「うっちゃりファンク」「夏の終わりに」を含む、デブパレードの魂が詰まった全１０曲。
+          </div>
+          <div style="margin-bottom: 1.5rem;">
+            <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" style="display: inline-block; background: #FF9900; color: #000; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: bold; font-size: 1rem; padding: 0.8rem 2rem; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;" onmouseover="this.style.background='#FFB300'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#FF9900'; this.style.transform='translateY(0)'">
+              🛒 Amazonで先行予約する &rarr;
+            </a>
+          </div>
+          <div class="tracks" style="font-size: 0.9rem; line-height: 2; margin-top: 0.5rem;">
+            <div style="font-family:'Oswald',sans-serif; font-size:0.7rem; color:#888; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.5rem;">Tracklist</div>
+            <div style="color:var(--gray);">01. 100CAN DIVE</div>
+            <div style="color:var(--gray);">02. 自転車</div>
+            <div style="color:var(--gray);">03. パルフェ</div>
+            <div style="color:var(--gray);">04. うっちゃりファンク &mdash; <a href="https://link-map.jp/links/5N3CvpY-" target="_blank" rel="noopener" style="color:var(--yellow); font-weight:bold; font-size:0.8rem;">▶ 先行配信中</a></div>
+            <div style="color:var(--gray);">05. 何年経っても万年FAT お前らにゃ一生わかんねえや</div>
+            <div style="color:var(--gray);">06. 夏の終わりに &mdash; <a href="https://link-map.jp/links/t7J6lCsV" target="_blank" rel="noopener" style="color:var(--red); font-weight:bold; font-size:0.8rem;">▶ 先行配信中</a></div>
+            <div style="color:var(--gray);">07. ハッピー乱デブー</div>
+            <div style="color:var(--gray);">08. ダブルベッド</div>
+            <div style="color:var(--gray);">09. メシを喰わせろ！</div>
+            <div style="color:var(--gray);">10. タチアガレ</div>
           </div>
         </div>
       </div>
@@ -2019,7 +2139,7 @@
       <div style="max-width: 800px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
         <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/7JY1DiPoWEkSWldBjVZoIb?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
       </div>
-      <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">最新シングル「ハッピー乱デブー」をSpotifyでチェック！</p>
+      <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--gray);">最新シングル「夏の終わりに」（7/29配信）を含む、デブパレード最新作をSpotifyでチェック！</p>
     </div>
   </section>
 
@@ -2792,6 +2912,10 @@
     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     INSTA
   </a>
+  <a class="share-btn" href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener"
+     style="background: #FF9900; color: #000; font-weight: 900; font-size: 0.85rem; animation: pulse-amazon 2s infinite;">
+    🛒 Amazon予約
+  </a>
   <a class="share-btn fb-btn" href="https://www.facebook.com/DevParadeOfficial" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
     FB
@@ -3308,7 +3432,33 @@ if (savedLang) {
       }
     })();
     </script>
-    
+
+    <!-- Amazon予約バー・アルバムカウントダウン JS -->
+    <script>
+    // Amazon予約フローティングバー（スクロール開始後0.5秒で表示）
+    (function() {
+      var bar = document.getElementById('amazon-float-bar');
+      if (!bar) return;
+      setTimeout(function() { bar.classList.add('visible'); }, 500);
+    })();
+
+    // 8/19アルバムリリースカウントダウン
+    (function tick() {
+      var el = document.getElementById('album-countdown');
+      if (!el) return;
+      var release = new Date('2026-08-19T00:00:00+09:00');
+      var diff = release - new Date();
+      if (diff <= 0) {
+        el.innerHTML = '<span style="color:#00ff88;">🎸 NOW ON SALE!</span>';
+        return;
+      }
+      var days = Math.floor(diff / 86400000);
+      var hours = Math.floor((diff % 86400000) / 3600000);
+      el.innerHTML = '⏳ リリースまで <span style="font-size:1.4rem;color:var(--yellow);">' + days + '</span>日 <span style="font-size:1.4rem;color:var(--yellow);">' + hours + '</span>時間';
+      setTimeout(tick, 60000);
+    })();
+    </script>
+
 </body>
 
 </html>
