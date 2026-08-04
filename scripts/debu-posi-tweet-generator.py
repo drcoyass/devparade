@@ -2157,40 +2157,51 @@ def mark_as_posted(tweet_data):
 
 
 def auto_post(tweet_text):
-    """X APIで自動投稿 (twikitを使用)"""
-    if not TwikitClient:
-        print("⚠️ [DEBUG] twikit is not imported. Skipping auto-post.")
-        return None
-    if not all([X_USERNAME, X_EMAIL, X_PASSWORD]):
-        missing = []
-        if not X_USERNAME: missing.append("X_USERNAME")
-        if not X_EMAIL: missing.append("X_EMAIL")
-        if not X_PASSWORD: missing.append("X_PASSWORD")
-        print(f"⚠️ [DEBUG] Missing credentials in auto_post: {', '.join(missing)}")
-        return None
+    """X APIで自動投稿 (tweepy v2を使用)"""
+    import tweepy
 
-    async def _post():
-        client = TwikitClient('ja-JP')
-        print("🔄 Logging in to X via twikit...")
-        await client.login(
-            auth_info_1=X_USERNAME,
-            auth_info_2=X_EMAIL,
-            password=X_PASSWORD
-        )
-        print("🔄 Sending tweet...")
-        tweet = await client.create_tweet(text=tweet_text)
-        return tweet.id
+    api_key       = os.environ.get("X_API_KEY", "")
+    api_secret    = os.environ.get("X_API_SECRET", "")
+    access_token  = os.environ.get("X_ACCESS_TOKEN", "")
+    access_secret = os.environ.get("X_ACCESS_SECRET", "")
+
+    if not all([api_key, api_secret, access_token, access_secret]):
+        missing = [k for k, v in {
+            "X_API_KEY": api_key, "X_API_SECRET": api_secret,
+            "X_ACCESS_TOKEN": access_token, "X_ACCESS_SECRET": access_secret
+        }.items() if not v]
+        print(f"⚠️ Missing credentials: {', '.join(missing)}")
+        return None
 
     try:
-        tweet_id = asyncio.run(_post())
-        print(f"✅ Auto-posted via twikit! Tweet ID: {tweet_id}")
+        client = tweepy.Client(
+            consumer_key=api_key,
+            consumer_secret=api_secret,
+            access_token=access_token,
+            access_token_secret=access_secret,
+            wait_on_rate_limit=True
+        )
+        response = client.create_tweet(text=tweet_text)
+        tweet_id = response.data['id']
+        print(f"✅ Auto-posted! Tweet ID: {tweet_id}")
+        print(f"   URL: https://x.com/devparade/status/{tweet_id}")
         return tweet_id
-    except Exception as e:
-        print(f"❌ Auto-post via twikit failed: {e}")
-        # Fallback: generate intent URL for manual posting
+
+    except tweepy.errors.Forbidden as e:
+        print(f"❌ 403 Forbidden: {e}")
+        print("   → X API Free tierは書き込み不可。Basicプラン($100/mo)へのアップグレードが必要。")
         intent_url = f"https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet_text)}"
-        print(f"手動で投稿する場合は以下のURLをブラウザで開いてください: {intent_url}")
+        print(f"   手動投稿URL: {intent_url}")
         return None
+    except tweepy.errors.TooManyRequests as e:
+        print(f"⚠️ Rate limited (429): {e}")
+        return None
+    except Exception as e:
+        print(f"❌ {type(e).__name__}: {e}")
+        intent_url = f"https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet_text)}"
+        print(f"   手動投稿URL: {intent_url}")
+        return None
+
 
 
 def generate_ai_tweet(campaign="scheduled"):
