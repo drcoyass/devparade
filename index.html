@@ -1700,6 +1700,46 @@
         <p style="color:var(--gray);">DEV 語録を読み込み中...</p>
       </div>
     </div>
+
+    <!-- Daily Quote Gacha -->
+    <div style="text-align: center; margin-top: 3rem;" class="reveal">
+      <div id="daily-quote-box" style="display:none; max-width:600px; margin: 0 auto 1.5rem auto; background:#111; padding:2rem; border-radius:12px; border:2px solid var(--yellow); position:relative;">
+        <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--yellow); color:#000; font-family:'Oswald',sans-serif; font-weight:bold; padding:2px 15px; border-radius:20px; font-size:0.8rem;">TODAY's QUOTE</div>
+        <p id="daily-quote-text" style="font-size:1.4rem; font-weight:bold; color:#fff; line-height:1.5; margin-bottom:1rem;"></p>
+        <p id="daily-quote-author" style="color:var(--gray); font-size:0.9rem; margin-bottom:1.5rem;"></p>
+        <a id="daily-quote-share" href="#" target="_blank" style="display:inline-block; background:#000; color:#fff; text-decoration:none; padding:0.5rem 1.2rem; border-radius:30px; font-size:0.9rem; border:1px solid #555;">𝕏 で名言をシェア</a>
+      </div>
+      <button onclick="drawDailyQuote()" style="background:var(--yellow); color:#000; font-family:'Oswald',sans-serif; font-size:1.1rem; font-weight:bold; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; letter-spacing:0.05em; box-shadow:0 4px 10px rgba(255,204,0,0.3);">🍖 本日のデブ語録ガチャを回す</button>
+    </div>
+  </section>
+
+  <!-- ===== METABO CHECKER ===== -->
+  <section id="metabo-checker" style="background: linear-gradient(135deg, #111, #000); padding: 5rem 1rem; border-top: 2px dashed #333; border-bottom: 2px dashed #333;">
+    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+      <h2 style="font-family:'Oswald', sans-serif; font-size: 2.5rem; color: var(--yellow); letter-spacing: 0.1em; margin-bottom: 0.5rem;" class="reveal">METABO CHECKER</h2>
+      <p style="color: var(--gray); margin-bottom: 2rem;" class="reveal">デブパレード公式 メタボ階級診断</p>
+      
+      <div style="background: #1a1a1a; padding: 2rem; border-radius: 12px; border: 1px solid #333;" class="reveal">
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display:block; color:#ccc; margin-bottom:0.5rem; font-weight:bold;">身長 (cm)</label>
+          <input type="number" id="height-input" placeholder="例: 170" style="width:100%; max-width:200px; padding:0.8rem; font-size:1.2rem; text-align:center; border:2px solid #333; border-radius:6px; background:#222; color:#fff;">
+        </div>
+        <div style="margin-bottom: 2rem;">
+          <label style="display:block; color:#ccc; margin-bottom:0.5rem; font-weight:bold;">体重 (kg)</label>
+          <input type="number" id="weight-input" placeholder="例: 95" style="width:100%; max-width:200px; padding:0.8rem; font-size:1.2rem; text-align:center; border:2px solid #333; border-radius:6px; background:#222; color:#fff;">
+        </div>
+        <button onclick="calculateMetabo()" style="background:var(--red); color:#fff; font-family:'Oswald',sans-serif; font-size:1.2rem; font-weight:bold; padding:1rem 3rem; border:none; border-radius:50px; cursor:pointer; letter-spacing:0.1em; transition:all 0.3s; box-shadow:0 5px 15px rgba(227,30,36,0.3);">診断する！</button>
+        
+        <!-- Result Area -->
+        <div id="metabo-result" style="display:none; margin-top:2rem; padding-top:2rem; border-top:1px solid #333;">
+          <div style="font-size:0.9rem; color:#888;">あなたのBMI: <span id="bmi-val" style="color:#fff; font-weight:bold;"></span></div>
+          <div style="font-size:0.9rem; color:#888; margin-top:0.5rem;">判定階級</div>
+          <div id="metabo-rank" style="font-family:'Noto Sans JP', sans-serif; font-size:1.8rem; font-weight:900; color:var(--yellow); margin:0.5rem 0; text-shadow:0 2px 10px rgba(255,204,0,0.3);"></div>
+          <p id="metabo-msg" style="color:#fff; line-height:1.6; margin-bottom:1.5rem;"></p>
+          <a id="metabo-share-btn" href="#" target="_blank" style="display:inline-block; background:#000; color:#fff; text-decoration:none; padding:0.8rem 1.5rem; border-radius:30px; font-weight:bold; border:1px solid #555; transition:background 0.2s;">𝕏 で結果をシェア</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== LIVE ===== -->
@@ -1883,6 +1923,33 @@
           style="display:inline-block; padding:0.6rem 1.5rem; background:var(--red); color:#fff; text-decoration:none; font-family:'Oswald',sans-serif; font-size:0.85rem; letter-spacing:0.1em; border-radius:2px;">
           YouTubeで再生リストを見る &rarr;
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHORTS GALLERY ===== -->
+  <section id="shorts" style="padding: 4rem 1rem; background: #0a0a0a;">
+    <h2 class="section-title reveal" style="margin-bottom: 0.5rem;">SHORT <span>VIDEOS</span></h2>
+    <p class="section-sub reveal" style="margin-bottom: 2rem;">TikTok & YouTube Shorts</p>
+    
+    <div class="shorts-container reveal" style="display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 2rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+      <!-- Short 1 (Placeholder) -->
+      <div class="short-card" style="flex: 0 0 auto; width: 280px; height: 500px; background: #1a1a1a; border-radius: 12px; scroll-snap-align: center; position: relative; overflow: hidden; border: 1px solid #333;">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#555; text-align:center;">
+          <svg style="width:40px; height:40px; margin-bottom:10px; fill:#555;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><br>Short Video 1<br>(Coming Soon)
+        </div>
+      </div>
+      <!-- Short 2 (Placeholder) -->
+      <div class="short-card" style="flex: 0 0 auto; width: 280px; height: 500px; background: #1a1a1a; border-radius: 12px; scroll-snap-align: center; position: relative; overflow: hidden; border: 1px solid #333;">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#555; text-align:center;">
+          <svg style="width:40px; height:40px; margin-bottom:10px; fill:#555;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><br>Short Video 2<br>(Coming Soon)
+        </div>
+      </div>
+      <!-- Short 3 (Placeholder) -->
+      <div class="short-card" style="flex: 0 0 auto; width: 280px; height: 500px; background: #1a1a1a; border-radius: 12px; scroll-snap-align: center; position: relative; overflow: hidden; border: 1px solid #333;">
+        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:#555; text-align:center;">
+          <svg style="width:40px; height:40px; margin-bottom:10px; fill:#555;" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><br>Short Video 3<br>(Coming Soon)
+        </div>
       </div>
     </div>
   </section>
@@ -3457,6 +3524,70 @@ if (savedLang) {
       el.innerHTML = '⏳ リリースまで <span style="font-size:1.4rem;color:var(--yellow);">' + days + '</span>日 <span style="font-size:1.4rem;color:var(--yellow);">' + hours + '</span>時間';
       setTimeout(tick, 60000);
     })();
+
+    // ===== METABO CHECKER LOGIC =====
+    function calculateMetabo() {
+      const h = parseFloat(document.getElementById('height-input').value);
+      const w = parseFloat(document.getElementById('weight-input').value);
+      if(!h || !w || h <= 0 || w <= 0) {
+        alert("身長と体重を正しく入力してくれ！");
+        return;
+      }
+      const hm = h / 100;
+      const bmi = (w / (hm * hm)).toFixed(1);
+      
+      let rank = "";
+      let msg = "";
+      let color = "";
+      
+      if(w >= 90) {
+        rank = "ヘヴィメタボ (90kgオーバー)";
+        msg = "見事な巨体だ！君も今日からデブパレードの仲間入りだ。一緒に痛風に気をつけよう！";
+        color = "#e31e24"; // Red
+      } else if (bmi >= 25) {
+        rank = "ぽっちゃり (見習いデブ)";
+        msg = "良い素質を持っているが、まだデブパレードには入れない。深夜にラーメンを追加して90kgを目指せ！";
+        color = "#ffcc00"; // Yellow
+      } else {
+        rank = "ガリガリ (痩せすぎ)";
+        msg = "細すぎる！もっと唐揚げにマヨネーズをかけて食え！カロリーは熱に弱いからゼロカロリーだ！";
+        color = "#aaaaaa"; // Gray
+      }
+      
+      document.getElementById('bmi-val').innerText = bmi;
+      const rankEl = document.getElementById('metabo-rank');
+      rankEl.innerText = rank;
+      rankEl.style.color = color;
+      document.getElementById('metabo-msg').innerText = msg;
+      
+      const shareText = encodeURIComponent(`俺のメタボ階級は【${rank}】(BMI: ${bmi})でした！\n\n${msg}\n\n🍖デブパレード公式メタボ診断\n#デブパレード #メタボ診断`);
+      const shareUrl = encodeURIComponent("https://devparade.jp");
+      document.getElementById('metabo-share-btn').href = `https://x.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
+      
+      document.getElementById('metabo-result').style.display = 'block';
+    }
+
+    // ===== DAILY QUOTE GACHA LOGIC =====
+    const devQuotes = [
+      { text: "カロリーは熱に弱いから、揚げ物はゼロカロリー！", author: "デブパレード" },
+      { text: "俺たちの音楽は耳から入る高カロリーだ。", author: "ugazin" },
+      { text: "ダイエットは明日から。今日は肉の日だからな！", author: "COYASS" },
+      { text: "動けるデブこそ至高。", author: "TAKA" },
+      { text: "痛風？それは選ばれし者への勲章さ。", author: "デブパレード" },
+      { text: "楽器も腹も鳴らしてナンボ。", author: "TSUKASA" }
+    ];
+    
+    function drawDailyQuote() {
+      const q = devQuotes[Math.floor(Math.random() * devQuotes.length)];
+      document.getElementById('daily-quote-text').innerText = `「${q.text}」`;
+      document.getElementById('daily-quote-author').innerText = `— ${q.author}`;
+      
+      const shareText = encodeURIComponent(`本日のデブ語録🍖\n「${q.text}」 — ${q.author}\n\n#デブパレード #デブ語録`);
+      const shareUrl = encodeURIComponent("https://devparade.jp");
+      document.getElementById('daily-quote-share').href = `https://x.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
+      
+      document.getElementById('daily-quote-box').style.display = 'block';
+    }
     </script>
 
 </body>
