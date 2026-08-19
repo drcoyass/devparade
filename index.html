@@ -67,6 +67,54 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&family=Oswald:wght@400;600;700&display=swap"
     rel="stylesheet">
   <style>
+    /* ===== CONFETTI CELEBRATION ===== */
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    @keyframes confetti-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(15px); }
+      75% { transform: translateX(-15px); }
+    }
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      animation: confetti-fall linear forwards, confetti-shake 1s ease-in-out infinite;
+    }
+    /* ===== RELEASE DAY GLOW PULSE ===== */
+    @keyframes release-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(227,30,36,0.4), 0 0 60px rgba(227,30,36,0.1); }
+      50% { box-shadow: 0 0 40px rgba(227,30,36,0.8), 0 0 80px rgba(227,30,36,0.3); }
+    }
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .release-day-badge {
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+    .shimmer-text {
+      background: linear-gradient(90deg, #FFD700 0%, #fff 25%, #FFD700 50%, #fff 75%, #FFD700 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
     :root {
       --red: #E31E24;
       --dark-red: #B01018;
@@ -1402,14 +1450,17 @@
 <body>
   <!-- DEBUG VERSION: 2026-05-13-1610 -->
 
-<!-- Amazon予約フローティングCTAバー -->
+<!-- 🎉 アルバム発売日フローティングCTAバー -->
 <div id="amazon-float-bar">
-  <span class="amz-label">🎸 1st Full Album 『全ての武器をお箸に』2026.08.19 RELEASE</span>
-  <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" class="amz-cta" id="amz-float-btn">
-    🛒 Amazonで予約する
+  <span class="amz-label">🎉🎉🎉 1st Full Album 『全ての武器をお箸に』2026.8.19 NOW ON SALE! 🎉🎉🎉</span>
+  <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" class="amz-cta" id="amz-float-btn" style="background:#E31E24; animation: pulse-badge 1.5s ease-in-out infinite;">
+    🛒 Amazonで今すぐ購入！
   </a>
   <button class="amz-close" onclick="document.getElementById('amazon-float-bar').style.display='none'" aria-label="閉じる">&times;</button>
 </div>
+
+<!-- 🎊 紙吹雪コンテナ -->
+<div class="confetti-container" id="confetti-container"></div>
 
   <!-- ===== NAV ===== -->
   <div style="background: var(--red); color: white; text-align: center; padding: 10px 15px; font-weight: bold; font-family: 'Oswald', sans-serif; letter-spacing: 0.1em; position: fixed; top: 0; width: 100%; z-index: 1001; box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-size: 0.9rem;">
@@ -1468,6 +1519,49 @@
     <div class="scroll-indicator"><span></span></div>
   </section>
 
+  <!-- ===== 🎉 ALBUM RELEASE DAY CELEBRATION BANNER ===== -->
+  <div id="album-release-banner" style="display: block;">
+    <div style="background: linear-gradient(135deg, #1a0000 0%, #330000 30%, #0a0a0a 60%, #1a0000 100%); border-top: 5px solid var(--red); border-bottom: 5px solid var(--red); padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden; animation: release-glow 3s ease-in-out infinite;">
+      <!-- Background decorations -->
+      <div style="position: absolute; top: -60px; left: -40px; font-size: 18rem; opacity: 0.03; font-family: 'Bebas Neue', sans-serif; color: var(--red); transform: rotate(-10deg);">RELEASE</div>
+      <div style="position: absolute; bottom: -40px; right: -40px; font-size: 14rem; opacity: 0.03; font-family: 'Bebas Neue', sans-serif; color: var(--yellow); transform: rotate(5deg);">8.19</div>
+      
+      <div style="position: relative; z-index: 2; max-width: 900px; margin: 0 auto;">
+        <!-- Release Day Badge -->
+        <div class="release-day-badge" style="display: inline-block; background: var(--red); color: #fff; font-family: 'Oswald', sans-serif; font-weight: 700; padding: 0.6rem 2rem; font-size: 1.3rem; letter-spacing: 0.15em; margin-bottom: 1.5rem; box-shadow: 0 4px 15px rgba(227,30,36,0.5), 2px 2px 0px var(--yellow); text-transform: uppercase;">🎉 2026.8.19 RELEASE!</div>
+        
+        <!-- Album Art + Info -->
+        <div style="display: flex; gap: 2.5rem; align-items: center; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
+          <div style="flex: 0 0 auto;">
+            <img src="assets/album-hashi.jpg" alt="全ての武器をお箸に ジャケット" style="width: 220px; height: 220px; border-radius: 12px; box-shadow: 0 15px 40px rgba(227,30,36,0.5), 0 0 60px rgba(227,30,36,0.2); border: 3px solid var(--red); transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05) rotate(2deg)'" onmouseout="this.style.transform='scale(1) rotate(0deg)'">
+          </div>
+          <div style="text-align: left; max-width: 450px;">
+            <div style="font-family: 'Oswald', sans-serif; font-size: 0.9rem; color: var(--yellow); letter-spacing: 0.2em; margin-bottom: 0.5rem;">1st FULL ALBUM</div>
+            <h2 class="shimmer-text" style="font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: clamp(2.2rem, 5vw, 3.2rem); margin-bottom: 0.8rem; letter-spacing: 0.05em;">全ての武器をお箸に</h2>
+            <p style="font-size: 1rem; color: #ccc; line-height: 1.8; margin-bottom: 0.5rem;">15年ぶりの奇跡の復活を経て完成した<br>デブパレード初のフルアルバム。<br>全10曲、魂の重量級サウンド！</p>
+            <div style="font-family: 'Oswald', sans-serif; font-size: 0.85rem; color: var(--gray); letter-spacing: 0.1em;">10 tracks / ハンサムレコーズ / 2026.08.19</div>
+          </div>
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #FF9900, #FFB300); color: #000; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.3rem; padding: 1.2rem 3rem; border-radius: 50px; transition: all 0.3s; box-shadow: 0 10px 30px rgba(255,153,0,0.5); letter-spacing: 0.1em;" onmouseover="this.style.transform='scale(1.08) translateY(-3px)'; this.style.boxShadow='0 15px 40px rgba(255,153,0,0.7)'" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 30px rgba(255,153,0,0.5)'">
+            🛒 Amazonで購入する
+          </a>
+          <a href="https://open.spotify.com/intl-ja/artist/5D8hajVfwrC1C83bwvdP5q" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 10px; background: #1DB954; color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 1rem 2.5rem; border-radius: 50px; transition: all 0.3s; box-shadow: 0 8px 20px rgba(29,185,84,0.4); letter-spacing: 0.1em;" onmouseover="this.style.transform='scale(1.05) translateY(-2px)'" onmouseout="this.style.transform='scale(1) translateY(0)'">
+            <svg style="width: 22px; height: 22px; fill: white;" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.503 17.306c-.216.353-.679.467-1.032.25-2.855-1.745-6.448-2.139-10.682-1.171-.403.092-.81-.159-.903-.562-.092-.403.159-.81.562-.903 4.636-1.06 8.599-.607 11.805 1.353.353.216.467.679.25 1.033zm1.472-3.26c-.271.439-.844.582-1.282.311-3.27-2.01-8.256-2.593-12.122-1.417-.492.149-1.011-.131-1.161-.623-.15-.492.13-1.012.622-1.162 4.417-1.34 9.907-.696 13.633 1.597.439.271.583.844.31 1.284zm.126-3.415C15.195 8.232 8.749 8.019 5 9.157c-.58.176-1.192-.156-1.367-.736-.176-.58.156-1.192.736-1.367 4.298-1.305 11.419-1.053 16.03 2.193.522.317.69 1.002.373 1.524-.317.521-1.002.691-1.524.375z"/></svg>
+            Spotifyで聴く
+          </a>
+        </div>
+        
+        <!-- Share prompt -->
+        <div style="margin-top: 2rem; font-size: 0.9rem; color: var(--gray);">
+          📢 #デブパレード #全ての武器をお箸に #DEVPARADE で拡散お願いします！
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== HAPPY RAN-DEBU BANNER (Released on 6/29) ===== -->
   <div id="new-hero-629" style="display: block;">
     <div class="ucchari-banner" style="background: linear-gradient(135deg, #001a0d, #004d26); border-top: 4px solid #00ff88; border-bottom: 4px solid #00ff88; padding: 4rem 1.5rem; text-align: center; position: relative; overflow: hidden;">
@@ -1483,17 +1577,17 @@
     </div>
   </div>
 
-  <!-- ===== AMAZON PRE-ORDER BANNER ===== -->
+  <!-- ===== AMAZON 好評発売中 BANNER ===== -->
   <div class="amazon-preorder-banner" style="background: linear-gradient(135deg, #111, #232f3e); border-top: 4px solid #FF9900; border-bottom: 4px solid #FF9900; padding: 2rem 1.5rem; text-align: center; position: relative; overflow: hidden; margin-bottom: 2rem;">
-    <div style="position: absolute; top: -30px; right: -30px; font-size: 10rem; opacity: 0.05; font-family: 'Bebas Neue', sans-serif; color: #FF9900;">AMAZON</div>
+    <div style="position: absolute; top: -30px; right: -30px; font-size: 10rem; opacity: 0.05; font-family: 'Bebas Neue', sans-serif; color: #FF9900;">NOW ON SALE</div>
     <div style="position: relative; z-index: 2; max-width: 800px; margin: 0 auto;">
-      <div style="display: inline-block; background: #FF9900; color: #000; font-family: 'Oswald', sans-serif; font-weight: 700; padding: 0.4rem 1.2rem; font-size: 1rem; letter-spacing: 0.1em; transform: rotate(-1deg); margin-bottom: 1rem; box-shadow: 2px 2px 0px #fff;">1st ALBUM 先行予約受付中！</div>
+      <div class="release-day-badge" style="display: inline-block; background: #FF9900; color: #000; font-family: 'Oswald', sans-serif; font-weight: 700; padding: 0.4rem 1.2rem; font-size: 1rem; letter-spacing: 0.1em; transform: rotate(-1deg); margin-bottom: 1rem; box-shadow: 2px 2px 0px #fff;">🎉 1st ALBUM 好評発売中！</div>
       <h2 style="font-family: 'Noto Sans JP', sans-serif; font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.8rem); color: #fff; text-shadow: 0 4px 15px rgba(255,153,0,0.5); margin-bottom: 1rem; letter-spacing: 0.05em;">全ての武器をお箸に</h2>
       <p style="font-size: 1.1rem; color: #ccc; line-height: 1.8; margin-bottom: 1.5rem;">
-        15年ぶりの奇跡の復活フルアルバム（2026.08.19リリース）がついにAmazonにて予約開始！
+        15年ぶりの奇跡の復活フルアルバムがついに発売！🎊 Amazonにて好評販売中！
       </p>
       <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" style="display: inline-block; background: #FF9900; color: #000; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.2rem; padding: 1rem 2.5rem; border-radius: 50px; transition: all 0.3s; box-shadow: 0 10px 25px rgba(255,153,0,0.4); letter-spacing: 0.1em;" onmouseover="this.style.transform='scale(1.05) translateY(-3px)'; this.style.boxShadow='0 15px 35px rgba(255,153,0,0.6)'" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 10px 25px rgba(255,153,0,0.4)'">
-        🛒 Amazonで先行予約する &rarr;
+        🛒 Amazonで今すぐ購入 &rarr;
       </a>
     </div>
   </div>
@@ -2063,14 +2157,20 @@
           <div class="year" style="color: var(--yellow);">2026.08.19 &mdash; 1st Full Album</div>
           <h3>全ての武器をお箸に</h3>
           <div class="label" style="color: var(--gray); font-weight: bold; margin-bottom: 0.5rem;">ハンサムレコーズ</div>
-          <div class="coming">2026.08.19 RELEASE</div>
+          <div class="coming" style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+            <span style="background: var(--red); color: #fff; padding: 0.3rem 1rem; font-size: 1rem; letter-spacing: 0.15em; font-weight: bold;">🎉 NOW ON SALE!</span>
+            <span>2026.08.19 RELEASE</span>
+          </div>
           <div style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6;">
-            15年越しの初フルアルバムがついにリリース決定！<br>
+            15年越しの初フルアルバムがついに発売！🎊<br>
             先行配信シングル「うっちゃりファンク」「夏の終わりに」を含む、デブパレードの魂が詰まった全１０曲。
           </div>
-          <div style="margin-bottom: 1.5rem;">
+          <div style="margin-bottom: 1.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
             <a href="https://amzn.asia/d/0e0WMIuP" target="_blank" rel="noopener" style="display: inline-block; background: #FF9900; color: #000; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: bold; font-size: 1rem; padding: 0.8rem 2rem; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;" onmouseover="this.style.background='#FFB300'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#FF9900'; this.style.transform='translateY(0)'">
-              🛒 Amazonで先行予約する &rarr;
+              🛒 Amazonで購入する &rarr;
+            </a>
+            <a href="https://open.spotify.com/intl-ja/artist/5D8hajVfwrC1C83bwvdP5q" target="_blank" rel="noopener" style="display: inline-block; background: #1DB954; color: #fff; text-decoration: none; font-family: 'Oswald', sans-serif; font-weight: bold; font-size: 1rem; padding: 0.8rem 2rem; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: all 0.2s;" onmouseover="this.style.background='#1ed760'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#1DB954'; this.style.transform='translateY(0)'">
+              🎵 Spotifyで聴く &rarr;
             </a>
           </div>
           <div class="tracks" style="font-size: 0.9rem; line-height: 2; margin-top: 0.5rem;">
@@ -3588,6 +3688,37 @@ if (savedLang) {
       
       document.getElementById('daily-quote-box').style.display = 'block';
     }
+    </script>
+
+    <!-- 🎊 紙吹雪アニメーション JS -->
+    <script>
+    (function() {
+      var container = document.getElementById('confetti-container');
+      if (!container) return;
+      var colors = ['#E31E24', '#FFD700', '#FF9900', '#00ff88', '#ffb6c1', '#1DB954', '#fff'];
+      var shapes = ['■', '●', '▲', '★', '🎵', '🍖', '🎸'];
+      var totalPieces = 80;
+      
+      for (var i = 0; i < totalPieces; i++) {
+        var piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.color = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.fontSize = (Math.random() * 16 + 8) + 'px';
+        piece.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        piece.style.animationDelay = (Math.random() * 5) + 's';
+        piece.style.opacity = Math.random() * 0.8 + 0.2;
+        container.appendChild(piece);
+      }
+      
+      // 10秒後に紙吹雪を非表示
+      setTimeout(function() {
+        container.style.transition = 'opacity 2s';
+        container.style.opacity = '0';
+        setTimeout(function() { container.remove(); }, 2000);
+      }, 10000);
+    })();
     </script>
 
 </body>
