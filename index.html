@@ -1903,6 +1903,37 @@
     </div>
   </section>
 
+  <!-- ===== 🗳️ FAVORITE TRACK POLL ===== -->
+  <section id="fav-poll" style="background: linear-gradient(135deg, #0a0a0a, #1a0a00); padding: 5rem 1rem; border-top: 2px solid var(--red); border-bottom: 2px solid var(--red);">
+    <div style="max-width: 700px; margin: 0 auto; text-align: center;">
+      <h2 style="font-family:'Oswald', sans-serif; font-size: 2.5rem; color: var(--red); letter-spacing: 0.15em; margin-bottom: 0.5rem;" class="reveal">FAVORITE TRACK</h2>
+      <p style="color: var(--gray); margin-bottom: 0.5rem;" class="reveal">あなたの推し曲に投票しよう！</p>
+      <p style="color: #555; font-size: 0.8rem; margin-bottom: 2rem;" class="reveal">『全ての武器をお箸に』収録全10曲から1曲選んでね</p>
+
+      <div id="poll-container" class="reveal" style="background: #111; padding: 2rem; border-radius: 12px; border: 1px solid #333;">
+        <div id="poll-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+        </div>
+
+        <!-- Results (hidden until vote) -->
+        <div id="poll-results" style="display:none; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #333;">
+          <div style="font-family:'Oswald',sans-serif; color:var(--yellow); font-size:1rem; letter-spacing:0.1em; margin-bottom:1rem;">RANKING</div>
+          <div id="poll-bars"></div>
+          <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #666;">
+            Total: <span id="poll-total" style="color: #fff; font-weight: bold;">0</span> votes
+          </div>
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
+            <a id="poll-share-x" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; background: #000; color: #fff; text-decoration: none; padding: 0.6rem 1.4rem; border-radius: 30px; font-size: 0.9rem; font-weight: bold; border: 1px solid #555; transition: all 0.2s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#000'">
+              𝕏 で推し曲をシェア
+            </a>
+            <a id="poll-share-line" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; background: #06C755; color: #fff; text-decoration: none; padding: 0.6rem 1.4rem; border-radius: 30px; font-size: 0.9rem; font-weight: bold; transition: all 0.2s;">
+              LINE で送る
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== LIVE ===== -->
   <section id="live">
     <h2 class="section-title reveal">LIVE <span>SCHEDULE</span></h2>
@@ -3782,6 +3813,121 @@ if (savedLang) {
         container.style.opacity = '0';
         setTimeout(function() { container.remove(); }, 2000);
       }, 10000);
+    })();
+    </script>
+
+    <!-- 🗳️ Favorite Track Poll Logic -->
+    <script>
+    (function() {
+      const TRACKS = [
+        '100CAN DIVE', '自転車', 'パルフェ', 'ハッピー乱デブー', 'DAIKICHI',
+        '夏の終わりに', 'ファットマン ハンティング', 'うっちゃりファンク', 'バッチコイ!!! 2026', '全ての武器をお箸に'
+      ];
+      const EMOJIS = ['🏊','🚲','🍨','🎉','⛩️','🌅','🔫','💃','⚡','🥢'];
+      const COLORS = ['#e01e5a','#00ff88','#ffb6c1','#ff6b35','#ffd700','#9b59b6','#3498db','#e74c3c','#f39c12','#E31E24'];
+      const STORAGE_KEY = 'devparade_poll';
+
+      function getVotes() {
+        try {
+          const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          return d.votes || {};
+        } catch(e) { return {}; }
+      }
+      function getUserVote() {
+        try {
+          const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+          return d.userVote || null;
+        } catch(e) { return null; }
+      }
+
+      function saveVote(track) {
+        const votes = getVotes();
+        votes[track] = (votes[track] || 0) + 1;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ votes, userVote: track }));
+      }
+
+      function renderButtons() {
+        const container = document.getElementById('poll-buttons');
+        if (!container) return;
+        container.innerHTML = '';
+        const userVote = getUserVote();
+
+        TRACKS.forEach(function(track, i) {
+          const btn = document.createElement('button');
+          btn.textContent = EMOJIS[i] + ' ' + track;
+          btn.style.cssText = 'background: #222; color: #fff; border: 2px solid #333; padding: 0.7rem 0.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: bold; cursor: pointer; transition: all 0.2s; font-family: "Noto Sans JP", sans-serif;';
+          if (userVote === track) {
+            btn.style.borderColor = COLORS[i];
+            btn.style.background = COLORS[i] + '22';
+            btn.style.cursor = 'default';
+          }
+          btn.onmouseover = function() { if(!userVote) { btn.style.borderColor = COLORS[i]; btn.style.transform = 'scale(1.05)'; }};
+          btn.onmouseout = function() { if(!userVote) { btn.style.borderColor = '#333'; btn.style.transform = 'scale(1)'; }};
+          btn.onclick = function() {
+            if (userVote) return;
+            saveVote(track);
+            renderButtons();
+            showResults(track);
+          };
+          container.appendChild(btn);
+        });
+
+        if (userVote) showResults(userVote);
+      }
+
+      function showResults(votedTrack) {
+        const resultsDiv = document.getElementById('poll-results');
+        const barsDiv = document.getElementById('poll-bars');
+        if (!resultsDiv || !barsDiv) return;
+        resultsDiv.style.display = 'block';
+
+        const votes = getVotes();
+        const total = Object.values(votes).reduce(function(a,b){return a+b;}, 0);
+        document.getElementById('poll-total').textContent = total;
+
+        // Sort tracks by votes desc
+        const sorted = TRACKS.map(function(t, i) {
+          return { track: t, votes: votes[t] || 0, emoji: EMOJIS[i], color: COLORS[i], idx: i };
+        }).sort(function(a,b) { return b.votes - a.votes; });
+
+        barsDiv.innerHTML = '';
+        const maxVotes = sorted[0].votes || 1;
+        sorted.forEach(function(item, rank) {
+          const pct = total > 0 ? Math.round(item.votes / total * 100) : 0;
+          const barWidth = total > 0 ? Math.max(item.votes / maxVotes * 100, 2) : 2;
+          const isVoted = item.track === votedTrack;
+
+          const row = document.createElement('div');
+          row.style.cssText = 'display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; text-align: left;';
+
+          row.innerHTML =
+            '<div style="flex: 0 0 30px; font-size: 0.75rem; color: ' + (rank < 3 ? '#ffd700' : '#666') + '; font-family: Oswald, sans-serif; font-weight: bold;">' + (rank+1) + '.</div>' +
+            '<div style="flex: 0 0 140px; font-size: 0.8rem; color: ' + (isVoted ? '#fff' : '#aaa') + '; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: ' + (isVoted ? 'bold' : 'normal') + ';">' + item.emoji + ' ' + item.track + '</div>' +
+            '<div style="flex: 1; height: 18px; background: #222; border-radius: 4px; overflow: hidden; position: relative;">' +
+              '<div style="height: 100%; width: 0; background: ' + item.color + '; border-radius: 4px; transition: width 1s ease-out;" data-target-width="' + barWidth + '%"></div>' +
+            '</div>' +
+            '<div style="flex: 0 0 45px; font-size: 0.75rem; color: #888; text-align: right;">' + pct + '%</div>';
+
+          barsDiv.appendChild(row);
+        });
+
+        // Animate bars
+        setTimeout(function() {
+          var bars = barsDiv.querySelectorAll('[data-target-width]');
+          bars.forEach(function(bar) { bar.style.width = bar.getAttribute('data-target-width'); });
+        }, 100);
+
+        // Set share links
+        var shareText = '🗳️ デブパレード「' + votedTrack + '」に投票した！あなたの推し曲は？\n#デブパレード #全ての武器をお箸に #DEVPARADE';
+        var shareUrl = 'https://devparade.jp/#fav-poll';
+        document.getElementById('poll-share-x').href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+        document.getElementById('poll-share-line').href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl + '?t=' + encodeURIComponent(votedTrack));
+      }
+
+      // Nav menu item
+      var navList = document.querySelector('nav ul, .nav-links');
+
+      renderButtons();
     })();
     </script>
 
