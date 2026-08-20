@@ -1903,6 +1903,46 @@
     </div>
   </section>
 
+  <!-- ===== 🎭 MEMBER SHINDAN ===== -->
+  <section id="member-shindan" style="background: linear-gradient(135deg, #0a0008, #1a0020); padding: 5rem 1rem; border-top: 3px solid var(--yellow); border-bottom: 3px solid var(--yellow);">
+    <div style="max-width: 650px; margin: 0 auto; text-align: center;">
+      <h2 style="font-family:'Oswald', sans-serif; font-size: 2.5rem; color: var(--yellow); letter-spacing: 0.15em; margin-bottom: 0.5rem;" class="reveal">MEMBER SHINDAN</h2>
+      <p style="color: var(--gray); margin-bottom: 0.3rem;" class="reveal">あなたはどのデブパレメンバー？</p>
+      <p style="color: #555; font-size: 0.8rem; margin-bottom: 2rem;" class="reveal">5つの質問に答えて、あなたのデブパレ度を診断！</p>
+
+      <div id="shindan-container" class="reveal" style="background: #111; padding: 2rem; border-radius: 12px; border: 1px solid #333;">
+        <!-- Question Area -->
+        <div id="shindan-q" style="min-height: 200px;">
+          <div id="shindan-progress" style="display: flex; gap: 4px; justify-content: center; margin-bottom: 1.5rem;"></div>
+          <div id="shindan-question" style="font-size: 1.2rem; font-weight: bold; color: #fff; margin-bottom: 1.5rem; line-height: 1.6;"></div>
+          <div id="shindan-options" style="display: grid; gap: 0.6rem;"></div>
+        </div>
+
+        <!-- Result Area (hidden) -->
+        <div id="shindan-result" style="display: none;">
+          <div style="font-family:'Oswald',sans-serif; color:var(--yellow); font-size:0.9rem; letter-spacing:0.15em; margin-bottom:0.5rem;">YOUR RESULT</div>
+          <div id="shindan-member-emoji" style="font-size: 4rem; margin-bottom: 0.5rem;"></div>
+          <div id="shindan-member-name" style="font-family:'Noto Sans JP',sans-serif; font-size:2rem; font-weight:900; color:#fff; margin-bottom:0.3rem;"></div>
+          <div id="shindan-member-role" style="font-family:'Oswald',sans-serif; font-size:0.9rem; color:var(--gray); letter-spacing:0.1em; margin-bottom:1rem;"></div>
+          <div id="shindan-member-desc" style="font-size:0.95rem; color:#ccc; line-height:1.8; margin-bottom:1.5rem; padding:0 1rem;"></div>
+          <div id="shindan-member-match" style="display:inline-block; background:var(--red); color:#fff; padding:0.4rem 1.2rem; border-radius:20px; font-weight:bold; font-size:0.9rem; margin-bottom:1.5rem;"></div>
+
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;">
+            <a id="shindan-share-x" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; background: #000; color: #fff; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.95rem; font-weight: bold; border: 1px solid #555; transition: all 0.2s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#000'">
+              𝕏 で結果をシェア
+            </a>
+            <a id="shindan-share-line" href="#" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; background: #06C755; color: #fff; text-decoration: none; padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.95rem; font-weight: bold; transition: all 0.2s;">
+              LINE で送る
+            </a>
+          </div>
+          <button onclick="resetShindan()" style="margin-top: 1rem; background: transparent; color: var(--gray); border: 1px solid #333; padding: 0.5rem 1.5rem; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s;" onmouseover="this.style.borderColor='#fff';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='var(--gray)'">
+            🔄 もう一度やる
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 🗳️ FAVORITE TRACK POLL ===== -->
   <section id="fav-poll" style="background: linear-gradient(135deg, #0a0a0a, #1a0a00); padding: 5rem 1rem; border-top: 2px solid var(--red); border-bottom: 2px solid var(--red);">
     <div style="max-width: 700px; margin: 0 auto; text-align: center;">
@@ -3814,6 +3854,154 @@ if (savedLang) {
         setTimeout(function() { container.remove(); }, 2000);
       }, 10000);
     })();
+    </script>
+
+    <!-- 🎭 Member Shindan Logic -->
+    <script>
+    var shindanStep = 0;
+    var shindanScores = { hanzi: 0, coyass: 0, ugazin: 0, pe: 0, tah: 0 };
+
+    var SHINDAN_Q = [
+      {
+        q: '🍖 焼肉食べ放題に来ました。まず何から攻める？',
+        opts: [
+          { text: 'カルビ！まず王道から全力で！', scores: { hanzi: 3, pe: 1 } },
+          { text: 'タン塩。戦略的に軽いものから', scores: { ugazin: 3, coyass: 1 } },
+          { text: 'ハラミ一択。通はこれ', scores: { coyass: 3, tah: 1 } },
+          { text: 'ライス大盛り。肉は後から', scores: { tah: 3, hanzi: 1 } },
+          { text: '全種類一枚ずつ。データ収集', scores: { pe: 3, ugazin: 1 } }
+        ]
+      },
+      {
+        q: '🎤 カラオケで選ぶジャンルは？',
+        opts: [
+          { text: '熱い応援ソング！場を盛り上げる', scores: { hanzi: 3, tah: 1 } },
+          { text: 'ヒップホップ。言葉で魅せる', scores: { coyass: 3, hanzi: 1 } },
+          { text: 'ファンク・ソウル。グルーヴ重視', scores: { ugazin: 3, pe: 1 } },
+          { text: 'ヘヴィメタル。重低音で圧倒', scores: { pe: 3, coyass: 1 } },
+          { text: 'ドラムだけで参加したい', scores: { tah: 3, ugazin: 1 } }
+        ]
+      },
+      {
+        q: '⚡ チームの中でのあなたの立ち位置は？',
+        opts: [
+          { text: '先頭に立つリーダー！ついてこい！', scores: { hanzi: 3, coyass: 1 } },
+          { text: '言葉で場をまとめるブレイン', scores: { coyass: 3, ugazin: 1 } },
+          { text: '裏方で全体の方向性を設計する人', scores: { ugazin: 3, tah: 1 } },
+          { text: '安定感で支える縁の下の力持ち', scores: { pe: 3, hanzi: 1 } },
+          { text: 'リズムを刻んで全員をまとめる', scores: { tah: 3, pe: 1 } }
+        ]
+      },
+      {
+        q: '🌴 休日の過ごし方は？',
+        opts: [
+          { text: 'イベント企画！人と会うのが好き', scores: { hanzi: 3, pe: 1 } },
+          { text: '執筆や創作。言葉を紡ぐ時間', scores: { coyass: 3, ugazin: 1 } },
+          { text: '楽器を弾いて新しい曲作り', scores: { ugazin: 3, tah: 1 } },
+          { text: 'サウナからの焼肉。リカバリー重視', scores: { pe: 3, coyass: 1 } },
+          { text: 'ひたすら練習。ストイックに', scores: { tah: 3, hanzi: 1 } }
+        ]
+      },
+      {
+        q: '🥢 「全ての武器をお箸に」── この言葉、あなたならどう解釈する？',
+        opts: [
+          { text: '食の力で世界を変える！ポジティブ全開！', scores: { hanzi: 3, tah: 1 } },
+          { text: '言葉遊びとして最高。韻を踏みたい', scores: { coyass: 3, hanzi: 1 } },
+          { text: '深いメッセージ。音で表現したい', scores: { ugazin: 3, pe: 1 } },
+          { text: '共感。実際箸が最強の武器', scores: { pe: 3, coyass: 1 } },
+          { text: 'ビートに乗せたらグルーヴが出る', scores: { tah: 3, ugazin: 1 } }
+        ]
+      }
+    ];
+
+    var MEMBERS = {
+      hanzi: { name: 'ハンサム判治', role: 'VOCAL / LEADER', emoji: '🎤',
+        desc: 'あなたはチームの太陽！圧倒的なリーダーシップと明るさで周りを巻き込む力があります。デブをポジティブに変える「ポジデブ」精神の体現者。場を盛り上げるのはお手の物！',
+        color: '#E31E24' },
+      coyass: { name: 'COYASS', role: 'MC', emoji: '🎙️',
+        desc: 'あなたは言葉の魔術師！知性とユーモアを兼ね備え、的確な言葉で人の心を動かします。歯科医師とMCの二刀流のように、ギャップが魅力の多才なタイプ。',
+        color: '#3498db' },
+      ugazin: { name: 'ugazin', role: 'GUITAR / SONGWRITER', emoji: '🎸',
+        desc: 'あなたはクリエイター気質！全体を見渡す視野の広さと、細部まで作り込む職人肌。バンドの音楽的方向性を決める頭脳派。一人の時間に最高のアイデアが生まれる。',
+        color: '#ffd700' },
+      pe: { name: 'ぺー', role: 'BASS', emoji: '🎸',
+        desc: 'あなたは安定感の塊！目立たなくても確実に支える力持ちタイプ。重低音のように深く温かい人間性が持ち味。食べることへの情熱は誰にも負けない！',
+        color: '#00ff88' },
+      tah: { name: 'TAH', role: 'DRUMS', emoji: '🥁',
+        desc: 'あなたはリズムキーパー！黙々と練習するストイックさと、ここぞという時の爆発力を持つ職人タイプ。グルーヴこそが正義。体でリズムを感じる天性の感覚派！',
+        color: '#e01e5a' }
+    };
+
+    function startShindan() {
+      shindanStep = 0;
+      shindanScores = { hanzi: 0, coyass: 0, ugazin: 0, pe: 0, tah: 0 };
+      document.getElementById('shindan-q').style.display = 'block';
+      document.getElementById('shindan-result').style.display = 'none';
+      renderShindanQ();
+    }
+
+    function renderShindanQ() {
+      if (shindanStep >= SHINDAN_Q.length) { showShindanResult(); return; }
+      var q = SHINDAN_Q[shindanStep];
+
+      // Progress bar
+      var prog = document.getElementById('shindan-progress');
+      prog.innerHTML = '';
+      for (var i = 0; i < SHINDAN_Q.length; i++) {
+        var dot = document.createElement('div');
+        dot.style.cssText = 'width: 40px; height: 5px; border-radius: 3px; background: ' + (i <= shindanStep ? 'var(--yellow)' : '#333') + '; transition: background 0.3s;';
+        prog.appendChild(dot);
+      }
+
+      document.getElementById('shindan-question').textContent = 'Q' + (shindanStep+1) + '. ' + q.q;
+
+      var optsDiv = document.getElementById('shindan-options');
+      optsDiv.innerHTML = '';
+      q.opts.forEach(function(opt) {
+        var btn = document.createElement('button');
+        btn.textContent = opt.text;
+        btn.style.cssText = 'background: #222; color: #fff; border: 2px solid #333; padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; font-family: "Noto Sans JP", sans-serif; text-align: left;';
+        btn.onmouseover = function() { btn.style.borderColor = 'var(--yellow)'; btn.style.background = '#2a2a00'; };
+        btn.onmouseout = function() { btn.style.borderColor = '#333'; btn.style.background = '#222'; };
+        btn.onclick = function() {
+          Object.keys(opt.scores).forEach(function(k) { shindanScores[k] += opt.scores[k]; });
+          shindanStep++;
+          // Flash effect
+          optsDiv.style.opacity = '0';
+          setTimeout(function() { optsDiv.style.opacity = '1'; renderShindanQ(); }, 200);
+        };
+        optsDiv.appendChild(btn);
+      });
+    }
+
+    function showShindanResult() {
+      document.getElementById('shindan-q').style.display = 'none';
+      var resultDiv = document.getElementById('shindan-result');
+      resultDiv.style.display = 'block';
+
+      var winner = Object.keys(shindanScores).reduce(function(a,b) { return shindanScores[a] > shindanScores[b] ? a : b; });
+      var m = MEMBERS[winner];
+      var total = Object.values(shindanScores).reduce(function(a,b){return a+b;},0);
+      var pct = Math.round(shindanScores[winner] / total * 100);
+
+      document.getElementById('shindan-member-emoji').textContent = m.emoji;
+      document.getElementById('shindan-member-name').textContent = m.name;
+      document.getElementById('shindan-member-name').style.color = m.color;
+      document.getElementById('shindan-member-role').textContent = m.role;
+      document.getElementById('shindan-member-desc').textContent = m.desc;
+      document.getElementById('shindan-member-match').textContent = '一致度: ' + pct + '%';
+      document.getElementById('shindan-member-match').style.background = m.color;
+
+      var shareText = '🎭 デブパレードメンバー診断の結果…\n私は「' + m.name + '」タイプ！（一致度' + pct + '%）\n' + m.emoji + ' ' + m.desc.substring(0, 30) + '…\n\n#デブパレード #メンバー診断 #DEVPARADE';
+      var shareUrl = 'https://devparade.jp/#member-shindan';
+      document.getElementById('shindan-share-x').href = 'https://x.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+      document.getElementById('shindan-share-line').href = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl);
+    }
+
+    function resetShindan() { startShindan(); }
+
+    // Auto-start
+    startShindan();
     </script>
 
     <!-- 🗳️ Favorite Track Poll Logic -->
