@@ -22,16 +22,20 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy python-dotenv requests openai
+        run: pip install tweepy python-dotenv requests openai twikit
 
       - name: Run Growth Engine
         env:
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-        run: python scripts/follower-growth.py
+        run: |
+          cd scripts && python follower-growth.py
 
       - name: Commit and Push state changes
         run: |
@@ -39,7 +43,8 @@ jobs:
           git config --local user.name "GitHub Action"
           git add data/*.json || true
           git commit -m "🤖 [skip ci] Update PosiDev growth logs" || echo "No changes to commit"
-          git push
+          git pull --rebase || true
+          git push || echo "Push failed (concurrent update)"
 
       - name: Create Growth Report Issue
         if: always()

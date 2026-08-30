@@ -55,21 +55,13 @@ HASHTAG_SETS = {
 
 
 def get_write_client():
-    if not all([API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
-        return None
-    return tweepy.Client(
-        consumer_key=API_KEY,
-        consumer_secret=API_SECRET,
-        access_token=ACCESS_TOKEN,
-        access_token_secret=ACCESS_SECRET,
-        wait_on_rate_limit=True,
-    )
+    """後方互換性のためのダミー。実際の操作はx_clientを使用"""
+    return True
 
 
 def get_read_client():
-    if BEARER_TOKEN:
-        return tweepy.Client(bearer_token=BEARER_TOKEN, wait_on_rate_limit=True)
-    return get_write_client()
+    """後方互換性のためのダミー"""
+    return True
 
 
 def load_growth_log():
@@ -86,20 +78,22 @@ def save_growth_log(log):
 
 
 def get_account_stats(read_client, write_client):
-    """自アカウントの統計を取得"""
+    """自アカウントの統計を取得（x_client経由）"""
     try:
-        me = write_client.get_me(
-            user_fields=["public_metrics", "description", "created_at"]
-        )
-        if me.data:
-            metrics = me.data.public_metrics or {}
+        try:
+            from x_client import get_my_info
+        except ImportError:
+            from scripts.x_client import get_my_info
+
+        info = get_my_info()
+        if info:
             return {
-                "username": me.data.username,
-                "name": me.data.name,
-                "followers": metrics.get("followers_count", 0),
-                "following": metrics.get("following_count", 0),
-                "tweets": metrics.get("tweet_count", 0),
-                "listed": metrics.get("listed_count", 0),
+                "username": info.get("username", ""),
+                "name": info.get("name", ""),
+                "followers": info.get("followers", 0),
+                "following": info.get("following", 0),
+                "tweets": info.get("tweets", 0),
+                "listed": 0,
             }
     except Exception as e:
         print(f"   ⚠️ アカウント情報取得エラー: {e}")
@@ -107,68 +101,31 @@ def get_account_stats(read_client, write_client):
 
 
 def analyze_recent_tweets(read_client, user_id):
-    """直近ツイートのエンゲージメント分析"""
-    try:
-        tweets = read_client.get_users_tweets(
-            id=user_id,
-            max_results=20,
-            tweet_fields=["public_metrics", "created_at", "text"],
-        )
-        if not tweets.data:
-            return []
-
-        results = []
-        for tweet in tweets.data:
-            metrics = tweet.public_metrics or {}
-            engagement = (
-                metrics.get("like_count", 0)
-                + metrics.get("retweet_count", 0) * 2
-                + metrics.get("reply_count", 0) * 3
-                + metrics.get("quote_count", 0) * 2
-            )
-            results.append({
-                "id": str(tweet.id),
-                "text": tweet.text[:100],
-                "likes": metrics.get("like_count", 0),
-                "retweets": metrics.get("retweet_count", 0),
-                "replies": metrics.get("reply_count", 0),
-                "engagement_score": engagement,
-                "created_at": str(tweet.created_at) if tweet.created_at else "",
-            })
-
-        results.sort(key=lambda x: x["engagement_score"], reverse=True)
-        return results
-
-    except Exception as e:
-        print(f"   ⚠️ ツイート分析エラー: {e}")
-        return []
+    """直近ツイートのエンゲージメント分析（現在はtwikit非対応のためスキップ）"""
+    # twikit では自分のツイートの詳細メトリクスは取得困難なため
+    # この機能は有料API復帰まで一時停止
+    print("   ℹ️ ツイート分析は現在スキップ（twikit制限）")
+    return []
 
 
 def engage_with_mentions(write_client, read_client):
-    """メンションに「いいね」で反応（フォロワーとの関係構築）"""
+    """メンションに「いいね」で反応（x_client経由）"""
     liked = 0
     try:
-        me = write_client.get_me()
-        if not me.data:
-            return 0
+        try:
+            from x_client import get_mentions as xc_get_mentions, like_tweet
+        except ImportError:
+            from scripts.x_client import get_mentions as xc_get_mentions, like_tweet
 
-        mentions = read_client.get_users_mentions(
-            id=me.data.id,
-            max_results=10,
-            tweet_fields=["author_id"],
-        )
-        if not mentions.data:
-            return 0
-
-        for tweet in mentions.data:
-            if tweet.author_id == me.data.id:
+        mentions = xc_get_mentions(10)
+        for m in mentions:
+            tweet_id = m.get("id", "")
+            if not tweet_id:
                 continue
             try:
-                write_client.like(tweet.id)
-                liked += 1
-                print(f"   ❤️ いいね: {str(tweet.id)[:10]}...")
-            except tweepy.errors.Forbidden:
-                pass  # 既にいいね済み
+                if like_tweet(tweet_id):
+                    liked += 1
+                    print(f"   ❤️ いいね: {tweet_id[:10]}...")
             except Exception:
                 pass
 
@@ -292,18 +249,11 @@ def main():
 
     # 2. ツイート分析
     print("\n📈 エンゲージメント分析...")
-    tweet_analysis = []
-    if stats:
-        try:
-            me = write_client.get_me()
-            if me.data:
-                tweet_analysis = analyze_recent_tweets(read_client, me.data.id)
-                if tweet_analysis:
-                    best = tweet_analysis[0]
-                    print(f"   ベストツイート: {best['text'][:50]}...")
-                    print(f"   Score: {best['engagement_score']} (❤️{best['likes']} 🔄{best['retweets']})")
-        except Exception as e:
-            print(f"   ⚠️ 分析エラー: {e}")
+    tweet_analysis = analyze_recent_tweets(read_client, None)
+    if tweet_analysis:
+        best = tweet_analysis[0]
+        print(f"   ベストツイート: {best['text'][:50]}...")
+        print(f"   Score: {best['engagement_score']} (❤️{best['likes']} 🔄{best['retweets']})")
 
     # 3. メンションへの「いいね」
     print("\n❤️ メンションエンゲージメント...")

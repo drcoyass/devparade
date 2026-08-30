@@ -43,7 +43,8 @@ jobs:
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
-        run: python scripts/debu-posi-tweet-generator.py
+        run: |
+          cd scripts && python debu-posi-tweet-generator.py
 
       - name: Commit and Push state changes
         run: |
@@ -51,7 +52,8 @@ jobs:
           git config --local user.name "GitHub Action"
           git add data/*.json data/*.txt || true
           git commit -m "🤖 [skip ci] Update PosiDev state" || echo "No changes to commit"
-          git push
+          git pull --rebase || true
+          git push || echo "Push failed (concurrent update)"
 
       - name: Create Issue log
         env:

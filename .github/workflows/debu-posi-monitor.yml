@@ -24,16 +24,20 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy requests beautifulsoup4
+        run: pip install tweepy requests beautifulsoup4 twikit
 
       - name: Search & auto-reply (Free method)
         env:
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-        run: python scripts/debu-posi-search-free.py
+        run: |
+          cd scripts && python debu-posi-search-free.py
 
       - name: Commit and Push state changes
         run: |
@@ -41,7 +45,8 @@ jobs:
           git config --local user.name "GitHub Action"
           git add data/*.json data/*.txt || true
           git commit -m "🤖 [skip ci] Update PosiDev monitor state" || echo "No changes to commit"
-          git push
+          git pull --rebase || true
+          git push || echo "Push failed (concurrent update)"
 
       - name: Create Issue report
         if: always()

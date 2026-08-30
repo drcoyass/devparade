@@ -2157,50 +2157,23 @@ def mark_as_posted(tweet_data):
 
 
 def auto_post(tweet_text):
-    """X APIで自動投稿 (tweepy v2を使用)"""
-    import tweepy
-
-    api_key       = os.environ.get("X_API_KEY", "")
-    api_secret    = os.environ.get("X_API_SECRET", "")
-    access_token  = os.environ.get("X_ACCESS_TOKEN", "")
-    access_secret = os.environ.get("X_ACCESS_SECRET", "")
-
-    if not all([api_key, api_secret, access_token, access_secret]):
-        missing = [k for k, v in {
-            "X_API_KEY": api_key, "X_API_SECRET": api_secret,
-            "X_ACCESS_TOKEN": access_token, "X_ACCESS_SECRET": access_secret
-        }.items() if not v]
-        print(f"⚠️ Missing credentials: {', '.join(missing)}")
-        return None
-
+    """X に自動投稿 (twikit優先、tweepyフォールバック)"""
     try:
-        client = tweepy.Client(
-            consumer_key=api_key,
-            consumer_secret=api_secret,
-            access_token=access_token,
-            access_token_secret=access_secret,
-            wait_on_rate_limit=True
-        )
-        response = client.create_tweet(text=tweet_text)
-        tweet_id = response.data['id']
-        print(f"✅ Auto-posted! Tweet ID: {tweet_id}")
-        print(f"   URL: https://x.com/devparade/status/{tweet_id}")
-        return tweet_id
+        from x_client import post_tweet
+    except ImportError:
+        try:
+            from scripts.x_client import post_tweet
+        except ImportError:
+            print("❌ x_client モジュールが見つかりません")
+            return None
 
-    except tweepy.errors.Forbidden as e:
-        print(f"❌ 403 Forbidden: {e}")
-        print("   → X API Free tierは書き込み不可。Basicプラン($100/mo)へのアップグレードが必要。")
+    tweet_id = post_tweet(tweet_text)
+    if tweet_id and tweet_id != "dry_run":
+        print(f"   URL: https://x.com/devparade/status/{tweet_id}")
+    elif not tweet_id:
         intent_url = f"https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet_text)}"
         print(f"   手動投稿URL: {intent_url}")
-        return None
-    except tweepy.errors.TooManyRequests as e:
-        print(f"⚠️ Rate limited (429): {e}")
-        return None
-    except Exception as e:
-        print(f"❌ {type(e).__name__}: {e}")
-        intent_url = f"https://twitter.com/intent/tweet?text={urllib.parse.quote(tweet_text)}"
-        print(f"   手動投稿URL: {intent_url}")
-        return None
+    return tweet_id
 
 
 

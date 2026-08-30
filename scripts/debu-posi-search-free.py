@@ -57,21 +57,15 @@ from posideb_keywords import select_response
 
 
 def get_write_client():
-    if not all([API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_SECRET]):
-        return None
-    return tweepy.Client(
-        consumer_key=API_KEY,
-        consumer_secret=API_SECRET,
-        access_token=ACCESS_TOKEN,
-        access_token_secret=ACCESS_SECRET,
-        wait_on_rate_limit=True,
-    )
+    """後方互換性のためのダミー。実際の投稿はx_clientを使用"""
+    # x_client経由で投稿するため、tweepyクライアントは不要
+    # ただしNoneだと後続処理がスキップされるため、Trueを返す
+    return True
 
 
 def get_read_client():
-    if BEARER_TOKEN:
-        return tweepy.Client(bearer_token=BEARER_TOKEN, wait_on_rate_limit=True)
-    return get_write_client()
+    """後方互換性のためのダミー"""
+    return True
 
 
 def load_replied_ids():
@@ -158,66 +152,44 @@ def search_google_for_tweets():
 
 # ===== 方式2: メンション監視 =====
 def check_mentions(read_client, write_client):
-    """@dev_paradeへのメンションを監視"""
-    results = []
-
+    """@dev_paradeへのメンションを監視（x_client経由）"""
     try:
-        me = write_client.get_me()
-        if not me.data:
-            return []
-        my_id = me.data.id
-        my_username = me.data.username
+        try:
+            from x_client import get_mentions as xc_get_mentions
+        except ImportError:
+            from scripts.x_client import get_mentions as xc_get_mentions
 
-        last_id = get_last_mention_id()
-        kwargs = {
-            "id": my_id,
-            "max_results": 20,
-            "tweet_fields": ["created_at", "author_id", "text"],
-            "user_fields": ["username"],
-            "expansions": ["author_id"],
-        }
-        if last_id:
-            kwargs["since_id"] = last_id
-
-        result = read_client.get_users_mentions(**kwargs)
-        if not result.data:
-            print("   メンションなし")
-            return []
-
-        users = {}
-        if result.includes and "users" in result.includes:
-            for user in result.includes["users"]:
-                users[user.id] = user.username
-
-        newest_id = last_id
-        for tweet in result.data:
-            username = users.get(tweet.author_id, "unknown")
-            if username == my_username:
+        raw_mentions = xc_get_mentions(20)
+        results = []
+        for m in raw_mentions:
+            if m.get("username", "") == "dev_parade":
                 continue
-
             results.append({
-                "id": str(tweet.id),
-                "username": username,
-                "text": tweet.text,
+                "id": m.get("id", ""),
+                "username": m.get("username", "unknown"),
+                "text": m.get("text", ""),
                 "source": "mention",
             })
-            print(f"   📩 メンション: @{username}")
+            print(f"   📩 メンション: @{m.get('username', 'unknown')}")
 
-            if newest_id is None or int(tweet.id) > int(newest_id or 0):
-                newest_id = str(tweet.id)
-
-        if newest_id and newest_id != last_id:
-            save_last_mention_id(newest_id)
-
+        return results
     except Exception as e:
         print(f"   ⚠️ メンション取得: {e}")
-
-    return results
+        return []
 
 
 # ===== ツイート詳細取得 & 返信 =====
 def reply_to_tweets(write_client, read_client, tweet_targets, replied_ids):
-    """発見したツイートにポジデブ返信"""
+    """発見したツイートにポジデブ返信（x_client経由）"""
+    try:
+        from x_client import reply_tweet as xc_reply
+    except ImportError:
+        try:
+            from scripts.x_client import reply_tweet as xc_reply
+        except ImportError:
+            print("❌ x_client モジュールが見つかりません")
+            return []
+
     results = []
     reply_count = 0
 
@@ -232,15 +204,6 @@ def reply_to_tweets(write_client, read_client, tweet_targets, replied_ids):
 
         username = target["username"]
         tweet_text = target.get("text", "")
-
-        # Google経由の場合、ツイート本文がないのでAPIで取得を試みる
-        if not tweet_text and read_client:
-            try:
-                tweet_data = read_client.get_tweet(tweet_id, tweet_fields=["text"])
-                if tweet_data.data:
-                    tweet_text = tweet_data.data.text
-            except Exception:
-                tweet_text = ""
 
         response = select_response(tweet_text or "デブ")
         member = random.choice(MEMBERS)
@@ -257,29 +220,23 @@ def reply_to_tweets(write_client, read_client, tweet_targets, replied_ids):
         }
 
         try:
-            write_client.create_tweet(
-                text=reply_text,
-                in_reply_to_tweet_id=tweet_id,
-            )
-            result["status"] = "sent"
-            replied_ids.add(tweet_id)
-            reply_count += 1
-            print(f"   ✅ ポジデブ返信 → @{username}: {response[:40]}...")
-            time.sleep(3)
-        except tweepy.errors.Forbidden as e:
+            reply_id = xc_reply(reply_text, tweet_id)
+            if reply_id:
+                result["status"] = "sent"
+                replied_ids.add(tweet_id)
+                reply_count += 1
+                print(f"   ✅ ポジデブ返信 → @{username}: {response[:40]}...")
+                time.sleep(3)
+            else:
+                print(f"   ❌ 返信失敗: @{username}")
+                result["status"] = "failed"
+        except Exception as e:
             error_msg = str(e)
             if "duplicate" in error_msg.lower():
                 print(f"   ⏭️ 重複スキップ: @{username}")
                 replied_ids.add(tweet_id)
             else:
-                print(f"   ❌ 返信失敗(403): {e}")
-            result["status"] = f"failed: {e}"
-        except tweepy.errors.NotFound:
-            print(f"   ⏭️ ツイート削除済み: {tweet_id}")
-            replied_ids.add(tweet_id)
-            result["status"] = "deleted"
-        except Exception as e:
-            print(f"   ❌ 返信失敗: {e}")
+                print(f"   ❌ 返信失敗: {e}")
             result["status"] = f"failed: {e}"
 
         results.append(result)
