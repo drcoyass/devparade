@@ -35,7 +35,7 @@ jobs:
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
           X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
         run: |
-          cd scripts && python follower-growth.py
+          PYTHONPATH=scripts:$PYTHONPATH python scripts/follower-growth.py
 
       - name: Commit and Push state changes
         run: |

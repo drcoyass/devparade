@@ -40,8 +40,10 @@ ACCESS_TOKEN = os.environ.get("X_ACCESS_TOKEN")
 ACCESS_SECRET = os.environ.get("X_ACCESS_SECRET")
 BEARER_TOKEN = os.environ.get("X_BEARER_TOKEN")
 
-FOUND_IDS_FILE = "data/replied_tweet_ids.json"
-LAST_MENTION_ID_FILE = "data/last_monitor_id.txt"
+from pathlib import Path
+_BASE_DIR = Path(__file__).resolve().parent.parent
+FOUND_IDS_FILE = str(_BASE_DIR / "data" / "replied_tweet_ids.json")
+LAST_MENTION_ID_FILE = str(_BASE_DIR / "data" / "last_monitor_id.txt")
 
 MEMBERS = [
     {"name": "ハンサム判治", "role": "Vo./Leader", "weight": "90kg超"},
