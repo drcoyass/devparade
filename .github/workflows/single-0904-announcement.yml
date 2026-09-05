@@ -1,0 +1,55 @@
+name: 9/4 Release Announcement - 「9月4日」告知ポスト
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: '投稿スロット (main: メイン告知 / story: エピソード深掘り / replay: 夜告知)'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - story
+          - replay
+      dry_run:
+        description: 'DRY RUN（投稿せずテスト実行）'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  post-announcement:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install tweepy python-dotenv requests twifork
+
+      - name: Post 9/4 announcement
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          X_USERNAME: ${{ secrets.X_USERNAME }}
+          X_EMAIL: ${{ secrets.X_EMAIL }}
+          X_PASSWORD: ${{ secrets.X_PASSWORD }}
+          X_COOKIES_JSON: ${{ secrets.X_COOKIES_JSON }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: |
+          DRY_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_FLAG="--dry-run"
+          fi
+          PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}" $DRY_FLAG

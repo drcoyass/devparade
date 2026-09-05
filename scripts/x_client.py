@@ -56,14 +56,29 @@ def _has_tweepy_creds():
 # ===== twikit 方式 =====
 
 async def _get_twikit_client():
-    """twikit クライアントを取得（クッキー持続化対応）"""
+    """twikit / twifork クライアントを取得（クッキー持続化対応）"""
+    Client = None
     try:
-        from twikit import Client
+        from twifork import Client
     except ImportError:
-        print("⚠️ twikit未インストール。pip install twikit を実行してください。")
-        return None
+        try:
+            from twikit import Client
+        except ImportError:
+            print("⚠️ twifork/twikit未インストール。pip install twifork を実行してください。")
+            return None
 
     client = Client("ja-JP")
+
+    # 環境変数 X_COOKIES_JSON からクッキー復元（GitHub Secrets連携）
+    env_cookies = os.environ.get("X_COOKIES_JSON", "")
+    if env_cookies and not COOKIES_FILE.exists():
+        try:
+            COOKIES_FILE.parent.mkdir(parents=True, exist_ok=True)
+            with open(COOKIES_FILE, "w", encoding="utf-8") as f:
+                f.write(env_cookies)
+            print("🍪 環境変数からクッキーを復元しました")
+        except Exception as e:
+            print(f"⚠️ 環境変数クッキー保存失敗: {e}")
 
     # クッキーファイルが存在すれば読み込む（再ログイン不要）
     if COOKIES_FILE.exists():

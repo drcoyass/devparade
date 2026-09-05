@@ -24,7 +24,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy requests beautifulsoup4 twikit
+        run: pip install tweepy requests beautifulsoup4 twifork
 
       - name: Search & auto-reply (Free method)
         env:

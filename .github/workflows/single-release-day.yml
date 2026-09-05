@@ -35,7 +35,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy python-dotenv requests twikit
+        run: pip install tweepy python-dotenv requests twifork
 
       - name: Determine release slot
         id: slot

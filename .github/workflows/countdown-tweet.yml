@@ -27,7 +27,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install deps
-        run: pip install tweepy twikit
+        run: pip install tweepy twifork
 
       - name: Generate and post countdown tweet
         env:
