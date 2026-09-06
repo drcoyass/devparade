@@ -439,6 +439,23 @@ def build_promo_video(mode="countdown", topic=None, days=None, custom_texts=None
         if os.path.exists(group_pic):
             image_paths.append(group_pic)
 
+    elif mode == "single0904":
+        texts = [
+            "15年前、リリースできなかった\n親友への追悼の歌がある。",
+            "『お前がメジャーでやってるだけで\n俺は最高だと思うぜ！』",
+            "病室の高校生に自慢してくれた友は、\nその年の9月4日に旅立った。",
+            "15年ぶりの奇跡の復活。\nこの忘れ物を取りに来た。",
+            "『何千曲と歌ってきたが、\nここまで泣いて歌えんかったのは初めてだ』\n― ハンサム判治",
+            "ハンサム判治 feat. デブパレード\nDigital Single「9月4日」\n各配信ストアで配信中！"
+        ]
+        cover_pic = os.path.join(GLOBAL_ASSETS_DIR, "single-0904.jpg")
+        if os.path.exists(cover_pic):
+            image_paths.append(cover_pic)
+        for c in ["member-group.jpg", "member-hanzi.jpg", "live-front.jpg"]:
+            path = os.path.join(GLOBAL_ASSETS_DIR, c)
+            if os.path.exists(path):
+                image_paths.append(path)
+
     elif mode == "viral":
         if not topic:
             topic = "深夜のラーメン"
@@ -447,6 +464,21 @@ def build_promo_video(mode="countdown", topic=None, days=None, custom_texts=None
         candidates = ["member-group.jpg", "member-coyass.jpg", "member-hanzi.jpg", "member-ugazin.jpg", "member-tah.jpg"]
         for c in candidates:
             path = os.path.join(GLOBAL_ASSETS_DIR, c)
+            if os.path.exists(path):
+                image_paths.append(path)
+                
+    elif mode == "royal":
+        texts = [
+            "🔥 15年の沈黙を破り大復活！ 🔥",
+            "NARUTO ED『バッチコイ!!!』でお馴染み\nデブパレードが帰ってきた！",
+            "メンバー全員90kgオーバー！\nさらに増した音圧とポジティブ！",
+            "8月19日 1stアルバム発売！\n『全ての武器をお箸に』予約受付中！",
+            "最新情報はプロフのリンクから！\n#デブパレード #バッチコイ"
+        ]
+        # 背景画像（アーティスト写真やかっこいいライブ写真）
+        image_candidates = ["member-group.jpg", "live-front.jpg", "member-closeup.jpg"]
+        for name in image_candidates:
+            path = os.path.join(GLOBAL_ASSETS_DIR, name)
             if os.path.exists(path):
                 image_paths.append(path)
                 
@@ -597,7 +629,7 @@ def build_promo_video(mode="countdown", topic=None, days=None, custom_texts=None
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Devparade Promo Video Generator")
-    parser.add_argument("--mode", choices=["countdown", "album", "viral", "custom"], default="countdown",
+    parser.add_argument("--mode", choices=["countdown", "album", "viral", "custom", "royal", "single0904"], default="countdown",
                         help="動画の生成モード (デフォルト: countdown)")
     parser.add_argument("--topic", help="viralモード用のお題 (例: 深夜のラーメン)")
     parser.add_argument("--days", type=int, help="countdownモードの残り日数 (指定しない場合は自動計算)")

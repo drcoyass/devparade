@@ -80,14 +80,21 @@ async def _get_twikit_client():
         except Exception as e:
             print(f"⚠️ 環境変数クッキー保存失敗: {e}")
 
-    # クッキーファイルが存在すれば読み込む（再ログイン不要）
+    # クッキーファイルまたは環境変数から設定
     if COOKIES_FILE.exists():
         try:
+            with open(COOKIES_FILE, "r", encoding="utf-8") as f:
+                c_data = json.load(f)
+            if isinstance(c_data, dict):
+                if hasattr(client, "set_cookies"):
+                    client.set_cookies(c_data)
+                    print("🍪 セッションクッキー(dict)を設定しました")
+                    return client
             client.load_cookies(str(COOKIES_FILE))
             print("🍪 セッションクッキーを読み込みました")
             return client
         except Exception as e:
-            print(f"⚠️ クッキー読み込み失敗（再ログインします）: {e}")
+            print(f"⚠️ クッキー読み込み失敗: {e}")
 
     # 新規ログイン
     if not _has_twikit_creds():
