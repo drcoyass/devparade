@@ -1,7 +1,8 @@
 {
   "posted": [
     "a33a173ca5cc",
-    "4a693b6ac3cf"
+    "4a693b6ac3cf",
+    "12dd0a0f3bab"
   ],
   "scores": {
     "a33a173ca5cc": {
@@ -11,6 +12,10 @@
     "4a693b6ac3cf": {
       "score": 75,
       "posted_at": "2026-09-06T20:53:20.153173+09:00"
+    },
+    "12dd0a0f3bab": {
+      "score": 69,
+      "posted_at": "2026-09-06T23:17:30.332913+09:00"
     }
   },
   "cycle": 1
