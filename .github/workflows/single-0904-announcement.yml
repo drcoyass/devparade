@@ -55,3 +55,12 @@ jobs:
           else
             PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}"
           fi
+
+      - name: Auto Retweet from @coyass
+        if: github.event.inputs.dry_run != 'true'
+        env:
+          COYASS_COOKIES_JSON: ${{ secrets.COYASS_COOKIES_JSON }}
+        run: |
+          echo "🔄 公式ツイートを @coyass アカウントで自動リツイート中..."
+          sleep 5
+          PYTHONPATH=scripts:$PYTHONPATH python scripts/auto_retweet_coyass.py || true

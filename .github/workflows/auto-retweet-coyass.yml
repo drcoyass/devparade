@@ -1,0 +1,44 @@
+name: Auto Retweet to Dr.COYASS - 公式ツイートをcoyassでリツイート
+
+on:
+  workflow_dispatch:
+    inputs:
+      tweet_id:
+        description: 'リツイートするTweet ID（空欄の場合は最新ツイートを自動検知）'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  retweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install twifork
+
+      - name: Run Auto Retweet
+        env:
+          COYASS_COOKIES_JSON: ${{ secrets.COYASS_COOKIES_JSON }}
+        run: |
+          TID_FLAG=""
+          if [ -n "${{ github.event.inputs.tweet_id }}" ]; then
+            TID_FLAG="--tweet-id ${{ github.event.inputs.tweet_id }}"
+          fi
+          PYTHONPATH=scripts:$PYTHONPATH python scripts/auto_retweet_coyass.py $TID_FLAG
+
+      - name: Commit and push retweeted IDs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/coyass_retweeted_ids.json || true
+          git commit -m "🤖 Update: coyass retweeted IDs [skip ci]" || true
+          git push origin main || true
