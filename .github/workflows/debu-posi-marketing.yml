@@ -7,12 +7,12 @@ on:
         description: 'キャンペーン名 (launch / scheduled / collab)'
         required: false
         default: 'scheduled'
-#  schedule:
-#    # X閲覧ピーク時間に1日4回投稿（JST）
-#    - cron: '30 22 * * *'  # 朝 7:30 JST（通勤ラッシュ）
-#    - cron: '0 3 * * *'    # 昼 12:00 JST（ランチタイム）
-#    - cron: '0 8 * * *'    # 夕方 17:00 JST（帰宅ラッシュ）
-#    - cron: '30 11 * * *'  # 夜 20:30 JST（ゴールデンタイム）
+  schedule:
+    # X閲覧ピーク時間に1日4回自動投稿（JST）
+    - cron: '30 22 * * *'  # 朝 7:30 JST（通勤ラッシュ）
+    - cron: '0 3 * * *'    # 昼 12:00 JST（ランチタイム）
+    - cron: '0 8 * * *'    # 夕方 17:00 JST（帰宅ラッシュ）
+    - cron: '30 11 * * *'  # 夜 20:30 JST（ゴールデンタイム）
 
 permissions:
   issues: write
@@ -46,6 +46,14 @@ jobs:
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: |
           PYTHONPATH=scripts:$PYTHONPATH python scripts/debu-posi-tweet-generator.py
+
+      - name: Auto Retweet from @coyass
+        env:
+          COYASS_COOKIES_JSON: ${{ secrets.COYASS_COOKIES_JSON }}
+        run: |
+          echo "🔄 公式ツイートを @coyass アカウントで自動リツイート中..."
+          sleep 5
+          PYTHONPATH=scripts:$PYTHONPATH python scripts/auto_retweet_coyass.py || true
 
       - name: Commit and Push state changes
         run: |

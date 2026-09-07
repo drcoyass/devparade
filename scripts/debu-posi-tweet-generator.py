@@ -86,6 +86,22 @@ except ImportError:
     except ImportError:
         EXTRA_TWEETS_3 = []
 
+try:
+    from debu_goshu_database import DEBU_GOSHU_STOCKS
+except ImportError:
+    try:
+        from scripts.debu_goshu_database import DEBU_GOSHU_STOCKS
+    except ImportError:
+        DEBU_GOSHU_STOCKS = []
+
+try:
+    from debu_generator_engine import generate_combinatorial_tweets
+except ImportError:
+    try:
+        from scripts.debu_generator_engine import generate_combinatorial_tweets
+    except ImportError:
+        generate_combinatorial_tweets = lambda n: []
+
 # ===== 日替わりポジデブツイート（55種類以上） =====
 DAILY_TWEETS_BASE = [
 
@@ -1873,8 +1889,9 @@ DM or リプライで！🍖
 #ポジデブBot #コラボ募集""",
 ]
 
-# ===== DAILY_TWEETSを統合 =====
-DAILY_TWEETS = DAILY_TWEETS_BASE + EXTRA_TWEETS + EXTRA_TWEETS_2 + EXTRA_TWEETS_3
+# ===== DAILY_TWEETSを統合 (800+種類の大規模ストック) =====
+COMBINATORIAL_TWEETS = generate_combinatorial_tweets(300)
+DAILY_TWEETS = DAILY_TWEETS_BASE + EXTRA_TWEETS + EXTRA_TWEETS_2 + EXTRA_TWEETS_3 + DEBU_GOSHU_STOCKS + COMBINATORIAL_TWEETS
 
 # ===== 🎵 先行シングル「夏の終わりに」リリース専用ツイート =====
 SINGLE_RELEASE_TWEETS = [
@@ -1973,15 +1990,32 @@ def get_dynamic_hashtags():
     return tags
 
 
+def calculate_tweet_weight(text: str) -> int:
+    """X (Twitter) の重み付け文字数を計算 (ASCII=1, CJK/絵文字=2, URL=23)"""
+    import unicodedata
+    import re
+    text_sub = re.sub(r'https?://\S+', 'x' * 23, text)
+    weight = 0
+    for char in text_sub:
+        width = unicodedata.east_asian_width(char)
+        if width in ('F', 'W', 'A') or ord(char) > 0x1F000:
+            weight += 2
+        else:
+            weight += 1
+    return weight
+
+
 def enhance_tweet_with_mechanics(text):
-    """インプレッション増加のための仕組み（ハッシュタグ、CTA）を付与"""
+    """インプレッション増加のための仕組み（ハッシュタグ、CTA）を付与（文字数上限ガード付き）"""
     enhanced = text.strip()
 
     # 1. 動的ハッシュタグの追加
     dynamic_tags = get_dynamic_hashtags()
     for tag in dynamic_tags:
         if tag not in enhanced:
-            enhanced += f" {tag}"
+            candidate = f"{enhanced} {tag}"
+            if calculate_tweet_weight(candidate) <= 275:
+                enhanced = candidate
 
     # 2. リプライ誘導（CTA）の追加（確率で付与）
     if "？" not in enhanced and "教えて" not in enhanced and random.random() < 0.3:
@@ -1990,7 +2024,9 @@ def enhance_tweet_with_mechanics(text):
             "\n\nあなたの「デブあるある」もリプで募集中！🍖",
             "\n\nこの意見、どう思う？リプ待ってるぜ！🍖"
         ]
-        enhanced += random.choice(cta_list)
+        candidate = enhanced + random.choice(cta_list)
+        if calculate_tweet_weight(candidate) <= 275:
+            enhanced = candidate
 
     return enhanced
 
@@ -2099,47 +2135,58 @@ def score_tweet(text):
 
 
 
-
 def select_diverse_tweet():
-    """多様な選択：未投稿の中からスコアを考慮しつつランダムに選ぶ（上位固定を避ける）"""
+    """多様な選択：未投稿プール全体からランダム・均等に選ぶ（同じネタの繰り返しを完全防止）"""
     data = load_posted()
     posted_hashes = set(data.get("posted", []))
 
-    # 全ツイートをスコアリング
-    scored = []
+    # 全ツイートの準備
+    all_candidates = []
     for tweet in DAILY_TWEETS:
-        h = tweet_hash(tweet)
-        s = score_tweet(tweet)
-        scored.append({"text": tweet, "hash": h, "score": s, "posted": h in posted_hashes})
+        t_clean = tweet.strip()
+        if not t_clean:
+            continue
+        h = tweet_hash(t_clean)
+        w = calculate_tweet_weight(t_clean)
+        # Xの文字数制限280ポイント（全角140文字）を超えるものは除外
+        if w > 275:
+            continue
+        all_candidates.append({
+            "text": t_clean,
+            "hash": h,
+            "weight": w,
+            "score": score_tweet(t_clean),
+            "posted": h in posted_hashes
+        })
+
+    # 重複ハッシュをユニーク化
+    seen_hashes = set()
+    unique_candidates = []
+    for c in all_candidates:
+        if c["hash"] not in seen_hashes:
+            seen_hashes.add(c["hash"])
+            unique_candidates.append(c)
 
     # 未投稿のみフィルタ
-    unposted = [t for t in scored if not t["posted"]]
+    unposted = [t for t in unique_candidates if not t["posted"]]
 
     # 全部投稿済みならサイクルリセット
     if len(unposted) == 0:
-        print(f"🔄 全{len(DAILY_TWEETS)}種を投稿済み → サイクル{data.get('cycle', 1) + 1}へリセット")
+        print(f"🔄 全{len(unique_candidates)}種を投稿完了！ → サイクル{data.get('cycle', 1) + 1}へリセット")
         data["posted"] = []
         data["cycle"] = data.get("cycle", 1) + 1
         save_posted(data)
-        unposted = scored.copy()
+        unposted = unique_candidates.copy()
         for t in unposted:
             t["posted"] = False
 
-    # スコアが高いものほど選ばれやすくするが、上位20%に固定しない（ルーレット選択に近い形）
-    # スコアの自乗で重み付けしてランダム性を確保
-    unposted.sort(key=lambda x: x["score"], reverse=True)
-    
-    # 完全に同じものが続くのを避けるため、上位15個程度からランダムに選ぶ
-    # (または unposted の 30% 程度の広い範囲から選ぶ)
-    pool_size = max(10, len(unposted) // 3)
-    pool = unposted[:pool_size]
-    selected = random.choice(pool)
+    # 【重要】上位固定を完全撤廃：未投稿プール全体から均等にランダム選択
+    selected = random.choice(unposted)
 
-    # スコア分布の表示
-    print(f"\n📊 ツイートスコアリング（多様性優先）:")
-    print(f"   全{len(scored)}種 | 投稿済み: {len(posted_hashes)} | 未投稿: {len(unposted)}")
-    print(f"   ✅ 選択: スコア{selected['score']} | ハッシュ: {selected['hash']}")
-    
+    print(f"\n📊 ツイートストック状況（超大規模・完全シャッフル）:")
+    print(f"   総ストック: {len(unique_candidates)}種 | 投稿済み: {len(posted_hashes)} | 未投稿残り: {len(unposted)}")
+    print(f"   ✅ 選択ツイート: 重み{selected['weight']}/280 | スコア{selected['score']} | ハッシュ:{selected['hash'][:8]}...")
+
     return selected
 
 
@@ -2285,25 +2332,25 @@ def main():
     selected = None
 
     if CAMPAIGN == "scheduled":
-        # 1. 優先的に AI 生成を試す（重複チェック付き）
-        data = load_posted()
-        posted_hashes = set(data.get("posted", []))
-        
-        for attempt in range(3):
-            ai_tweet = generate_ai_tweet(CAMPAIGN)
-            if ai_tweet:
-                h = tweet_hash(ai_tweet)
-                if h not in posted_hashes:
-                    tweet_text = ai_tweet
-                    selected = {"text": tweet_text, "hash": h, "score": 100}
-                    print(f"🚀 Generated via AI (GPT-4o) - Attempt {attempt+1}")
-                    break
+        use_ai = os.environ.get("USE_AI_TWEET", "false").lower() == "true"
+        if use_ai:
+            data = load_posted()
+            posted_hashes = set(data.get("posted", []))
+            for attempt in range(3):
+                ai_tweet = generate_ai_tweet(CAMPAIGN)
+                if ai_tweet:
+                    h = tweet_hash(ai_tweet)
+                    if h not in posted_hashes:
+                        tweet_text = ai_tweet
+                        selected = {"text": tweet_text, "hash": h, "score": 100}
+                        print(f"🚀 Generated via AI (GPT-4o) - Attempt {attempt+1}")
+                        break
+                    else:
+                        print(f"🔁 AI tweet duplicated (hash: {h}), retrying...")
                 else:
-                    print(f"🔁 AI tweet duplicated (hash: {h}), retrying...")
-            else:
-                break
-        
-        # AIが失敗したか、3回とも重複した場合はテンプレートから選択
+                    break
+
+        # デフォルトおよびAI不使用・失敗時は、800種超の大規模ストックから完全ランダム・均等選択
         if not tweet_text:
             selected = select_diverse_tweet()
             tweet_text = selected["text"]

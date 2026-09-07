@@ -2,7 +2,8 @@
 .env
 *.env
 X_ACCOUNT_INFO.md
-data/twikit_cookies.json
+data/*cookies*.json
+*cookies*.json
 
 # Python
 __pycache__/
