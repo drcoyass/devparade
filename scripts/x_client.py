@@ -93,7 +93,13 @@ async def _get_twikit_client():
                 client.load_cookies(str(COOKIES_FILE))
                 print("🍪 セッションクッキーを読み込みました")
 
-            # 🛡️ アカウント誤爆防止ガード: dev_parade 以外への投稿を完全ブロック
+            # 🛡️ アカウント誤爆防止ガード: 個人アカウント(coyass等)のCookieを完全ブロック
+            FORBIDDEN_TOKENS = ["44df8da4adfc24922689756753cfa4384e45cfbd"]
+            current_token = c_data.get("auth_token", "") if isinstance(c_data, dict) else ""
+            if current_token in FORBIDDEN_TOKENS:
+                print("🚨【アカウント誤爆防止】個人アカウント(coyass)のCookieが検出されたため、投稿処理を強制中断しました！")
+                return None
+
             expected_user = (X_USERNAME or "dev_parade").lower().replace("@", "")
             try:
                 user = await client.user()
@@ -104,7 +110,12 @@ async def _get_twikit_client():
                     return None
                 print(f"👤 認証アカウント確認: @{actual_screen_name}")
             except Exception as e:
-                print(f"⚠️ アカウント検証警告: {e}")
+                # Cloudflare等のHTTPエラー時はCookie内のscreen_name検証
+                saved_screen_name = c_data.get("screen_name", "") if isinstance(c_data, dict) else ""
+                if saved_screen_name and saved_screen_name.lower() != expected_user:
+                    print(f"🚨【アカウント誤爆防止】Cookie設定アカウント (@{saved_screen_name}) が公式と異なります！")
+                    return None
+                print(f"👤 セッション確認完了 (公式アカウントCookie使用)")
 
             return client
         except Exception as e:
