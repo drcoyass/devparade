@@ -48,8 +48,10 @@ jobs:
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: |
-          DRY_FLAG=""
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            DRY_FLAG="--dry-run"
+            echo "🔍 アカウント検証を実行中..."
+            PYTHONPATH=scripts:$PYTHONPATH python scripts/verify_account.py
+            PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}" --dry-run
+          else
+            PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}"
           fi
-          PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}" $DRY_FLAG
