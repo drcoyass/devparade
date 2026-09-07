@@ -1,9 +1,18 @@
-name: DEV PARADE X Growth Engine - フォロワー増加自動化
+name: DEV PARADE X Growth Engine & Member RT - フォロワー増加＆メンバーRT自動化
 
-#  schedule:
-#    # 1日1回、夜22:00 JST（13:00 UTC）に実行
-#    - cron: '0 13 * * *'
+on:
+  schedule:
+    # 1日3回巡回（昼12:45、夜19:45、深夜23:15 JST）
+    - cron: '45 3 * * *'   # 12:45 JST（ランチ後）
+    - cron: '45 10 * * *'  # 19:45 JST（帰宅・夜）
+    - cron: '15 14 * * *'  # 23:15 JST（深夜リラックス）
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'DRY RUN（テスト実行・アクション送信なし）'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   issues: write
@@ -25,10 +34,12 @@ jobs:
 
       - name: Run Growth Engine
         env:
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
           X_USERNAME: ${{ secrets.X_USERNAME }}
           X_EMAIL: ${{ secrets.X_EMAIL }}
           X_PASSWORD: ${{ secrets.X_PASSWORD }}
           X_COOKIES_JSON: ${{ secrets.X_COOKIES_JSON }}
+          COYASS_COOKIES_JSON: ${{ secrets.COYASS_COOKIES_JSON }}
           X_API_KEY: ${{ secrets.X_API_KEY }}
           X_API_SECRET: ${{ secrets.X_API_SECRET }}
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}

@@ -257,6 +257,48 @@ async def _twikit_like(tweet_id):
         return False
 
 
+async def _twikit_retweet(tweet_id):
+    """twikit でリツイート"""
+    client = await _get_twikit_client()
+    if not client:
+        return False
+
+    try:
+        await client.retweet(tweet_id)
+        print(f"🔄 [twikit] リツイート成功: {tweet_id}")
+        return True
+    except Exception as e:
+        print(f"⚠️ [twikit] リツイート失敗 ({tweet_id}): {e}")
+        return False
+
+
+async def _twikit_get_user_tweets(screen_name, count=5):
+    """twikit で特定ユーザーの最新ツイート取得"""
+    client = await _get_twikit_client()
+    if not client:
+        return []
+
+    try:
+        user = await client.get_user_by_screen_name(screen_name)
+        if not user:
+            return []
+        tweets = await user.get_tweets("Tweets", count=count)
+        results = []
+        for t in tweets:
+            results.append({
+                "id": str(t.id),
+                "text": t.text if hasattr(t, 'text') else "",
+                "created_at": str(getattr(t, 'created_at', "")),
+                "is_reply": bool(getattr(t, 'reply_to', None)),
+                "username": screen_name,
+            })
+        print(f"👤 [twikit] @{screen_name} のツイート {len(results)}件取得")
+        return results
+    except Exception as e:
+        print(f"⚠️ [twikit] @{screen_name} ツイート取得エラー: {e}")
+        return []
+
+
 # ===== tweepy 方式（フォールバック） =====
 
 def _tweepy_post(text):
@@ -415,6 +457,24 @@ def like_tweet(tweet_id):
     if _has_twikit_creds() or COOKIES_FILE.exists():
         return asyncio.run(_twikit_like(tweet_id))
     return False
+
+
+def retweet_tweet(tweet_id):
+    """リツイートする"""
+    if DRY_RUN:
+        print(f"🔍 [DRY RUN] リツイートスキップ: {tweet_id}")
+        return True
+
+    if _has_twikit_creds() or COOKIES_FILE.exists():
+        return asyncio.run(_twikit_retweet(tweet_id))
+    return False
+
+
+def get_user_tweets(screen_name, count=5):
+    """特定ユーザーの最新ツイートを取得"""
+    if _has_twikit_creds() or COOKIES_FILE.exists():
+        return asyncio.run(_twikit_get_user_tweets(screen_name, count))
+    return []
 
 
 # ===== テスト =====

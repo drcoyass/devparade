@@ -1,281 +1,303 @@
 #!/usr/bin/env python3
 """
-Devparade X Follower Growth Engine
-フォロワー増加マーケティング自動化
+Devparade X Follower Growth & Member Retweet Engine
+===================================================
+フォロワー増加マーケティング ＆ メンバーツイート自動リツイート完全自動化
 
 戦略:
-1. エンゲージメント分析 - 過去ツイートのパフォーマンスを分析
-2. 最適投稿時間の学習
-3. ターゲットユーザーへのいいね・フォロー
-4. トレンドハッシュタグの活用
-5. フォロワー増加レポート生成
+1. メンバー（判治, COYASS, ugazin, ぺー, TAH）の新着ツイート自動リツイート
+2. 親和性の高いターゲット層（ボディポジティブ、大盛り、デブあるある、NARUTO等）への安全ないいね巡回
+3. デブパレード言及・メンションへの感謝いいね
+4. フォロワー推移トラッキング ＆ 成長レポート生成
 """
 
 import os
+import sys
 import json
 import random
+import time
 from datetime import datetime, timezone, timedelta
-
-try:
-    import tweepy
-except ImportError:
-    tweepy = None
-
-API_KEY = os.environ.get("X_API_KEY")
-API_SECRET = os.environ.get("X_API_SECRET")
-ACCESS_TOKEN = os.environ.get("X_ACCESS_TOKEN")
-ACCESS_SECRET = os.environ.get("X_ACCESS_SECRET")
-BEARER_TOKEN = os.environ.get("X_BEARER_TOKEN")
-
 from pathlib import Path
+
 _BASE_DIR = Path(__file__).resolve().parent.parent
-GROWTH_LOG = str(_BASE_DIR / "data" / "growth_log.json")
+GROWTH_LOG = _BASE_DIR / "data" / "growth_log.json"
+LIKED_FILE = _BASE_DIR / "data" / "liked_tweet_ids.json"
 
-# フォロー対象のキーワード（これらに言及してるユーザーに関わる）
+DRY_RUN = os.environ.get("DRY_RUN", "false").lower() == "true"
+
+# 親和性の高い検索キーワード（デブパレードのファンになりやすい層）
 TARGET_KEYWORDS = [
+    "デブ", "太った", "体重増えた", "大盛り", "特盛",
+    "飯テロ", "深夜のラーメン", "焼肉食べたい", "食べ放題",
     "ボディポジティブ", "ぽっちゃり", "大きいサイズ",
-    "body positive", "plus size", "self love",
-    "デブ芸人", "おデブ", "太ってる",
-    "NARUTO", "バッチコイ",
+    "NARUTO バッチコイ", "NARUTO エンディング"
 ]
 
-# 関連アカウント（これらのフォロワーと交流）
-RELATED_ACCOUNTS = [
-    "matslovedx",      # マツコ系
-    "watanabe_naomi",   # 渡辺直美
+# 除外キーワード（スパム・アフィリエイト・不適切なアカウントを避ける）
+EXCLUDE_KEYWORDS = [
+    "副業", "稼ぐ", "在宅", "裏垢", "パパ活", "ママ活", "ギャンブル",
+    "カジノ", "暗号資産", "仮想通貨", "fx", "プレゼント企画", "paypay"
 ]
-
-# 戦略的ハッシュタグセット
-HASHTAG_SETS = {
-    "core": ["#ポジデブ", "#ポジデブBot", "#DEVPARADE", "#デブパレード"],
-    "reach": ["#ボディポジティブ", "#自己肯定感", "#ありのまま", "#bodypositivity"],
-    "music": ["#バンド", "#ロック", "#邦ロック", "#バッチコイ", "#NARUTO"],
-    "viral": ["#拡散希望", "#フォロバ100", "#相互フォロー"],
-    "english": ["#BodyPositive", "#SelfLove", "#PlusSize", "#FatPositive"],
-    "food": ["#焼肉", "#グルメ", "#大盛り", "#飯テロ"],
-}
-
-
-def get_write_client():
-    """後方互換性のためのダミー。実際の操作はx_clientを使用"""
-    return True
-
-
-def get_read_client():
-    """後方互換性のためのダミー"""
-    return True
 
 
 def load_growth_log():
     try:
-        with open(GROWTH_LOG, "r") as f:
+        with open(GROWTH_LOG, "r", encoding="utf-8") as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
-        return {"runs": [], "liked_users": [], "followers_history": []}
+        return {"runs": [], "liked_tweets": [], "followers_history": []}
 
 
 def save_growth_log(log):
-    with open(GROWTH_LOG, "w") as f:
+    GROWTH_LOG.parent.mkdir(parents=True, exist_ok=True)
+    with open(GROWTH_LOG, "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=2)
 
 
-def get_account_stats(read_client, write_client):
-    """自アカウントの統計を取得（x_client経由）"""
+def load_liked_ids():
     try:
-        try:
-            from x_client import get_my_info
-        except ImportError:
-            from scripts.x_client import get_my_info
-
-        info = get_my_info()
-        if info:
-            return {
-                "username": info.get("username", ""),
-                "name": info.get("name", ""),
-                "followers": info.get("followers", 0),
-                "following": info.get("following", 0),
-                "tweets": info.get("tweets", 0),
-                "listed": 0,
-            }
-    except Exception as e:
-        print(f"   ⚠️ アカウント情報取得エラー: {e}")
-    return None
+        with open(LIKED_FILE, "r", encoding="utf-8") as f:
+            return set(json.load(f))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return set()
 
 
-def analyze_recent_tweets(read_client, user_id):
-    """直近ツイートのエンゲージメント分析（現在はtwikit非対応のためスキップ）"""
-    # twikit では自分のツイートの詳細メトリクスは取得困難なため
-    # この機能は有料API復帰まで一時停止
-    print("   ℹ️ ツイート分析は現在スキップ（twikit制限）")
-    return []
+def save_liked_ids(liked_set):
+    LIKED_FILE.parent.mkdir(parents=True, exist_ok=True)
+    # 最新2000件のみ保持
+    recent_ids = list(liked_set)[-2000:]
+    with open(LIKED_FILE, "w", encoding="utf-8") as f:
+        json.dump(recent_ids, f, indent=2)
 
 
-def engage_with_mentions(write_client, read_client):
-    """メンションに「いいね」で反応（x_client経由）"""
-    liked = 0
+def is_safe_tweet(text):
+    """スパム・不適切ツイートを排除する安全フィルター"""
+    text_lower = text.lower()
+    for kw in EXCLUDE_KEYWORDS:
+        if kw in text_lower:
+            return False
+    return True
+
+
+def run_target_likes(max_likes=6):
+    """
+    ターゲット層の一般ユーザーツイートに安全に「いいね」して公式を認知してもらう
+    （アカウント制限を避けるため1回5〜6件の極小安全運用）
+    """
     try:
+        from x_client import search_tweets, like_tweet
+    except ImportError:
         try:
-            from x_client import get_mentions as xc_get_mentions, like_tweet
+            from scripts.x_client import search_tweets, like_tweet
         except ImportError:
-            from scripts.x_client import get_mentions as xc_get_mentions, like_tweet
+            print("❌ x_client が見つかりません")
+            return 0
 
-        mentions = xc_get_mentions(10)
-        for m in mentions:
-            tweet_id = m.get("id", "")
-            if not tweet_id:
-                continue
-            try:
-                if like_tweet(tweet_id):
-                    liked += 1
-                    print(f"   ❤️ いいね: {tweet_id[:10]}...")
-            except Exception:
-                pass
+    liked_ids = load_liked_ids()
+    new_liked = 0
 
-    except Exception as e:
-        print(f"   ⚠️ メンションエンゲージ: {e}")
+    # ランダムにキーワードを2つ選択
+    selected_keywords = random.sample(TARGET_KEYWORDS, min(3, len(TARGET_KEYWORDS)))
+    print(f"\n🎯 ターゲットいいね巡回（キーワード: {', '.join(selected_keywords)}）...")
 
-    return liked
+    for kw in selected_keywords:
+        if new_liked >= max_likes:
+            break
+
+        print(f"  🔍 検索中: 「{kw}」")
+        try:
+            results = search_tweets(kw, count=5)
+            for t in results:
+                if new_liked >= max_likes:
+                    break
+
+                tid = t.get("id")
+                text = t.get("text", "")
+                username = t.get("username", "")
+
+                if not tid or tid in liked_ids:
+                    continue
+
+                if not is_safe_tweet(text):
+                    continue
+
+                print(f"     ❤️ いいね対象: @{username} 「{text[:40].replace(chr(10), ' ')}...」")
+                if DRY_RUN:
+                    print(f"        [DRY RUN] いいねをスキップ")
+                    liked_ids.add(tid)
+                    new_liked += 1
+                else:
+                    success = like_tweet(tid)
+                    if success:
+                        liked_ids.add(tid)
+                        new_liked += 1
+                        time.sleep(random.uniform(2.0, 3.5))  # レート制限回避
+
+        except Exception as e:
+            print(f"  ⚠️ 検索・いいねエラー ({kw}): {e}")
+
+    save_liked_ids(liked_ids)
+    print(f"  ✅ いいね巡回完了: 今回 {new_liked} 件実行")
+    return new_liked
 
 
-def generate_growth_report(stats, tweet_analysis, liked_count, log):
+def run_brand_mentions_like(max_likes=4):
+    """「デブパレード」に言及してくれているツイートに感謝のいいね"""
+    try:
+        from x_client import search_tweets, like_tweet
+    except ImportError:
+        return 0
+
+    liked_ids = load_liked_ids()
+    brand_liked = 0
+    queries = ["デブパレード", "Devparade", "#デブパレード"]
+
+    print("\n📣 バンド言及ツイートへのいいね巡回...")
+    for q in queries:
+        if brand_liked >= max_likes:
+            break
+        try:
+            results = search_tweets(q, count=4)
+            for t in results:
+                if brand_liked >= max_likes:
+                    break
+                tid = t.get("id")
+                text = t.get("text", "")
+                username = t.get("username", "")
+
+                # 公式自身のツイートはスキップ
+                if username.lower() == "dev_parade" or tid in liked_ids:
+                    continue
+
+                if not is_safe_tweet(text):
+                    continue
+
+                print(f"     🍖 バンド言及発見: @{username} 「{text[:40].replace(chr(10), ' ')}...」")
+                if DRY_RUN:
+                    liked_ids.add(tid)
+                    brand_liked += 1
+                else:
+                    if like_tweet(tid):
+                        liked_ids.add(tid)
+                        brand_liked += 1
+                        time.sleep(2.0)
+        except Exception as e:
+            print(f"  ⚠️ ブランド検索エラー ({q}): {e}")
+
+    save_liked_ids(liked_ids)
+    return brand_liked
+
+
+def generate_growth_report(stats, target_likes, brand_likes, member_rts, log):
     """フォロワー増加レポート生成"""
     jst = timezone(timedelta(hours=9))
     now = datetime.now(jst)
 
-    # フォロワー推移
     prev_followers = 0
     if log.get("followers_history"):
         prev_followers = log["followers_history"][-1].get("count", 0)
 
-    followers = stats["followers"] if stats else 0
+    followers = stats.get("followers", 0) if stats else 0
     diff = followers - prev_followers if prev_followers > 0 else 0
     diff_str = f"+{diff}" if diff >= 0 else str(diff)
 
     lines = [
-        f"## 📈 Devparade X Growth Report",
+        f"## 📈 Devparade X Growth & RT Report",
         "",
         f"**日時:** {now.strftime('%Y-%m-%d %H:%M JST')}",
         "",
         "---",
         "",
-        "### アカウント統計",
+        "### 📊 アカウント統計",
         "",
-    ]
-
-    if stats:
-        lines.extend([
-            f"| 指標 | 数値 |",
-            f"|------|------|",
-            f"| フォロワー | **{stats['followers']}** ({diff_str}) |",
-            f"| フォロー中 | {stats['following']} |",
-            f"| ツイート数 | {stats['tweets']} |",
-            f"| リスト登録 | {stats['listed']} |",
-            "",
-        ])
-
-    # エンゲージメント分析
-    if tweet_analysis:
-        lines.extend([
-            "### トップエンゲージメント ツイート",
-            "",
-        ])
-        for i, t in enumerate(tweet_analysis[:5], 1):
-            lines.extend([
-                f"**#{i}** (Score: {t['engagement_score']})",
-                f"> {t['text']}",
-                f"❤️ {t['likes']} | 🔄 {t['retweets']} | 💬 {t['replies']}",
-                "",
-            ])
-
-    # アクション実行結果
-    lines.extend([
-        "### 実行アクション",
+        f"| 指標 | 数値 |",
+        f"|------|------|",
+        f"| フォロワー | **{followers}** ({diff_str}) |",
+        f"| フォロー中 | {stats.get('following', 0)} |",
+        f"| 累計ツイート | {stats.get('tweets', 0)} |",
         "",
-        f"- メンションへのいいね: {liked_count}件",
+        "### 🚀 今回のアクション実績",
         "",
-    ])
-
-    # マーケティングTIPS
-    lines.extend([
-        "### 📊 次のアクション推奨",
+        f"- 🎸 **メンバーツイート自動RT**: {member_rts} 件",
+        f"- 🎯 **ターゲット層へのいいね**: {target_likes} 件",
+        f"- 📣 **バンド言及への感謝いいね**: {brand_likes} 件",
+        f"- ❤️ **合計エンゲージメント**: {target_likes + brand_likes} 件",
         "",
-        "1. **エンゲージメント高いツイートの傾向を分析** → 似た内容を増やす",
-        "2. **メンションには必ず反応** → ファンとの関係構築",
-        "3. **ハッシュタグ戦略** → #ポジデブ #BodyPositive を定着させる",
-        "4. **コラボ** → デブ芸人、フードインフルエンサーとの絡み",
-        "5. **スレッド投稿** → 滞在時間UPでアルゴリズム優遇",
+        "### 💡 フォロワー増加の好循環サイクル",
+        "1. **メンバーRT**: 判治・COYASS・ugazin・ぺー・TAHのツイートを公式が拡散しTL活発化",
+        "2. **ターゲットいいね**: 「大盛り」「デブ」「飯テロ」投稿者へ公式からリアクション ➔ プロフィール流入",
+        "3. **888種デブ語録**: 1日4回の圧倒的クオリティ投稿でフォロー継続率を最大化",
         "",
         "---",
-        "*Devparade Growth Engine 🍖*",
-    ])
+        "*Devparade Automated Growth Engine 🍖*",
+    ]
 
-    with open("growth_report.md", "w") as f:
+    with open("growth_report.md", "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
-
-    return "\n".join(lines)
 
 
 def main():
     jst = timezone(timedelta(hours=9))
     now = datetime.now(jst)
 
-    print("=" * 50)
-    print(f"📈 Devparade X Growth Engine")
+    print("=" * 60)
+    print(f"📈 Devparade X Growth & Member RT Engine")
     print(f"   {now.strftime('%Y-%m-%d %H:%M JST')}")
-    print("=" * 50)
-
-    write_client = get_write_client()
-    read_client = get_read_client()
-
-    if not write_client:
-        print("❌ X API credentials not set")
-        return
+    print("=" * 60)
 
     log = load_growth_log()
 
     # 1. アカウント統計取得
-    print("\n📊 アカウント統計...")
-    stats = get_account_stats(read_client, write_client)
-    if stats:
-        print(f"   @{stats['username']}")
-        print(f"   フォロワー: {stats['followers']}")
-        print(f"   ツイート数: {stats['tweets']}")
+    stats = {}
+    try:
+        from x_client import get_my_info
+        stats = get_my_info() or {}
+        if stats:
+            print(f"👤 公式アカウント: @{stats.get('username')}")
+            print(f"   フォロワー: {stats.get('followers')} / フォロー中: {stats.get('following')}")
+            log.setdefault("followers_history", []).append({
+                "date": now.strftime("%Y-%m-%d %H:%M"),
+                "count": stats.get("followers", 0),
+            })
+            log["followers_history"] = log["followers_history"][-60:]
+    except Exception as e:
+        print(f"⚠️ アカウント統計取得スキップ: {e}")
 
-        # 履歴に追加
-        log.setdefault("followers_history", []).append({
-            "date": now.strftime("%Y-%m-%d %H:%M"),
-            "count": stats["followers"],
-        })
-        # 最新30件のみ保持
-        log["followers_history"] = log["followers_history"][-30:]
+    # 2. メンバーのツイート自動リツイート
+    member_rts = 0
+    try:
+        from member_retweet_engine import process_member_retweets
+        import asyncio
+        member_rts = asyncio.run(process_member_retweets(dry_run=DRY_RUN)) or 0
+    except Exception as e:
+        try:
+            from scripts.member_retweet_engine import process_member_retweets
+            import asyncio
+            member_rts = asyncio.run(process_member_retweets(dry_run=DRY_RUN)) or 0
+        except Exception as e2:
+            print(f"⚠️ メンバーRTエンジン実行エラー: {e2}")
 
-    # 2. ツイート分析
-    print("\n📈 エンゲージメント分析...")
-    tweet_analysis = analyze_recent_tweets(read_client, None)
-    if tweet_analysis:
-        best = tweet_analysis[0]
-        print(f"   ベストツイート: {best['text'][:50]}...")
-        print(f"   Score: {best['engagement_score']} (❤️{best['likes']} 🔄{best['retweets']})")
+    # 3. ターゲット層への安全ないいね巡回
+    target_likes = run_target_likes(max_likes=6)
 
-    # 3. メンションへの「いいね」
-    print("\n❤️ メンションエンゲージメント...")
-    liked_count = engage_with_mentions(write_client, read_client)
-    print(f"   いいね実行: {liked_count}件")
+    # 4. バンド言及ツイートへのいいね巡回
+    brand_likes = run_brand_mentions_like(max_likes=4)
 
-    # 4. レポート生成
-    print("\n📝 レポート生成...")
-    generate_growth_report(stats, tweet_analysis, liked_count, log)
+    # 5. レポート生成
+    generate_growth_report(stats, target_likes, brand_likes, member_rts, log)
 
     # ログ保存
     log.setdefault("runs", []).append({
         "date": now.strftime("%Y-%m-%d %H:%M"),
-        "followers": stats["followers"] if stats else 0,
-        "liked": liked_count,
+        "followers": stats.get("followers", 0),
+        "target_likes": target_likes,
+        "brand_likes": brand_likes,
+        "member_rts": member_rts,
     })
     log["runs"] = log["runs"][-100:]
     save_growth_log(log)
 
-    print("\n✅ Growth Engine Complete!")
+    print("\n🎉 Growth & RT Engine 巡回完了!")
 
 
 if __name__ == "__main__":
