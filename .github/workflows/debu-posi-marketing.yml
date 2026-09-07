@@ -7,12 +7,12 @@ on:
         description: 'キャンペーン名 (launch / scheduled / collab)'
         required: false
         default: 'scheduled'
-  schedule:
-    # X閲覧ピーク時間に1日4回投稿（JST）
-    - cron: '30 22 * * *'  # 朝 7:30 JST（通勤ラッシュ）
-    - cron: '0 3 * * *'    # 昼 12:00 JST（ランチタイム）
-    - cron: '0 8 * * *'    # 夕方 17:00 JST（帰宅ラッシュ）
-    - cron: '30 11 * * *'  # 夜 20:30 JST（ゴールデンタイム）
+#  schedule:
+#    # X閲覧ピーク時間に1日4回投稿（JST）
+#    - cron: '30 22 * * *'  # 朝 7:30 JST（通勤ラッシュ）
+#    - cron: '0 3 * * *'    # 昼 12:00 JST（ランチタイム）
+#    - cron: '0 8 * * *'    # 夕方 17:00 JST（帰宅ラッシュ）
+#    - cron: '30 11 * * *'  # 夜 20:30 JST（ゴールデンタイム）
 
 permissions:
   issues: write

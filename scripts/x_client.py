@@ -89,9 +89,23 @@ async def _get_twikit_client():
                 if hasattr(client, "set_cookies"):
                     client.set_cookies(c_data)
                     print("🍪 セッションクッキー(dict)を設定しました")
-                    return client
-            client.load_cookies(str(COOKIES_FILE))
-            print("🍪 セッションクッキーを読み込みました")
+            else:
+                client.load_cookies(str(COOKIES_FILE))
+                print("🍪 セッションクッキーを読み込みました")
+
+            # 🛡️ アカウント誤爆防止ガード: dev_parade 以外への投稿を完全ブロック
+            expected_user = (X_USERNAME or "dev_parade").lower().replace("@", "")
+            try:
+                user = await client.user()
+                actual_screen_name = getattr(user, "screen_name", "").lower()
+                if actual_screen_name and actual_screen_name != expected_user:
+                    print(f"🚨【アカウント誤爆防止】ログイン中のアカウント (@{actual_screen_name}) が公式アカウント (@{expected_user}) と異なります！")
+                    print(f"🚨 個人アカウント等への誤投稿を防止するため、投稿処理を強制中断しました。")
+                    return None
+                print(f"👤 認証アカウント確認: @{actual_screen_name}")
+            except Exception as e:
+                print(f"⚠️ アカウント検証警告: {e}")
+
             return client
         except Exception as e:
             print(f"⚠️ クッキー読み込み失敗: {e}")

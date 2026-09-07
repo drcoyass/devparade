@@ -7,9 +7,9 @@ on:
         description: 'Dry run (ツイートを実際には投稿しない)'
         required: false
         default: 'false'
-  schedule:
-    - cron: '0 3 * * *'    # 昼 12:00 JST（UTC 03:00）
-    - cron: '30 11 * * *'  # 夜 20:30 JST（UTC 11:30）
+#  schedule:
+#    - cron: '0 3 * * *'    # 昼 12:00 JST（UTC 03:00）
+#    - cron: '30 11 * * *'  # 夜 20:30 JST（UTC 11:30）
 
 permissions:
   issues: write
