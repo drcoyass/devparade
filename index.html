@@ -1883,13 +1883,19 @@
 
     <!-- Daily Quote Gacha -->
     <div style="text-align: center; margin-top: 3rem;" class="reveal">
-      <div id="daily-quote-box" style="display:none; max-width:600px; margin: 0 auto 1.5rem auto; background:#111; padding:2rem; border-radius:12px; border:2px solid var(--yellow); position:relative;">
-        <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--yellow); color:#000; font-family:'Oswald',sans-serif; font-weight:bold; padding:2px 15px; border-radius:20px; font-size:0.8rem;">TODAY's QUOTE</div>
-        <p id="daily-quote-text" style="font-size:1.4rem; font-weight:bold; color:#fff; line-height:1.5; margin-bottom:1rem;"></p>
-        <p id="daily-quote-author" style="color:var(--gray); font-size:0.9rem; margin-bottom:1.5rem;"></p>
-        <a id="daily-quote-share" href="#" target="_blank" style="display:inline-block; background:#000; color:#fff; text-decoration:none; padding:0.5rem 1.2rem; border-radius:30px; font-size:0.9rem; border:1px solid #555;">𝕏 で名言をシェア</a>
+      <div id="daily-quote-box" style="display:none; max-width:620px; margin: 0 auto 1.8rem auto; background:linear-gradient(145deg, #181818, #0d0d0d); padding:2.2rem; border-radius:16px; border:2px solid var(--yellow); position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: all 0.3s ease;">
+        <div style="display:flex; justify-content:center; gap:8px; position:absolute; top:-14px; left:50%; transform:translateX(-50%);">
+          <span style="background:var(--yellow); color:#000; font-family:'Oswald',sans-serif; font-weight:900; padding:3px 16px; border-radius:20px; font-size:0.85rem; letter-spacing:0.08em; box-shadow:0 3px 10px rgba(0,0,0,0.5);">TODAY's QUOTE</span>
+          <span id="daily-quote-rarity" style="background:#e31e24; color:#fff; font-family:'Oswald',sans-serif; font-weight:bold; padding:3px 12px; border-radius:20px; font-size:0.8rem; letter-spacing:0.05em;">SSR</span>
+        </div>
+        <p id="daily-quote-text" style="font-size:1.45rem; font-weight:bold; color:#fff; line-height:1.6; margin: 1rem 0; font-family:'Noto Sans JP',sans-serif;"></p>
+        <p id="daily-quote-author" style="color:var(--yellow); font-size:1rem; font-weight:bold; margin-bottom:1.5rem; letter-spacing:0.05em;"></p>
+        <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+          <a id="daily-quote-share" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:#000; color:#fff; text-decoration:none; padding:0.65rem 1.6rem; border-radius:30px; font-size:0.95rem; font-weight:bold; border:1px solid #555; box-shadow:0 4px 12px rgba(0,0,0,0.4); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--yellow)'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='#555'; this.style.transform='scale(1)'">𝕏 で名言をシェアする 🍖</a>
+          <button onclick="drawDailyQuote()" style="background:#222; color:#ccc; border:1px solid #444; border-radius:30px; padding:0.65rem 1.2rem; font-size:0.9rem; cursor:pointer; font-weight:bold; transition:all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='#777'" onmouseout="this.style.color='#ccc'; this.style.borderColor='#444'">🔄 もう一度引く</button>
+        </div>
       </div>
-      <button onclick="drawDailyQuote()" style="background:var(--yellow); color:#000; font-family:'Oswald',sans-serif; font-size:1.1rem; font-weight:bold; padding:0.8rem 2rem; border:none; border-radius:50px; cursor:pointer; letter-spacing:0.05em; box-shadow:0 4px 10px rgba(255,204,0,0.3);">🍖 本日のデブ語録ガチャを回す</button>
+      <button id="gacha-trigger-btn" onclick="drawDailyQuote()" style="background:linear-gradient(135deg, var(--yellow), #ff9900); color:#000; font-family:'Oswald',sans-serif; font-size:1.2rem; font-weight:900; padding:0.9rem 2.4rem; border:none; border-radius:50px; cursor:pointer; letter-spacing:0.08em; box-shadow:0 6px 20px rgba(255,204,0,0.4); transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🍖 本日のデブ語録ガチャを引く！</button>
     </div>
   </section>
 
@@ -3851,26 +3857,86 @@ if (savedLang) {
       document.getElementById('metabo-result').style.display = 'block';
     }
 
-    // ===== DAILY QUOTE GACHA LOGIC =====
+    // ===== DAILY QUOTE GACHA LOGIC (50+ 厳選ポジデブ語録) =====
     const devQuotes = [
-      { text: "カロリーは熱に弱いから、揚げ物はゼロカロリー！", author: "デブパレード" },
-      { text: "俺たちの音楽は耳から入る高カロリーだ。", author: "ugazin" },
-      { text: "ダイエットは明日から。今日は肉の日だからな！", author: "COYASS" },
-      { text: "動けるデブこそ至高。", author: "TAKA" },
-      { text: "痛風？それは選ばれし者への勲章さ。", author: "デブパレード" },
-      { text: "楽器も腹も鳴らしてナンボ。", author: "TSUKASA" }
+      // 【SSR: 神メタボ級】
+      { text: "俺の体重は92kg。夢の重さも92kg。軽い夢なんか持ったことない。", author: "ハンサム判治", rarity: "SSR", color: "#FFD700" },
+      { text: "太った分だけ、地球がお前を離したくないってこと。モテてるぜ、地球に。", author: "COYASS", rarity: "SSR", color: "#FFD700" },
+      { text: "炭水化物は心のガソリンだ。満タンにしねえでどこ走るんだよ。", author: "ugazin", rarity: "SSR", color: "#FFD700" },
+      { text: "重いベースは、重い男にしか鳴らせない。重低音は体格で決まる。", author: "ぺー", rarity: "SSR", color: "#FFD700" },
+      { text: "ドラムを叩けば叩くほど腹が減る。生きるってのはこのグルーヴのことさ。", author: "TAH", rarity: "SSR", color: "#FFD700" },
+      { text: "体重計の数字は、お前の戦闘力だ。デカい奴はデカいことができる。", author: "デブパレード", rarity: "SSR", color: "#FFD700" },
+      { text: "全員90kg以上でソニーからメジャーデビューした。才能に体重制限はない！", author: "デブパレード", rarity: "SSR", color: "#FFD700" },
+      { text: "迷ったら食え。食ってから悩め。空腹で出した答えにロクなもんはない。", author: "ハンサム判治", rarity: "SSR", color: "#FFD700" },
+      { text: "俺たち全員90kg超、5人合わせて半トン近く。ステージが揺れるのは物理法則だ。", author: "COYASS", rarity: "SSR", color: "#FFD700" },
+      { text: "新曲『9月4日』を聴け！デブが本気で作ったラブソングは、誰よりも重くて深い。", author: "デブパレード", rarity: "SSR", color: "#FFD700" },
+
+      // 【SR: 超重量級】
+      { text: "カロリーは熱に弱い。だから揚げ物は実質ゼロカロリーだ！", author: "デブパレード", rarity: "SR", color: "#E31E24" },
+      { text: "「太った？」違う、「存在感が増した」と言え。", author: "COYASS", rarity: "SR", color: "#E31E24" },
+      { text: "俺たちの音楽は耳から脳へ直撃する、超ド級の特盛カロリーだ。", author: "ugazin", rarity: "SR", color: "#E31E24" },
+      { text: "白飯はおかずを美味しく食べるためのステージ。大盛りこそがアンコール！", author: "ハンサム判治", rarity: "SR", color: "#E31E24" },
+      { text: "焼肉屋での『特盛ライスおかわり』は、全人類が目指すべき平和のシンボル。", author: "デブパレード", rarity: "SR", color: "#E31E24" },
+      { text: "デブは才能。愛嬌と安心感と迫力を同時に出せる人類の最高傑作。", author: "COYASS", rarity: "SR", color: "#E31E24" },
+      { text: "冬の寒さ？俺たちは全員自前の天然ヒーター積んでるから無敵だ。", author: "ぺー", rarity: "SR", color: "#E31E24" },
+      { text: "食べ放題は制限時間いっぱいまで戦い抜くデブの神聖なコロシアムだ！", author: "TAH", rarity: "SR", color: "#E31E24" },
+      { text: "「腹八分目」って誰が決めた？残りの二分に奇跡が詰まってんだよ！", author: "デブパレード", rarity: "SR", color: "#E31E24" },
+      { text: "痩せてる奴が歌うラブソングより、90kgの男が絞り出す愛の言葉の方が重い。", author: "ハンサム判治", rarity: "SR", color: "#E31E24" },
+      { text: "ラーメンのスープを飲み干すのは、作った店主への最大の敬意とスタンディングオベーション。", author: "デブパレード", rarity: "SR", color: "#E31E24" },
+      { text: "腹が出てるんじゃない。器が前に飛び出してるんだ。", author: "COYASS", rarity: "SR", color: "#E31E24" },
+
+      // 【R: 増量級】
+      { text: "今日食べた分は、明日のシャウトのパワーになる。", author: "ハンサム判治", rarity: "R", color: "#00ccff" },
+      { text: "「明日からダイエット」は、今日を全力で美味しく生きるための魔法の合言葉。", author: "デブパレード", rarity: "R", color: "#00ccff" },
+      { text: "デカい服を着てるんじゃない。服が俺たちのデカさに追いついてないだけだ。", author: "COYASS", rarity: "R", color: "#00ccff" },
+      { text: "夜中の2時にすするカップ麺の美味さは、人間が生きている証拠だ。", author: "ugazin", rarity: "R", color: "#00ccff" },
+      { text: "お腹のお肉は、今まで美味しく食べてきた幸せの記録アルバム。", author: "デブパレード", rarity: "R", color: "#00ccff" },
+      { text: "重いリフを弾く時は、自分の体重をそのまま弦に乗せるんだ。", author: "ugazin", rarity: "R", color: "#00ccff" },
+      { text: "ハグした時に一番安心感がある男、それが90kgオーバーの真の魅力。", author: "デブパレード", rarity: "R", color: "#00ccff" },
+      { text: "お腹が鳴るのは、魂が「肉をくれ」とビートを刻んでいるサイン。", author: "TAH", rarity: "R", color: "#00ccff" },
+      { text: "世間が何と言おうと、白米の上に肉を乗せた瞬間が人生の絶頂。", author: "ハンサム判治", rarity: "R", color: "#00ccff" },
+      { text: "バッチコイ！どんな悩みもカツ丼一杯食えば大体どうでもよくなるぜ！", author: "デブパレード", rarity: "R", color: "#00ccff" },
+      { text: "体重を減らす努力より、笑顔を増やす努力をしようぜ！", author: "COYASS", rarity: "R", color: "#00ccff" },
+      { text: "肉汁は心の美容液。滴る分だけ優しくなれる。", author: "デブパレード", rarity: "R", color: "#00ccff" }
     ];
     
     function drawDailyQuote() {
       const q = devQuotes[Math.floor(Math.random() * devQuotes.length)];
+      const box = document.getElementById('daily-quote-box');
+      const rarityBadge = document.getElementById('daily-quote-rarity');
+      const triggerBtn = document.getElementById('gacha-trigger-btn');
+      
+      // テキスト反映
       document.getElementById('daily-quote-text').innerText = `「${q.text}」`;
       document.getElementById('daily-quote-author').innerText = `— ${q.author}`;
       
-      const shareText = encodeURIComponent(`本日のデブ語録🍖\n「${q.text}」 — ${q.author}\n\n#デブパレード #デブ語録`);
+      // レア度スタイル反映
+      rarityBadge.innerText = q.rarity;
+      rarityBadge.style.background = q.color;
+      rarityBadge.style.color = q.rarity === 'SSR' ? '#000' : '#fff';
+      box.style.borderColor = q.color;
+      box.style.boxShadow = `0 10px 35px ${q.color}44`;
+      
+      // XシェアURL生成
+      const shareText = encodeURIComponent(`【本日のデブ語録ガチャ】[${q.rarity}]\n「${q.text}」\n— ${q.author}\n\n全員90kg以上のヘヴィメタボバンド #デブパレード 公式HPで引けるぜ！🍖\n新曲『9月4日』配信中！`);
       const shareUrl = encodeURIComponent("https://devparade.jp");
       document.getElementById('daily-quote-share').href = `https://x.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
       
-      document.getElementById('daily-quote-box').style.display = 'block';
+      // アニメーション表示
+      box.style.display = 'block';
+      box.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        box.style.transform = 'scale(1)';
+      }, 50);
+      
+      if (triggerBtn) {
+        triggerBtn.style.display = 'none';
+      }
+
+      // SSR時は祝福紙吹雪
+      if (q.rarity === 'SSR' && typeof window.fireConfettiBurst === 'function') {
+        window.fireConfettiBurst();
+      }
     }
     </script>
 
@@ -3896,12 +3962,36 @@ if (savedLang) {
         container.appendChild(piece);
       }
       
-      // 10秒後に紙吹雪を非表示
-      setTimeout(function() {
-        container.style.transition = 'opacity 2s';
-        container.style.opacity = '0';
-        setTimeout(function() { container.remove(); }, 2000);
-      }, 10000);
+      // グローバル紙吹雪バースト関数 (SSR当選時用)
+      window.fireConfettiBurst = function() {
+        var burstContainer = document.createElement('div');
+        burstContainer.style.position = 'fixed';
+        burstContainer.style.top = '0';
+        burstContainer.style.left = '0';
+        burstContainer.style.width = '100%';
+        burstContainer.style.height = '100%';
+        burstContainer.style.pointerEvents = 'none';
+        burstContainer.style.zIndex = '99999';
+        document.body.appendChild(burstContainer);
+
+        for (var k = 0; k < 50; k++) {
+          var p = document.createElement('div');
+          p.className = 'confetti-piece';
+          p.textContent = ['★', '🍖', '🔥', '✨', '🏆'][Math.floor(Math.random() * 5)];
+          p.style.left = (Math.random() * 80 + 10) + '%';
+          p.style.color = ['#FFD700', '#FF9900', '#FF3333', '#FFF'][Math.floor(Math.random() * 4)];
+          p.style.fontSize = (Math.random() * 20 + 14) + 'px';
+          p.style.animationDuration = (Math.random() * 2 + 2) + 's';
+          p.style.animationDelay = (Math.random() * 0.3) + 's';
+          burstContainer.appendChild(p);
+        }
+
+        setTimeout(function() {
+          burstContainer.style.transition = 'opacity 1.5s';
+          burstContainer.style.opacity = '0';
+          setTimeout(function() { burstContainer.remove(); }, 1500);
+        }, 3000);
+      };
     })();
     </script>
 

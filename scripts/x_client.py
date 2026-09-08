@@ -142,14 +142,35 @@ async def _get_twikit_client():
         return None
 
 
-async def _twikit_post(text):
-    """twikit でツイート投稿"""
+async def _twikit_post(text, media_path=None):
+    """twikit でツイート投稿（画像・動画対応）"""
     client = await _get_twikit_client()
     if not client:
         return None
 
     try:
-        result = await client.create_tweet(text=text)
+        media_ids = []
+        if media_path and os.path.exists(media_path):
+            print(f"📁 メディアアップロード中: {media_path}...")
+            ext = os.path.splitext(media_path)[1].lower()
+            if ext in [".mp4", ".mov"]:
+                media_type = "video/mp4"
+            elif ext in [".png"]:
+                media_type = "image/png"
+            elif ext in [".gif"]:
+                media_type = "image/gif"
+            else:
+                media_type = "image/jpeg"
+
+            try:
+                media_id = await client.upload_media(media_path, media_type=media_type)
+                if media_id:
+                    media_ids.append(media_id)
+                    print(f"✅ メディアアップロード成功! Media ID: {media_id}")
+            except Exception as em:
+                print(f"⚠️ メディアアップロード失敗 (テキストのみで投稿継続): {em}")
+
+        result = await client.create_tweet(text=text, media_ids=media_ids if media_ids else None)
         tweet_id = result.id if hasattr(result, 'id') else str(result)
         print(f"✅ [twikit] 投稿成功! Tweet ID: {tweet_id}")
         return str(tweet_id)
@@ -349,20 +370,21 @@ def _tweepy_reply(text, reply_to_tweet_id):
 
 # ===== 公開API（同期ラッパー） =====
 
-def post_tweet(text):
+def post_tweet(text, media_path=None):
     """
-    ツイートを投稿する（メインAPI）。
+    ツイートを投稿する（メインAPI・画像動画添付対応）。
     twikit → tweepy の順で試行。
     DRY_RUN=true の場合は投稿せずにテキストを表示。
     """
     if DRY_RUN:
-        print(f"🔍 [DRY RUN] 投稿スキップ ({len(text)}文字)")
+        media_str = f" [添付: {media_path}]" if media_path else ""
+        print(f"🔍 [DRY RUN] 投稿スキップ ({len(text)}文字){media_str}")
         print(f"   {text[:100]}...")
         return "dry_run"
 
-    # 方式1: twikit（無料）
+    # 方式1: twikit（無料・メディア対応）
     if _has_twikit_creds() or COOKIES_FILE.exists():
-        tweet_id = asyncio.run(_twikit_post(text))
+        tweet_id = asyncio.run(_twikit_post(text, media_path=media_path))
         if tweet_id:
             return tweet_id
 

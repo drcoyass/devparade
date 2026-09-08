@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       slot:
-        description: '投稿スロット (main: メイン告知 / story: エピソード深掘り / replay: 夜告知)'
+        description: '投稿スロット (main: メイン告知 / story: エピソード / replay: 夜告知 / video: 動画付きプロモ)'
         required: true
         default: 'main'
         type: choice
@@ -12,6 +12,7 @@ on:
           - main
           - story
           - replay
+          - video
       dry_run:
         description: 'DRY RUN（投稿せずテスト実行）'
         required: false
@@ -48,7 +49,13 @@ jobs:
           X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
           X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
         run: |
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          if [ "${{ github.event.inputs.slot }}" = "video" ]; then
+            if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+              PYTHONPATH=scripts:$PYTHONPATH python scripts/post_video_promo.py --dry-run
+            else
+              PYTHONPATH=scripts:$PYTHONPATH python scripts/post_video_promo.py
+            fi
+          elif [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             echo "🔍 アカウント検証を実行中..."
             PYTHONPATH=scripts:$PYTHONPATH python scripts/verify_account.py
             PYTHONPATH=scripts:$PYTHONPATH python scripts/release_0904_poster.py --slot "${{ github.event.inputs.slot }}" --dry-run
