@@ -2203,8 +2203,8 @@ def mark_as_posted(tweet_data):
     save_posted(data)
 
 
-def auto_post(tweet_text):
-    """X に自動投稿 (twikit優先、tweepyフォールバック)"""
+def auto_post(tweet_text, media_path=None):
+    """X に自動投稿 (画像・動画添付対応)"""
     try:
         from x_client import post_tweet
     except ImportError:
@@ -2214,7 +2214,7 @@ def auto_post(tweet_text):
             print("❌ x_client モジュールが見つかりません")
             return None
 
-    tweet_id = post_tweet(tweet_text)
+    tweet_id = post_tweet(tweet_text, media_path=media_path)
     if tweet_id and tweet_id != "dry_run":
         print(f"   URL: https://x.com/devparade/status/{tweet_id}")
     elif not tweet_id:
@@ -2388,8 +2388,26 @@ def main():
     print(f"Tweet ({len(tweet_text)} chars):")
     print(tweet_text)
 
+    # AI面白画像の自動選択・添付（ATTACH_AI_IMAGE=true時）
+    attach_ai_image = os.environ.get("ATTACH_AI_IMAGE", "true").lower() == "true"
+    ai_media_path = None
+    if attach_ai_image and CAMPAIGN == "scheduled":
+        try:
+            from ai_image_manager import get_random_ai_image
+            ai_media_path = get_random_ai_image(tweet_text)
+            if ai_media_path:
+                print(f"🖼️ AI面白画像を自動添付: {os.path.basename(ai_media_path)}")
+        except Exception:
+            try:
+                from scripts.ai_image_manager import get_random_ai_image
+                ai_media_path = get_random_ai_image(tweet_text)
+                if ai_media_path:
+                    print(f"🖼️ AI面白画像を自動添付: {os.path.basename(ai_media_path)}")
+            except Exception:
+                pass
+
     # 自動投稿
-    tweet_id = auto_post(tweet_text)
+    tweet_id = auto_post(tweet_text, media_path=ai_media_path)
     auto_posted = tweet_id is not None
 
     # Facebook 投稿 (追加)
