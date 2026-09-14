@@ -1,11 +1,6 @@
 {
   "runs": [
     {
-      "date": "2026-06-14 00:02",
-      "followers": 81,
-      "liked": 0
-    },
-    {
       "date": "2026-06-15 00:07",
       "followers": 82,
       "liked": 0
@@ -533,6 +528,13 @@
     },
     {
       "date": "2026-09-14 02:24",
+      "followers": 0,
+      "target_likes": 0,
+      "brand_likes": 0,
+      "member_rts": 0
+    },
+    {
+      "date": "2026-09-14 18:16",
       "followers": 0,
       "target_likes": 0,
       "brand_likes": 0,
