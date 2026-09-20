@@ -1890,7 +1890,23 @@
           <span id="daily-quote-rarity" style="background:#e31e24; color:#fff; font-family:'Oswald',sans-serif; font-weight:bold; padding:3px 12px; border-radius:20px; font-size:0.8rem; letter-spacing:0.05em;">SSR</span>
         </div>
         <p id="daily-quote-text" style="font-size:1.45rem; font-weight:bold; color:#fff; line-height:1.6; margin: 1rem 0; font-family:'Noto Sans JP',sans-serif;"></p>
-        <p id="daily-quote-author" style="color:var(--yellow); font-size:1rem; font-weight:bold; margin-bottom:1.5rem; letter-spacing:0.05em;"></p>
+        <p id="daily-quote-author" style="color:var(--yellow); font-size:1rem; font-weight:bold; margin-bottom:1.2rem; letter-spacing:0.05em;"></p>
+        
+        <!-- Lucky Food & Song Area -->
+        <div style="margin: 1.2rem auto; max-width: 520px; padding: 1rem 1.2rem; background: rgba(255,255,255,0.04); border-radius: 10px; border: 1px dashed rgba(255,204,0,0.3); display: flex; flex-direction: column; gap: 8px; font-size: 0.92rem; text-align: left;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="background: var(--yellow); color: #000; font-size: 0.75rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; font-family: 'Oswald', sans-serif; letter-spacing:0.05em;">LUCKY FOOD</span>
+            <span id="daily-lucky-food" style="color: #fff; font-weight: bold;"></span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="background: #e31e24; color: #fff; font-size: 0.75rem; font-weight: 900; padding: 2px 8px; border-radius: 4px; font-family: 'Oswald', sans-serif; letter-spacing:0.05em;">LUCKY SONG</span>
+              <span id="daily-lucky-song" style="color: #ff9900; font-weight: bold;"></span>
+            </div>
+            <a id="daily-lucky-song-link" href="https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" target="_blank" rel="noopener" style="font-size: 0.8rem; color: #1DB954; text-decoration: none; font-weight: bold; background: rgba(29,185,84,0.1); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(29,185,84,0.3);">Spotifyで聴く ▶</a>
+          </div>
+        </div>
+
         <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
           <a id="daily-quote-share" href="#" target="_blank" style="display:inline-flex; align-items:center; gap:8px; background:#000; color:#fff; text-decoration:none; padding:0.65rem 1.6rem; border-radius:30px; font-size:0.95rem; font-weight:bold; border:1px solid #555; box-shadow:0 4px 12px rgba(0,0,0,0.4); transition:all 0.2s;" onmouseover="this.style.borderColor='var(--yellow)'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='#555'; this.style.transform='scale(1)'">𝕏 で名言をシェアする 🍖</a>
           <button onclick="drawDailyQuote()" style="background:#222; color:#ccc; border:1px solid #444; border-radius:30px; padding:0.65rem 1.2rem; font-size:0.9rem; cursor:pointer; font-weight:bold; transition:all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='#777'" onmouseout="this.style.color='#ccc'; this.style.borderColor='#444'">🔄 もう一度引く</button>
@@ -3989,9 +4005,34 @@ if (savedLang) {
       { text: "体重を減らす努力より、笑顔を増やす努力をしようぜ！", author: "COYASS", rarity: "R", color: "#00ccff" },
       { text: "肉汁は心の美容液。滴る分だけ優しくなれる。", author: "デブパレード", rarity: "R", color: "#00ccff" }
     ];
+
+    const luckyFoods = [
+      "ニンニク背脂マシマシ豚骨醤油ラーメン 🍜",
+      "特盛牛カルビ丼（温玉ダブル乗せ） 🥩",
+      "山盛り鶏の唐揚げ定食（特製タルタル付き） 🍗",
+      "ダブルチーズバーガー＆メガフライドポテト 🍔🍟",
+      "肉厚ジューシー極上ロースカツカレー 🍛",
+      "チーズ溺れマルゲリータピザ 🍕",
+      "焼肉食べ放題（牛タン・ロース・カルビ無限） 🥓",
+      "大盛りソース焼きそば＆たこ焼きセット 🐙",
+      "豚バラ生姜焼き定食（ご飯マンガ盛り） 🍚",
+      "こってり特製油そば（背脂トッピング） 🍜"
+    ];
+
+    const luckySongs = [
+      { title: "『9月4日』(最新シングル・名曲)", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" },
+      { title: "『Cosmic Parade』", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" },
+      { title: "『BODY&SOUL』", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" },
+      { title: "『MEGATON PUNCH』", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" },
+      { title: "『デブのマーチ』", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" },
+      { title: "『ヘヴィメタボリック』", url: "https://open.spotify.com/album/43TjMlh361Q2uQ7wXG6y2e" }
+    ];
     
     function drawDailyQuote() {
       const q = devQuotes[Math.floor(Math.random() * devQuotes.length)];
+      const food = luckyFoods[Math.floor(Math.random() * luckyFoods.length)];
+      const song = luckySongs[Math.floor(Math.random() * luckySongs.length)];
+      
       const box = document.getElementById('daily-quote-box');
       const rarityBadge = document.getElementById('daily-quote-rarity');
       const triggerBtn = document.getElementById('gacha-trigger-btn');
@@ -3999,6 +4040,9 @@ if (savedLang) {
       // テキスト反映
       document.getElementById('daily-quote-text').innerText = `「${q.text}」`;
       document.getElementById('daily-quote-author').innerText = `— ${q.author}`;
+      document.getElementById('daily-lucky-food').innerText = food;
+      document.getElementById('daily-lucky-song').innerText = song.title;
+      document.getElementById('daily-lucky-song-link').href = song.url;
       
       // レア度スタイル反映
       rarityBadge.innerText = q.rarity;
@@ -4007,8 +4051,8 @@ if (savedLang) {
       box.style.borderColor = q.color;
       box.style.boxShadow = `0 10px 35px ${q.color}44`;
       
-      // XシェアURL生成
-      const shareText = encodeURIComponent(`【本日のデブ語録ガチャ】[${q.rarity}]\n「${q.text}」\n— ${q.author}\n\n全員90kg以上のヘヴィメタボバンド #デブパレード 公式HPで引けるぜ！🍖\n新曲『9月4日』配信中！`);
+      // XシェアURL生成 (ラッキー飯 & ソング含む)
+      const shareText = encodeURIComponent(`【本日のデブ語録ガチャ】[${q.rarity}]\n「${q.text}」\n— ${q.author}\n\n🍚 ラッキー飯: ${food}\n🎵 ラッキーソング: ${song.title}\n\n全員90kg以上のヘヴィメタボバンド #デブパレード 公式HPで引けるぜ！🍖\n新曲『9月4日』配信中！`);
       const shareUrl = encodeURIComponent("https://devparade.jp");
       document.getElementById('daily-quote-share').href = `https://x.com/intent/tweet?text=${shareText}&url=${shareUrl}`;
       

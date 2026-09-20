@@ -102,6 +102,16 @@ except ImportError:
     except ImportError:
         generate_combinatorial_tweets = lambda n: []
 
+try:
+    from debu_poll_generator import DEBU_POLL_TEMPLATES
+    POLL_TWEETS = [p["text"] for p in DEBU_POLL_TEMPLATES]
+except ImportError:
+    try:
+        from scripts.debu_poll_generator import DEBU_POLL_TEMPLATES
+        POLL_TWEETS = [p["text"] for p in DEBU_POLL_TEMPLATES]
+    except ImportError:
+        POLL_TWEETS = []
+
 # ===== 日替わりポジデブツイート（55種類以上） =====
 DAILY_TWEETS_BASE = [
 
@@ -1891,7 +1901,7 @@ DM or リプライで！🍖
 
 # ===== DAILY_TWEETSを統合 (800+種類の大規模ストック) =====
 COMBINATORIAL_TWEETS = generate_combinatorial_tweets(300)
-DAILY_TWEETS = DAILY_TWEETS_BASE + EXTRA_TWEETS + EXTRA_TWEETS_2 + EXTRA_TWEETS_3 + DEBU_GOSHU_STOCKS + COMBINATORIAL_TWEETS
+DAILY_TWEETS = DAILY_TWEETS_BASE + EXTRA_TWEETS + EXTRA_TWEETS_2 + EXTRA_TWEETS_3 + DEBU_GOSHU_STOCKS + COMBINATORIAL_TWEETS + POLL_TWEETS
 
 # ===== 🎵 先行シングル「夏の終わりに」リリース専用ツイート =====
 SINGLE_RELEASE_TWEETS = [
