@@ -69,7 +69,8 @@
     "d26cc1c37634",
     "5c0cde423b59",
     "e4abddde7fe4",
-    "3befaeaececb"
+    "3befaeaececb",
+    "83d1eef6fbf8"
   ],
   "scores": {
     "a33a173ca5cc": {
@@ -351,6 +352,10 @@
     "3befaeaececb": {
       "score": 70,
       "posted_at": "2026-10-13T18:51:11.417185+09:00"
+    },
+    "83d1eef6fbf8": {
+      "score": 60,
+      "posted_at": "2026-10-14T00:39:57.403783+09:00"
     }
   },
   "cycle": 1
