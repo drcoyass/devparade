@@ -123,7 +123,8 @@
     "79cf80321e14",
     "251bb591fde3",
     "bade0f2f358e",
-    "b3ce2cafb25b"
+    "b3ce2cafb25b",
+    "ecb70fa837cd"
   ],
   "scores": {
     "a33a173ca5cc": {
@@ -621,6 +622,10 @@
     "b3ce2cafb25b": {
       "score": 66,
       "posted_at": "2026-10-27T02:29:44.129710+09:00"
+    },
+    "ecb70fa837cd": {
+      "score": 60,
+      "posted_at": "2026-10-27T10:34:35.734278+09:00"
     }
   },
   "cycle": 1
