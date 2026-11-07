@@ -1,13 +1,6 @@
 {
   "runs": [
     {
-      "date": "2026-10-05 19:52",
-      "followers": 0,
-      "target_likes": 6,
-      "brand_likes": 0,
-      "member_rts": 8
-    },
-    {
       "date": "2026-10-06 04:24",
       "followers": 0,
       "target_likes": 6,
@@ -699,14 +692,17 @@
       "target_likes": 6,
       "brand_likes": 0,
       "member_rts": 7
+    },
+    {
+      "date": "2026-11-08 01:38",
+      "followers": 94,
+      "target_likes": 6,
+      "brand_likes": 1,
+      "member_rts": 4
     }
   ],
   "liked_users": [],
   "followers_history": [
-    {
-      "date": "2026-08-15 22:31",
-      "count": 82
-    },
     {
       "date": "2026-08-16 22:33",
       "count": 83
@@ -942,6 +938,10 @@
     {
       "date": "2026-11-07 19:42",
       "count": 93
+    },
+    {
+      "date": "2026-11-08 01:38",
+      "count": 94
     }
   ]
 }
