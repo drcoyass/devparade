@@ -47,14 +47,6 @@ jobs:
         run: |
           PYTHONPATH=scripts:$PYTHONPATH python scripts/debu-posi-tweet-generator.py
 
-      - name: Auto Retweet from @coyass
-        env:
-          COYASS_COOKIES_JSON: ${{ secrets.COYASS_COOKIES_JSON }}
-        run: |
-          echo "🔄 公式ツイートを @coyass アカウントで自動リツイート中..."
-          sleep 5
-          PYTHONPATH=scripts:$PYTHONPATH python scripts/auto_retweet_coyass.py || true
-
       - name: Commit and Push state changes
         run: |
           git config --local user.email "action@github.com"
