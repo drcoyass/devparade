@@ -36,6 +36,11 @@ MEMBERS = [
     {"name": "TAH", "screen_name": "lolMusika", "role": "Dr.", "tag": "TAH"},
 ]
 
+# 【2026-11-24 X運用組み替え】自動引用ポストは原則停止。
+# メンバーツイートへの反応は「いいね＋通常リツイート」のみに統一する。
+# 引用ポストを再開する場合のみ True に戻すこと。
+ENABLE_QUOTE_POSTS = False
+
 # 引用ポストを優先発動するキーワード
 HIGHLIGHT_KEYWORDS = [
     "デブパレード", "devparade", "9月4日", "夏の終わりに", "バッチコイ",
@@ -162,7 +167,7 @@ async def process_member_retweets(dry_run=False):
 
                 # 2. 引用ツイート or 通常リツイートの判定
                 tweet_url = f"https://x.com/{s_name}/status/{tid}"
-                should_quote = is_highlight_tweet(text) or random.random() < 0.4
+should_quote = ENABLE_QUOTE_POSTS and (is_highlight_tweet(text) or random.random() < 0.4)
 
                 if should_quote:
                     # 引用ポスト（Quote Tweet）
